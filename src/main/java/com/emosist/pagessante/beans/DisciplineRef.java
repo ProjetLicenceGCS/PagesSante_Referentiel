@@ -1,8 +1,4 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 
 package com.emosist.pagessante.beans;
 
@@ -18,8 +14,6 @@ import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
@@ -27,12 +21,12 @@ import javax.xml.bind.annotation.XmlTransient;
  */
 @Entity
 @Table(name = "disciplineref")
-@XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "Disciplineref.findAll", query = "SELECT d FROM DisciplineRef d"),
-    @NamedQuery(name = "Disciplineref.findByIddisciplineref", query = "SELECT d FROM DisciplineRef d WHERE d.iddisciplineref = :iddisciplineref"),
-    @NamedQuery(name = "Disciplineref.findByDescription", query = "SELECT d FROM DisciplineRef d WHERE d.description = :description"),
-    @NamedQuery(name = "Disciplineref.findByDescriptionNorm", query = "SELECT d FROM DisciplineRef d WHERE d.descriptionNorm = :descriptionNorm")})
+    @NamedQuery(name = "DisciplineRef.findAll", query = "SELECT d FROM DisciplineRef d"),
+    @NamedQuery(name = "DisciplineRef.findByIddisciplineref", query = "SELECT d FROM DisciplineRef d WHERE d.iddisciplineref = :iddisciplineref"),
+    @NamedQuery(name = "DisciplineRef.findByDescription", query = "SELECT d FROM DisciplineRef d WHERE d.description = :description"),
+    @NamedQuery(name = "DisciplineRef.findByDescriptionNorm", query = "SELECT d FROM DisciplineRef d WHERE d.descriptionNorm = :descriptionNorm")
+})
 public class DisciplineRef implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
@@ -78,7 +72,6 @@ public class DisciplineRef implements Serializable {
         this.descriptionNorm = descriptionNorm;
     }
 
-    @XmlTransient
     public List<SpecialiteElementRef> getSpecialiteelementrefList() {
         return specialiteelementrefList;
     }
