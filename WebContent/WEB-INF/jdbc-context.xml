@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:tx="http://www.springframework.org/schema/tx" xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="
+			http://www.springframework.org/schema/beans 
+			http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+			http://www.springframework.org/schema/tx 
+			http://www.springframework.org/schema/tx/spring-tx-3.0.xsd
+			http://www.springframework.org/schema/context
+			http://www.springframework.org/schema/context/spring-context-3.0.xsd
+	   		">
+	<!-- Load in application properties reference -->
+	<bean id="applicationProperties" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+		<property name="ignoreUnresolvablePlaceholders" value="false" />
+	    <property name="localOverride" value="false" />
+	    <property name="ignoreResourceNotFound" value="true" />
+	    <property name="locations">
+	        <list>
+	        	<!-- Order matters, last one to create a property wins! -->
+	        	<value>/WEB-INF/pagessante.properties</value>
+	        	<value>classpath:pagessante.properties</value>
+	            <!-- <value>file:${catalina.home}\conf\ApplicationPRODUCTION.properties</value> --><!-- FOR TOMCAT -->
+	            <!-- <value>file:${jboss.server.base.dir}\configuration\pagessante.properties</value> --><!-- FOR JBOSS-->
+	            <value>file:${jboss.server.config.dir}\pagessante.properties</value><!-- FOR JBOSS-->
+	        </list>
+	    </property>
+	</bean>
+	
+	
+	<!-- 
+	<bean id="dataSource" class="org.springframework.jdbc.datasource.SimpleDriverDataSource" p:idleConnectionTestPeriod="120">
+        <property name="driverClass" value="${jdbc.driverClassName}"/>
+        <property name="url" value="${jdbc.url}"/>
+        <property name="username" value="${jdbc.username}"/>
+        <property name="password" value="${jdbc.password}"/>
+    </bean>
+    -->
+
+	<bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource"
+		destroy-method="close" p:driverClass="${jdbc.driverClassName}"
+		p:jdbcUrl="${jdbc.url}" p:user="${jdbc.username}" p:password="${jdbc.password}"
+		p:minPoolSize="${jdbc.pool.minPoolSize}" p:maxPoolSize="${jdbc.pool.maxPoolSize}" p:acquireIncrement="${jdbc.pool.acquireIncrement}"
+		p:preferredTestQuery="${jdbc.pool.preferredTestQuery}" p:idleConnectionTestPeriod="${jdbc.pool.idleConnectionTestPeriod}"
+		p:maxIdleTimeExcessConnections="${jdbc.pool.maxIdleTimeExcessConnections}"
+		p:maxStatements="${jdbc.pool.maxStatements}"  />
+		<!-- p:testConnectionOnCheckOut="${jdbc.pool.testConnectionOnCheckOut}" p:testConnectionOnCheckIn="${jdbc.pool.testConnectionOnCheckIn}" -->
+		
+	<!-- Declare a transaction manager -->
+	<bean id="transactionManager"
+		class="org.springframework.jdbc.datasource.DataSourceTransactionManager"
+		p:dataSource-ref="dataSource" />
+		
+
+</beans>

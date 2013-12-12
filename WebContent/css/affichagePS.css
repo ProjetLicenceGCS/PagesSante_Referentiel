@@ -1,0 +1,605 @@
+/******* Classes concernant tout ce qui est de type texte et positionnement de texte ******/
+
+
+.LibelleTitreCadre, .LibelleTitreAdresse
+{
+    position: relative;
+    width: 127px;
+}
+
+.LibelleTitreGroupe{
+	position: relative;
+    width: 150px;
+}
+
+.LibelleTitreCadre, .LibelleTextesCadres, .LibelleTextesCadres2,.LibelleTitreGroupe
+{
+    float: left;
+}
+
+.LibelleTextesCadres, .LibelleTextesCadres2
+{
+	position:relative;
+    left: -15px;
+    text-align: right;
+    width: 140px;
+    z-index: 2;
+}
+
+.LibelleTitreClear
+{
+	position: relative;
+    clear: left;
+    margin-top: -20px;
+    margin-bottom: 5px;
+}
+
+.LibelleTextesCadres
+{
+	line-height: 30px;
+}
+.LibelleTextesCadres2
+{
+    bottom: -8px;
+}
+
+.DecalageChampTexte
+{
+    position: relative;
+    width: 581px;
+    float: left;      
+    margin-top: 4px;
+    line-height: 20px;
+}
+
+.DecalageChampTexteAdresse
+{
+    position: relative;
+    top: -20px;
+}
+
+.ChampTextesAdresse
+{
+    position: relative;
+    left: 126px;
+}
+
+.PlacementTextesInfos  
+{
+    position: relative;
+    color: #44668C;
+    line-height: 40px;
+    left: 40px;
+    top:-5px;
+    
+   /* 
+   (-bracket-:hack;
+    display: block;
+	min-height: 40px;
+	top:5px;
+	);
+   */
+	
+}
+
+.PlacementCentreNomPrenom
+{
+	position: relative;
+	left: 150px;
+}
+
+.PositionFax
+{
+	position: relative;
+	left:170px;
+}
+
+.PositionChampsFax
+{
+	position: relative;
+	left: 50px;
+}
+
+
+/*******  Classes concernant les cadres (bleu et blanc)  *******/
+
+
+.CadreFondBleuDessus, .CadreFondBleuDessusFonction, .CadreFondBleuCreationModification,
+ .CadreFondBleuAccessibilite, .CadreFondBleuAccessibiliteElement,.CadreFondBleuGroupe,
+  .CadreFondBleuOffre
+{
+    position: relative;
+    background-color: #F0F0F0;
+    border-color: #E3E3E3;
+    border-style: solid;
+    border-width: 1px;
+    color: #44668C;
+    font-size: 12px;
+}
+
+.CadreFondBleuDessus, .CadreFondBleuDessusFonction
+{
+    display: inline-block;
+    width: 742px; 
+    top: 16px; 
+    margin-left: 201px; 
+/*
+(-bracket-:hack;				//pour la mise en page de Chrome
+    	top: 19px;
+	);
+*/
+}
+
+.CadreFondBleuDessusFonction
+{
+	top: 19px;
+}
+
+.CadreFondBleuCreationModification
+{
+    float: left;
+    margin-top: 20px; 
+    left: 40px; 
+    width:520px;
+    height: 98px;
+    border-width: 1px;
+    border-radius: 5px;
+}
+
+.CadreFondBleuOffre{
+	margin-top: 20px; 
+    left: 40px; 
+    width:520px;
+    height: 98px;
+    border-width: 1px;
+    border-radius: 5px;
+}
+
+.CadreFondBleuGroupe
+{
+    float: left;
+    margin-top: 20px; 
+    left: 40px; 
+    width:520px;
+    height: 70px;
+    border-width: 1px;
+    border-radius: 5px;
+}
+
+.CadreFondBleuAccessibilite, .CadreFondBleuAccessibiliteElement
+{
+    width: 470px;
+    top:13px;
+    margin-bottom:20px;
+}
+
+.CadreFondBleuAccessibilite
+{
+	float: left;
+    left: 40px;
+}
+
+.CadreFondBleuAccessibiliteElement
+{
+    left: 186px;
+}
+
+.CadreFondBlanc
+{
+	position: absolute;
+    width: 744px;
+    overflow: hidden;
+    padding-bottom: 8px;
+}
+
+.CadreFondCalendrier{	
+    position: relative;
+    left: -15px;
+    top: -11px;
+    width: 458px;
+}
+
+.PlacementCadresGris
+{
+	top: -11px;
+}
+
+
+/******* Classes concernant Les positions des boutons (loupe et crayon) *******/
+
+
+.PositionIconePersonne
+{
+    position: relative;
+   	float: left;
+    margin-top: 8px;
+    left: 5px;
+    width: 90px;
+    height: 77px;
+}
+
+.PositionLoupe
+{
+	position: relative; 
+    left: 8px;
+    top: 2px;   
+    width: 16px; 
+	height: 16px;
+	z-index:3;
+}
+
+.BoutonModifierSupprimer
+{
+	position: relative;
+    float: right;
+    margin-top: 3px;
+    margin-right: 5px;
+    height: 16px; 
+	border: 0px; 
+	z-index: 4;
+}
+
+
+/******* Classes concernant le texte + placements image bandeau gauche gris *********/
+
+
+.TextesBandeauNom, .TextesBandeauNomFonction, .ImageBandeauNom
+{     
+    position: relative;
+    z-index: 2;
+    width: 744px;
+}
+
+.TextesBandeauNom{
+	display: inline-block;	
+}
+
+.TextesBandeauNom, .TextesBandeauNomFonction
+{
+    height: 15px;
+    left: 8px;
+    top: -22px;
+    color: #FFFFFF;
+    font-size: 13px;
+    font-weight: bold; 
+    font-family: Arial;
+    overflow: hidden; /*
+    (-bracket-:hack;	//			pour la mise en page de Chrome
+		top: 12px;
+	);
+                      */
+}
+
+.TextesBandeauNomFonction
+{
+	top: 12px;
+}
+
+.ImageBandeauNom
+{
+    top:41px;
+    left:201px;
+    height:23px;	
+}
+
+@media screen and (-webkit-min-device-pixel-ratio:0) { /* pour chrome */
+	.ImageBandeauNom {
+		top:34px;
+    	left:201px;
+    	height:23px;
+	}
+}
+
+.BandeauGaucheGris
+{
+    position: absolute;     
+    z-index: 1;
+    width: 155px;
+    height: 1500px;
+}
+
+.ChampsTextesLigneFonctions
+{
+    left: -8px;
+    width: 134px;
+}
+
+.FonctionsNonRenseignees
+{
+	left: 32px;
+}
+
+.TextesCadresGris
+{
+	position: relative;
+	top: 10px;
+}
+
+
+/******* Classes concernant les tableaux des différents onglets ***********/
+
+
+.TableauxOnglets, .TableauxPersonneEtFonction
+{
+    position: relative;
+	z-index: 2;
+    font-size: 11px; 
+    padding: 12px;
+    cellspacing: 1px;
+	top: -6px;  
+}
+
+.TableauxOnglets
+{
+	width: 584px;
+}
+
+.TableauxPersonneEtFonction
+{
+	width: 598px;	
+/*	(-bracket-: hack;
+		top: -17px;
+	)	*/
+}
+
+.TableauxGroupe
+{	
+	position: relative;
+    top: 45px;
+    width: 588px; 
+/*     
+    (-bracket-:hack;                   pour la mise en page de Chrome
+           top:0px;
+     );	*/
+}
+
+.TableauxMembreGroupe{
+	left: 15px;
+    position: relative;
+    top: 50px;
+    width: 585px;
+}
+
+.LigneBleuFonction
+{
+	left: -8px;
+}
+
+.LigneBleu
+{
+/*	(-bracket-:hack;				pour la mise en page de Chrome
+		left: 126px;
+    );*/
+}
+
+.TableauGroupe
+{
+	z-index: 1;
+	left: 126px;
+	top: -28px;	
+/*	(-bracket-:hack;				pour la mise en page de Chrome
+		float: right;
+		left: 16px;
+		top: -49px;
+	);*/
+}
+
+.TableauStatut
+{
+	position: relative;
+	left: 12px;
+	margin-top: 15px;
+	width: 575px;
+}
+
+.ScrollFonctionsDePersonne, .ScrollTelephone, .ScrollMail, .ScrollGroupe, .ScrollCompetences, .ScrollStatut, .ScrollSite
+{
+	position: relative;
+	height:auto;
+	max-height: 177px;
+	min-height:50px;
+    overflow-x: hidden;
+    overflow-y: auto;
+    width: 588px;           
+}
+
+.ScrollFonctionsDePersonne
+{
+	margin: -10px;
+}
+
+.TableauFonctionsDePersonne
+{
+	position: relative;
+	z-index: 1;
+	min-height: 90px;
+	left: 136px;
+	top: -18px;
+}
+
+.ScrollTelephone
+{
+	max-height: 121px;
+}
+
+.ScrollMail
+{
+	max-height: 141px;
+}
+
+.ScrollGroupe
+{
+	max-height: 190px;
+	min-height: 90px;
+}
+
+.ScrollStatut
+{
+	left: 126px;
+	top: -35px;
+	max-height: 162px;
+/*	(-bracket-:hack;				pour la mise en page de Chrome
+		top: -66px;
+	);*/
+}
+
+.ScrollCompetences
+{
+	z-index: 1;
+	top: -26px;
+	left: 126px;
+/*	(-bracket-:hack;
+		top: -48px;
+	);*/
+}
+
+.ScrollSite
+{
+    max-height: 200px;
+    width: 604px;
+    left:110px;
+    top: -37px;
+    z-index:1;
+/*	(-bracket-:hack;
+		min-height: 72px;
+	);*/
+}
+
+.TableauFonctionsDePersonne, .LigneBleu
+{
+/*	(-bracket-:hack;				pour la mise en page de Chrome
+		top: -37px;
+	);*/
+}
+
+
+/****** Classe pour le positionnement des onglets ******/
+
+
+.Onglets
+{
+	margin-left: 199px;
+    width: 745px;
+    position: relative;
+    margin-top: 30px;
+}
+
+
+/****** Classes pour gérer la taille des div des tableaux + ecart du bas ******/
+
+
+.EcartTableauxDescription
+{
+	margin-bottom: 10px;
+}
+
+.EcartBas
+{
+	margin-bottom: -20px;
+/*	(-bracket: hack;
+		margin-bottom: -10px;
+	);	*/
+}
+
+
+/****** Autres ******/
+
+
+.BlockAccessibilite, .BlockAccessibiliteElement
+{
+	position: relative;
+	display: inline-block;
+}
+
+.BlockAccessibilite
+{
+    height: 35px;
+    left: 59px;
+    top: 10px;
+    width: 120px;
+}
+
+.BlockAccessibiliteElement
+{
+    height: 28px;
+    left: 44px;
+    top: 4px;
+    width: 130px;
+}
+
+.EspaceLibelleInformations
+{
+    position: relative;
+    margin-top: 10px;
+}
+
+.bodyTableScroll
+{
+	left:16px;
+	padding-bottom:0px;
+	padding-top:0px;
+	top: 16px;
+}
+
+.tableOrgaSite
+{
+	position:relative;
+	top:-9px;
+}
+
+.PositionGestionnaire
+{
+	position: relative;
+    width: 681px;
+}
+
+.DisciplinePratique
+{
+	position: relative;
+    top: 3px;
+}
+
+.ResultAccessiblite
+{
+	position: relative;
+	left: 138px;
+    top: 22px;
+}
+
+.DecalageTop10
+{
+/*	(-bracket-:hack;                   pour la mise en page de Chrome
+           top:-10px;
+     );  */
+}
+
+.PositionSiteWeb, .PositionValidite, .PositionSiteWebEG
+{
+	position: absolute;
+	left: 15px;    
+}
+
+.PositionSiteWeb
+{ 
+	top: 69px;
+}
+
+.PositionSiteWebEG
+{ 
+	top: 85px;
+}
+
+.PositionValidite
+{
+    top: 110px;
+}
+
+.LibelleLongueurTotale
+{
+	width:584px;
+}
+
+.EnteteTableDescription
+{
+	width:800px;
+}

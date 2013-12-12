@@ -1,0 +1,111 @@
+
+/****** CSS INTERNET EXPLORER ******/
+
+/****** Classe en référence aux tableaux ******/
+
+
+.LigneBleu
+{
+	left: 137px;
+	top: -25px;
+}
+
+.TableauFonctionsDePersonne
+{
+	top: 6px;
+	left: 147px;
+}
+
+.TableauxPersonneEtFonction
+{
+	top: -4px;
+}
+
+.TableauGroupe
+{
+	float: right;
+	left: 28px;
+	top: -16px;
+}
+
+.TableauxGroupe
+{
+	top:0px;
+}
+
+.ScrollStatut
+{
+	top: -66px;
+}
+
+.ScrollSite
+{
+	min-height: 72px;
+}
+
+.ScrollCompetences
+{
+	top: -18px;
+	left: 137px;
+}
+
+
+/****** Classe pour gérer les écarts ******/
+
+
+.EcartBas
+{
+	margin-bottom: -10px;
+}
+
+
+/****** Autres ******/
+
+
+.BoutonModifierSupprimer
+{
+	margin-top: 2px;
+}
+
+.LibelleTitreClear
+{
+    margin-top: -20px;
+    margin-bottom: 20px;
+}
+
+.TextesBandeauNom, .TextesBandeauNomFonction
+{
+	top: -18px;
+}
+
+.DecalageTop10
+{
+	top: -10px;
+}
+
+.menu 
+{
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 11px;
+	font-weight:bold;
+	color: black;
+	position: absolute;
+	background-color: white;
+	padding: 2px;
+	width: 200px; 
+	margin-top:30px;
+	text-align: left;
+}
+
+#spinchargement{
+    position: absolute;
+    top:95px;
+    width: 25px;
+}
+
+.ImageBandeauNom
+{
+    left:204px;
+    height:23px;
+	top: 34px;
+}
