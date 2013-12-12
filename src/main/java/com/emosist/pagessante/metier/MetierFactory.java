@@ -8,6 +8,7 @@ package com.emosist.pagessante.metier;
 /**
  *
  * @author Damien Chesneau <contact@damienchesneau.fr>
+ * @author Morin Alexandre
  */
 public class MetierFactory {
 
@@ -17,7 +18,8 @@ public class MetierFactory {
     private static DictionnaireOffresSoinsService dictionnaireOffresSoinsSrv = null;
     private static SpecialiteElementRefService specialiteElementRefSrv = null;
     private static CSVService csvSrv= null;
-
+    private static DisciplineRefService disciplineRefSrv = null;
+    
     public static CSVService getCSVService() {
         if (csvSrv == null) {
             csvSrv = new CSVServiceImpl();
@@ -37,5 +39,11 @@ public class MetierFactory {
             specialiteElementRefSrv = new SpecialiteElementRefServiceImpl();
         }
         return specialiteElementRefSrv;
+    }
+    public static DisciplineRefService getDisciplineRefService(){
+        if(disciplineRefSrv == null){
+            disciplineRefSrv = new DisciplineRefServiceImpl();
+        }
+        return disciplineRefSrv;
     }
 }

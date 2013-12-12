@@ -8,6 +8,7 @@ package com.emosist.pagessante.physique.persistence;
 /**
  *
  * @author Damien Chesneau <contact@damienchesneau.fr>
+ * @author Morin Alexandre
  */
 public class PersistanceFactory {
 
@@ -15,6 +16,7 @@ public class PersistanceFactory {
     }
     private static SpecialiteElementRefMapper specialiteElementRefSrv = null;
     private static DictionnaireOffresSoinsMapper dictionnaireOffresSoinsSrv = null;
+    private static DisciplineRefMapper disciplineRefSrv = null;
     
     public static DictionnaireOffresSoinsMapper getDictionnaireOffresSoinsMapper() {
         if (dictionnaireOffresSoinsSrv == null) {
@@ -29,5 +31,10 @@ public class PersistanceFactory {
         }
         return specialiteElementRefSrv;
     }
-
+    public static DisciplineRefMapper getDisciplineRefMapper(){
+        if(disciplineRefSrv == null) {
+            disciplineRefSrv = new DisciplineRefMapperImpl();        
+        }
+        return disciplineRefSrv;
+    }
 }
