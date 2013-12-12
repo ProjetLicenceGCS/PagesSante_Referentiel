@@ -22,7 +22,7 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "disciplineref")
 @NamedQueries({
-    @NamedQuery(name = "DisciplineRef.findAll", query = "SELECT d FROM DisciplineRef d"),
+    @NamedQuery(name = "Disciplineref.findAll", query = "SELECT d FROM DisciplineRef d"),
     @NamedQuery(name = "DisciplineRef.findByIddisciplineref", query = "SELECT d FROM DisciplineRef d WHERE d.iddisciplineref = :iddisciplineref"),
     @NamedQuery(name = "DisciplineRef.findByDescription", query = "SELECT d FROM DisciplineRef d WHERE d.description = :description"),
     @NamedQuery(name = "DisciplineRef.findByDescriptionNorm", query = "SELECT d FROM DisciplineRef d WHERE d.descriptionNorm = :descriptionNorm")
@@ -37,7 +37,7 @@ public class DisciplineRef implements Serializable {
     @Column(name = "description")
     private String description;
     @Column(name = "description_norm")
-    private String descriptionNorm;
+    private String descriptionNorm; 
     @OneToMany(mappedBy = "iddisciplineref")
     private List<SpecialiteElementRef> specialiteelementrefList;
 

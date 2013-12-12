@@ -27,15 +27,15 @@
                     <tr>
                         <td><p style="text-align: center;">Description</p></td>
                         <td></td>
-                        <td><img onclick="addDisciplineRef();" src="<c:url value="/images/icone_action_ajouter_creer.png" />"</td>
+                        <td><img  src="<c:url value="/images/icone_action_ajouter_creer.png" />"</td>
                     </tr>
                 </thead>
 
-                <c:forEach items="${disciplineRef}" var="disciplineRef" var="status">
-                    <tr id="${disciplineRef.iddisciplineref}" >
-                        td><p title="${disciplineRef.descriptionNorm}">${disciplineRef.description}</p></td>
-                        <td style="width: 15px;"><img  style="display: block; margin-left: auto;  margin-right: auto;" src="<c:url value="/images/croix.png"/>" onclick="disciplineRefDelete('${disciplineRef.iddisciplineref}', this.parentNode);" /></td>
-                        <td style="width: 15px;"><img style="display: block; margin-left: auto;  margin-right: auto;" src="<c:url value="/images/icone_action_modifier.png" />" onclick="updateDisciplineRef(this.parentNode);"/></td>
+                <c:forEach items="${disciplineRef}" var="disciplinesRef" varStatus="status">
+                    <tr id="${disciplinesRef.iddisciplineref}" > 
+                        <td><p title="${disciplinesRef.descriptionNorm}">${disciplinesRef.description}</p></td>
+                        <td style="width: 15px;"><img  style="display: block; margin-left: auto;  margin-right: auto;" src="<c:url value="/images/croix.png"/>"  /></td>
+                        <td style="width: 15px;"><img style="display: block; margin-left: auto;  margin-right: auto;" src="<c:url value="/images/icone_action_modifier.png" />" /></td>
                     </tr>
                 </c:forEach>
             </table> 
