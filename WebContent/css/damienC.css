@@ -1,19 +1,19 @@
 .TableauLignesAutomatique tr:nth-child(2n+1){
-    line-height: 12px;
-    font-family:Arial;
-    font-weight:normal;
-    font-size:11px;
-    color:#44668C;
-    background-color:#FFFFFF;
-    text-decoration:none;
+    line-height: 1px;
+    font-family: Arial;
+    font-weight: normal;
+    font-size: 11px;
+    color: #44668C;
+    background-color: #FFFFFF;
+    text-decoration: none;
 }
 .TableauLignesAutomatique tr:nth-child(2n+2){
     line-height: 1px;
-    font-family:Arial;
-    font-weight:normal;
-    font-size:11px;
-    color:#44668C;
-    background-color:#CACDD0;
+    font-family: Arial;
+    font-weight: normal;
+    font-size: 11px;
+    color: #44668C;
+    background-color: #CACDD0;
 }
 .TableauLignesAutomatique thead tr td{
     line-height: 1px;    

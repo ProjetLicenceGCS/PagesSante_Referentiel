@@ -238,7 +238,7 @@ function getDialogForUpdate() {
             if (text.indexOf("PB") != -1) {
                 $("#alert").show();
             } else if  (text.indexOf("aucuneOffre") != -1) {
-                alert("aucune Offre");
+                getDialogUpdate();
             } else {
                 if (dicoOffreSoin == 0) {
                     var start = true;
@@ -261,7 +261,7 @@ function getDialogForUpdate() {
 }
 function getDialogUpdate() {
     $.ajax({
-        url: 'http://localhost:8080/PagesSante_Referentiel/pagessante/dictionnaireOffreSoin/getAjaxFile',
+        url: 'http://localhost:8080/PagesSante_Referentiel/pagessante/dictionnaireoffressoins/getAjaxFile',
         type: 'POST',
         dataType: 'text',
         width: 100,

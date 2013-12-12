@@ -160,15 +160,20 @@ public class SpecialiteElementRefController extends MainController {
             ret = "aucuneOffre";
         } else {
             List<DictionnaireOffresSoins> dictionnaireoffressoins = specialiteElementRefSelected.getDictionnaireoffressoinsList();
-            String toAdd = new String();
+            if(dictionnaireoffressoins.size()==0){
+                ret = "aucuneOffre";
+            }else{
+                String toAdd = new String();
             for (int i = 0; i < dictionnaireoffressoins.size(); i++) {
                 toAdd += dictionnaireoffressoins.get(i).getIddictoffressoins().toString();
                 if (dictionnaireoffressoins.size() != i + 1) {
                     toAdd += ",";
                 }
             }
-//            ret = "<script> var myDico = new Array(['" + toAdd + "']) </script>";
+            ret = "<script> var myDico = new Array(['" + toAdd + "']) </script>";
             ret = toAdd;
+            }
+            
         }
         return new ModelAndView("ajax/AjaxGetDicoOffreSoinForSpecialiteSelected", "ret", ret);
     }
