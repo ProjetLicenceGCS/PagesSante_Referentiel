@@ -4,6 +4,11 @@
  * @returns {undefined}
  */
 var dicoOffreSoin = new Array();
+var discipline ="";
+
+function setDisciplineSelected(id){
+    discipline = id;
+}
 
 function setSelectedElements(id) {
     var i;
@@ -113,7 +118,7 @@ function addSpecialiteElementRef() {
         buttons: {
             "Ajouter": function() {
                 $.ajax({
-                    url: 'http://localhost:8080/PagesSante_Referentiel/pagessante/specialiteelement/add?description=' + $('#description').val() + "&descriptionNormalise=" + $("#descriptionNormalise").val() + "&offres=" + dicoOffreSoin.toString(),
+                    url: 'http://localhost:8080/PagesSante_Referentiel/pagessante/specialiteelement/add?description=' + $('#description').val() + "&descriptionNormalise=" + $("#descriptionNormalise").val() + "&offres=" + dicoOffreSoin.toString()+"&discipline="+discipline,
                     type: 'POST',
                     dataType: 'text',
                     width: 100,
@@ -294,6 +299,43 @@ function getDialogUpdate() {
                                 pluriel = "offre";
                             }
                             document.getElementById("upoffreSoinNb").innerHTML = dicoOffreSoin.length + " " + pluriel;
+                            $(this).dialog("close");
+                        }
+                    }
+                });
+            }
+        }
+    });
+}
+function getDialogForDiscipline(){
+    $.ajax({
+        url: 'http://localhost:8080/PagesSante_Referentiel/pagessante/specialiteelement/getDisciplineForAjaxFile',
+        type: 'POST',
+        dataType: 'text',
+        width: 100,
+        timeout: 1000,
+        error: function() {
+            $("#alert").show();
+            $("#dialog-modifier").dialog("close");
+        },
+        success: function(text) {
+            if  (text.indexOf("Impossible de supprimer.") != -1) {
+                $("#alert").show();
+                $("#dialog-modifier").dialog("close");
+            } else {
+                document.getElementById("inner").innerHTML = text;
+                $("#dialog-disciplineRef").dialog({
+                    resizable: false,
+                    height: 500,
+                    width: 500,
+                    modal: true,
+                    buttons: {
+                        "Fermer": function() {
+//                            var pluriel = "offres";
+//                            if (dicoOffreSoin.length == 1) {
+//                                pluriel = "offre";
+//                            }
+//                            document.getElementById("upoffreSoinNb").innerHTML = dicoOffreSoin.length + " " + pluriel;
                             $(this).dialog("close");
                         }
                     }

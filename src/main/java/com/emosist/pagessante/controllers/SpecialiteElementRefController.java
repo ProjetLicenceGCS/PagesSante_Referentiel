@@ -1,10 +1,11 @@
-
 package com.emosist.pagessante.controllers;
 
 import com.emosist.pagessante.beans.DictionnaireOffresSoins;
+import com.emosist.pagessante.beans.DisciplineRef;
 import com.emosist.pagessante.beans.SpecialiteElementRef;
 import com.emosist.pagessante.exception.DataConflictException;
 import com.emosist.pagessante.metier.DictionnaireOffresSoinsService;
+import com.emosist.pagessante.metier.DisciplineRefService;
 import com.emosist.pagessante.metier.MetierFactory;
 import com.emosist.pagessante.metier.SpecialiteElementRefService;
 import java.util.ArrayList;
@@ -53,11 +54,10 @@ public class SpecialiteElementRefController extends MainController {
 
         return new ModelAndView("SpecialiteElementRef", "specialiteElementRef", specialiteElementRefs);
     }
-    @RequestMapping(method = RequestMethod.POST,value = "/selectOneSpecialite")
+
+    @RequestMapping(method = RequestMethod.POST, value = "/selectOneSpecialite")
     public ModelAndView selectOneSpecialite(ModelMap model, HttpServletRequest request) {
         List<SpecialiteElementRef> specialiteElementRefs = null;
-        // ajoute les variables de sessions pour définir le profil de
-        // l'utilisateur
         this.addSessionToModel(model, request);
         try {
             specialiteElementRefs = this.specialiteElementRefSrv.selectAll();
@@ -83,11 +83,20 @@ public class SpecialiteElementRefController extends MainController {
 
     @RequestMapping(method = RequestMethod.POST, value = "/add")
     public ModelAndView add(ModelMap model, HttpServletRequest request) {
+        DisciplineRefService disciplineRefSrv = MetierFactory.getDisciplineRefService();
         String ret = "OK";
         String description = request.getParameter("description");
         String descriptionNormalise = request.getParameter("descriptionNormalise");
         String trameOffreSoin = request.getParameter("offres");
-        
+        String disciplineStrID= request.getParameter("discipline");
+        DisciplineRef disciplineRef =null;
+        if(!"".equals(disciplineStrID)){
+            try {
+                disciplineRef = disciplineRefSrv.selectByPrimaryKey(Integer.valueOf(disciplineStrID));
+            } catch (Exception ex) {
+                Logger.getLogger(SpecialiteElementRefController.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
         List<DictionnaireOffresSoins> dictionnaireOffresSoinses = null;
         try {
             dictionnaireOffresSoinses = this.parseTram(trameOffreSoin);
@@ -97,7 +106,7 @@ public class SpecialiteElementRefController extends MainController {
         }
         SpecialiteElementRef add = null;
         try {
-            add = this.specialiteElementRefSrv.add(description, descriptionNormalise, dictionnaireOffresSoinses, null);
+            add = this.specialiteElementRefSrv.add(description, descriptionNormalise, dictionnaireOffresSoinses, disciplineRef);
         } catch (DataConflictException ex) {
             ret = "DC";
             Logger.getLogger(SpecialiteElementRefController.class.getName()).log(Level.SEVERE, null, ex);
@@ -105,10 +114,24 @@ public class SpecialiteElementRefController extends MainController {
             ret = "PB";
             Logger.getLogger(SpecialiteElementRefController.class.getName()).log(Level.SEVERE, null, ex);
         }
-        if(add==null){
+        if (add == null) {
             return new ModelAndView("ajax/AjaxAddSpecialiteElement", "ret", ret);
         }
         return new ModelAndView("ajax/AjaxAddSpecialiteElement", "ret", add.getIdspecialiteelementref());
+    }
+
+    @RequestMapping(method = RequestMethod.POST, value = "/getDisciplineForAjaxFile")
+    public ModelAndView getDiscipline(ModelMap model, HttpServletRequest request) {
+        String ret = "OK";
+        DisciplineRefService disciplineRefSrv = MetierFactory.getDisciplineRefService();
+        List<DisciplineRef> selectAll = null;
+        try {
+            selectAll = disciplineRefSrv.selectAll();
+        } catch (Exception ex) {
+            Logger.getLogger(SpecialiteElementRefController.class.getName()).log(Level.SEVERE, null, ex);
+            return new ModelAndView("ajax/AjaxSelectOneDiscipline", "disciplineRef", "erreur");
+        }
+        return new ModelAndView("ajax/AjaxSelectOneDiscipline", "disciplineRef", selectAll);
     }
 
     @RequestMapping(method = RequestMethod.POST, value = "/update")
@@ -126,9 +149,9 @@ public class SpecialiteElementRefController extends MainController {
             Logger.getLogger(SpecialiteElementRefController.class.getName()).log(Level.SEVERE, null, ex);
         }
         SpecialiteElementRef add = null;
-        SpecialiteElementRef selectByPrimaryKey =null;
+        SpecialiteElementRef selectByPrimaryKey = null;
         try {
-             selectByPrimaryKey = this.specialiteElementRefSrv.selectByPrimaryKey(Integer.valueOf(idStr));
+            selectByPrimaryKey = this.specialiteElementRefSrv.selectByPrimaryKey(Integer.valueOf(idStr));
         } catch (Exception ex) {
             ret = "PB";
             Logger.getLogger(SpecialiteElementRefController.class.getName()).log(Level.SEVERE, null, ex);
@@ -137,14 +160,14 @@ public class SpecialiteElementRefController extends MainController {
         selectByPrimaryKey.setDescriptionNorm(descriptionNormalise);
         selectByPrimaryKey.setDictionnaireoffressoinsList(dictionnaireOffresSoinses);
         try {
-             this.specialiteElementRefSrv.updateByPrimaryKeySelective(selectByPrimaryKey);
+            this.specialiteElementRefSrv.updateByPrimaryKeySelective(selectByPrimaryKey);
         } catch (Exception ex) {
             ret = "PB";
             Logger.getLogger(SpecialiteElementRefController.class.getName()).log(Level.SEVERE, null, ex);
         }
         return new ModelAndView("ajax/AjaxUpateSpecialite", "ret", ret);
     }
-    
+
     @RequestMapping(method = RequestMethod.POST, value = "/getDictionnaireOffreSoinBySpecialiteElement")
     public ModelAndView getDictionnaireOffreSoinBySpecialiteElement(ModelMap model, HttpServletRequest request) {
         String ret = "OK";
@@ -160,20 +183,20 @@ public class SpecialiteElementRefController extends MainController {
             ret = "aucuneOffre";
         } else {
             List<DictionnaireOffresSoins> dictionnaireoffressoins = specialiteElementRefSelected.getDictionnaireoffressoinsList();
-            if(dictionnaireoffressoins.size()==0){
+            if (dictionnaireoffressoins.size() == 0) {
                 ret = "aucuneOffre";
-            }else{
+            } else {
                 String toAdd = new String();
-            for (int i = 0; i < dictionnaireoffressoins.size(); i++) {
-                toAdd += dictionnaireoffressoins.get(i).getIddictoffressoins().toString();
-                if (dictionnaireoffressoins.size() != i + 1) {
-                    toAdd += ",";
+                for (int i = 0; i < dictionnaireoffressoins.size(); i++) {
+                    toAdd += dictionnaireoffressoins.get(i).getIddictoffressoins().toString();
+                    if (dictionnaireoffressoins.size() != i + 1) {
+                        toAdd += ",";
+                    }
                 }
+                ret = "<script> var myDico = new Array(['" + toAdd + "']) </script>";
+                ret = toAdd;
             }
-            ret = "<script> var myDico = new Array(['" + toAdd + "']) </script>";
-            ret = toAdd;
-            }
-            
+
         }
         return new ModelAndView("ajax/AjaxGetDicoOffreSoinForSpecialiteSelected", "ret", ret);
     }
@@ -219,9 +242,9 @@ public class SpecialiteElementRefController extends MainController {
         List<DictionnaireOffresSoins> dictionnaireOffresSoinses = new ArrayList<DictionnaireOffresSoins>();
         List<String> ids = this.transform(trame);
         for (int i = 0; i < ids.size(); i++) {
-            if(!"".equals(ids.get(i))){
+            if (!"".equals(ids.get(i))) {
                 DictionnaireOffresSoins offreSoin = this.dictionnaireOffresSoinsSrv.selectByPrimaryKey(Integer.valueOf(ids.get(i)));
-            dictionnaireOffresSoinses.add(offreSoin);
+                dictionnaireOffresSoinses.add(offreSoin);
             }
         }
         return dictionnaireOffresSoinses;

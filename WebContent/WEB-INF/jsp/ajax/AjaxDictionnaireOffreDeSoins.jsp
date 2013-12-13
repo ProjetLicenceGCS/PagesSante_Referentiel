@@ -1,18 +1,18 @@
 <%-- 
     Document   : AjaxDictionnaireOffreDeSoins
     Created on : 5 déc. 2013, 17:36:44
-    Author     : damien
+    Author     : Damien Chesneau <contact@damienchesneau.fr>
 --%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <div id="dialog-dictionnaireoffressoins" title="Dictionnaire des offres de soins" style=" display: none;  ">
     <table id="Dialog" style="width: 100%;" class="TableauLignesAutomatique">
-        <thead >
-            <tr>
+        <thead>
+            <tr style="font-size: 10px;">
                 <td>Intitule</td>
                 <td></td>
             </tr>
-        </thead>        
+        </thead>  
         <c:forEach  items="${dictonnaireOffreSoin}" var="dictonnaireOffreSoin" varStatus="status">
             <tr id="" >
                 <td><p title="${dictonnaireOffreSoin.intituleNorm}">${dictonnaireOffreSoin.intitule}</p></td>

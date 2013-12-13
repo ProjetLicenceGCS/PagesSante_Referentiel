@@ -1,7 +1,7 @@
 <%-- 
     Document   : head
     Created on : 2 déc. 2013, 11:23:19
-    Author     : damien
+    Author     : Damien Chesneau <contact@damienchesneau.fr>
 --%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
          pageEncoding="UTF-8"%>

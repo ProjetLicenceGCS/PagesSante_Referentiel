@@ -1,7 +1,7 @@
 <%-- 
     Document   : scriptToInclude
     Created on : 2 déc. 2013, 11:25:57
-    Author     : damien
+    Author     : Damien Chesneau <contact@damienchesneau.fr>
 --%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
