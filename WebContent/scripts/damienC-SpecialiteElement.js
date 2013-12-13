@@ -140,7 +140,6 @@ function addSpecialiteElementRef() {
                             var col2 = ligne.insertCell(1);
                             var col3 = ligne.insertCell(2);
                             ligne.id = text;
-//                            ligne.className = "TableauLignesPyjama";
                             col1.innerHTML = "<p title=\"" + $('#descriptionNormalise').val() + "\">" + $('#description').val() + "</p>";
                             col3.style = "width: 15px;";
                             col3.innerHTML = "<img style=\"display: block; margin-left: auto;  margin-right: auto;\" src=\"/PagesSante_Referentiel/images/icone_action_modifier.png\" onclick=\"updateSpecialiteElementRef(this.parentNode);\"/>";
@@ -331,11 +330,9 @@ function getDialogForDiscipline(){
                     modal: true,
                     buttons: {
                         "Fermer": function() {
-//                            var pluriel = "offres";
-//                            if (dicoOffreSoin.length == 1) {
-//                                pluriel = "offre";
-//                            }
-//                            document.getElementById("upoffreSoinNb").innerHTML = dicoOffreSoin.length + " " + pluriel;
+                            if(discipline!=""){
+                                document.getElementById("disciplineNb").innerHTML = "séléctionné.";
+                            }
                             $(this).dialog("close");
                         }
                     }
