@@ -161,6 +161,31 @@ function addSpecialiteElementRef() {
     });
 }
 var id;
+function ajaxDiscipline(){
+    $.ajax({
+        url: 'http://localhost:8080/PagesSante_Referentiel/pagessante/specialiteelement/knowIfADisciplineAreInTheEntity?id=' + id,
+        type: 'POST',
+        dataType: 'text',
+        width: 100,
+        timeout: 1000,
+        error: function() {
+            $("#alert").show();
+            $("#dialog-modifier").dialog("close");
+        },
+        success: function(text) {
+            if (text.indexOf("PB") != -1){
+                $("#alert").show();
+            } else if  (text.indexOf("aucun") != -1){
+                document.getElementById("updisciplineNb").innerHTML = "aucune séléction.";
+            } else {
+                discipline = text;
+                if(discipline!=""){
+                    document.getElementById("updisciplineNb").innerHTML = "séléctionné.";
+                }   
+            }
+        }
+    });
+}
 function updateSpecialiteElementRef(element) {
     var idSpecialiteElementRefSelected = element.parentElement.id;
     id = idSpecialiteElementRefSelected;
@@ -179,10 +204,11 @@ function updateSpecialiteElementRef(element) {
             $("#dialog-modifier").dialog("close");
         },
         success: function(text) {
+            ajaxDiscipline();
             if (text.indexOf("PB") != -1){
                 $("#alert").show();
             } else if  (text.indexOf("aucuneOffre") != -1){
-                alert("aucune Offre");
+               document.getElementById("upoffreSoinNb").innerHTML = "0 offre";
             } else {
                 var pluriel = "offres";
                 if (text.length == 1) {
@@ -340,4 +366,11 @@ function getDialogForDiscipline(){
             }
         }
     });
+}
+function getDialogForDisciplineWithUpdate(){
+    getDialogForDiscipline();
+    if(discipline!=""){
+        alert("discipline"+discipline);
+        document.getElementById("discipline"+discipline).checked = true;
+    }
 }

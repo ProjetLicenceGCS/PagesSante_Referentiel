@@ -88,9 +88,9 @@ public class SpecialiteElementRefController extends MainController {
         String description = request.getParameter("description");
         String descriptionNormalise = request.getParameter("descriptionNormalise");
         String trameOffreSoin = request.getParameter("offres");
-        String disciplineStrID= request.getParameter("discipline");
-        DisciplineRef disciplineRef =null;
-        if(!"".equals(disciplineStrID)){
+        String disciplineStrID = request.getParameter("discipline");
+        DisciplineRef disciplineRef = null;
+        if (!"".equals(disciplineStrID)) {
             try {
                 disciplineRef = disciplineRefSrv.selectByPrimaryKey(Integer.valueOf(disciplineStrID));
             } catch (Exception ex) {
@@ -168,6 +168,30 @@ public class SpecialiteElementRefController extends MainController {
         return new ModelAndView("ajax/AjaxUpateSpecialite", "ret", ret);
     }
 
+    @RequestMapping(method = RequestMethod.POST, value = "/knowIfADisciplineAreInTheEntity")
+    public ModelAndView knowIfADisciplineAreInTheEntity(ModelMap model, HttpServletRequest request) {
+        String ret = "OK";
+        String idInString = request.getParameter("id");
+        SpecialiteElementRef specialiteElementRefSelected = null;
+        try {
+            specialiteElementRefSelected = this.specialiteElementRefSrv.selectByPrimaryKey(Integer.valueOf(idInString));
+        } catch (Exception ex) {
+            ret = "PB";
+            Logger.getLogger(SpecialiteElementRefController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        try{
+        if (specialiteElementRefSelected.getIddisciplineref() == null) {
+            ret = "aucun";
+        } else {
+            DisciplineRef dictionnaireoffressoins = specialiteElementRefSelected.getIddisciplineref();
+            ret = String.valueOf(dictionnaireoffressoins.getIddisciplineref());
+        }
+          }catch(NullPointerException e){
+                ret = "aucun";
+        }
+        return new ModelAndView("ajax/AjaxSimpleResult", "ret", ret);
+    }
+
     @RequestMapping(method = RequestMethod.POST, value = "/getDictionnaireOffreSoinBySpecialiteElement")
     public ModelAndView getDictionnaireOffreSoinBySpecialiteElement(ModelMap model, HttpServletRequest request) {
         String ret = "OK";
@@ -212,11 +236,15 @@ public class SpecialiteElementRefController extends MainController {
             ret = "PB";
             Logger.getLogger(SpecialiteElementRefController.class.getName()).log(Level.SEVERE, null, ex);
         }
-        if (specialiteElementRefSelected.getDictionnaireoffressoinsList() == null) {
-            ret = "aucuneOffre";
-        } else {
-            List<DictionnaireOffresSoins> dictionnaireoffressoins = specialiteElementRefSelected.getDictionnaireoffressoinsList();
-            ret = String.valueOf(dictionnaireoffressoins.size());
+        try {
+            if (specialiteElementRefSelected.getDictionnaireoffressoinsList() == null) {
+                ret = "aucuneOffre";
+            } else {
+                List<DictionnaireOffresSoins> dictionnaireoffressoins = specialiteElementRefSelected.getDictionnaireoffressoinsList();
+                ret = String.valueOf(dictionnaireoffressoins.size());
+            }
+        }catch(NullPointerException e){
+                    ret = "aucuneOffre";
         }
         return new ModelAndView("ajax/AjaxGetCountDicoOffreSoinForSpecialiteSelected", "ret", ret);
     }

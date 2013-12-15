@@ -55,7 +55,6 @@ function addOffreDeSoin() {
             },
             Annuler: function() {
                 cleanInputs();
-
                 $(this).dialog("close");
             }
         }
@@ -160,7 +159,7 @@ function dictionnaireOffreDeSoinDelete(id, index) {
         }
     });
 }
-function updateDictionnaireOffreDeSoinRef(element) {//upIntitule upIntituleNormalise upDescription upMotsCles upSpecialitePrinter
+function updateDictionnaireOffreDeSoinRef(element) {
     var idOffreSoinSelected = element.parentElement.id;
     var intituleOffreSoinSelected = element.parentElement.children.item(0).firstChild.innerText;
     var intituleNormaliseOffreSoinSelected = element.parentElement.children.item(0).firstChild.title;
@@ -205,7 +204,6 @@ function updateDictionnaireOffreDeSoinRef(element) {//upIntitule upIntituleNorma
                     width: 100,
                     timeout: 1000,
                     error: function() {
-
                         $("#alert").show();
                         $(this).dialog("close");
                     },

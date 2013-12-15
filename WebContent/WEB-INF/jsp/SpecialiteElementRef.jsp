@@ -56,7 +56,7 @@
                 <tr><td>Description </td><td><input id="updescription" type="text"  ></input></td></tr>
                 <tr><td>Description normalisé </td><td><input id="updescriptionNormalise" type="text"  ></input></td></tr>
                 <tr><td>Offres de soins </td><td><input id="upoffresoins" type="button" onclick="getDialogForUpdate();" value="Faite votre séléction"/><td><div id="upoffreSoinNb" style="position: absolute;"></div></td></td></tr>
-                <tr><td>Discipline </td><td><input id="updiscipline" type="button" value="Faite votre séléction" /></td></tr>
+                <tr><td>Discipline </td><td><input id="updiscipline" onclick="getDialogForDisciplineWithUpdate();" type="button" value="Faite votre séléction" /><td><div id="updisciplineNb" style="position: absolute;"></div></td></td></tr>
             </table>
         </div><br/>
         <div id="inner"></div>

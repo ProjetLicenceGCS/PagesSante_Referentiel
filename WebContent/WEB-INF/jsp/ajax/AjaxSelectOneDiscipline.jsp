@@ -16,17 +16,8 @@
         <c:forEach  items="${disciplineRef}" var="disciplineRef" varStatus="status">
             <tr id="${disciplineRef.iddisciplineref}" >
                 <td><p title="${disciplineRef.descriptionNorm}">${disciplineRef.description}</p></td>
-                <td><input id="dico${disciplineRef.iddisciplineref}" name="group" type="radio" value="${disciplineRef.iddisciplineref}" onclick="setDisciplineSelected(this.value)" /></td>
+                <td><input id="discipline${disciplineRef.iddisciplineref}" name="group" type="radio" value="${disciplineRef.iddisciplineref}" onclick="setDisciplineSelected(this.value)" /></td>
             </tr>
         </c:forEach>
     </table>
-    <script>
-        function isInTab(id) {
-            for (i = 0; i < dicoOffreSoin.length; i++) {
-                if (dicoOffreSoin[i] == id) {
-                    return true;
-                }
-            }
-        }
-    </script>
 </div>
