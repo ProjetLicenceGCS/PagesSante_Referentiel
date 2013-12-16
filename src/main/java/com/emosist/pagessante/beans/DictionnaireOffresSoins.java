@@ -15,7 +15,7 @@ import javax.persistence.Table;
 
 /**
  *
- * @author damien
+ * @author Damien Chesneau <contact@damienchesneau.fr>
  */
 @Entity
 @Table(name = "dictionnaireoffressoins")
