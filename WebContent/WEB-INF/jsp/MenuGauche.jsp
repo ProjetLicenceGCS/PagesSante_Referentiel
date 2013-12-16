@@ -132,6 +132,11 @@
 										Dictionnaire des offres de soins																						
 									</a>
 									<br />
+                                                                        <img class="pucesousmenu" src="<c:url value="/images/fleche-menu-gauche.png" />" />&nbsp;
+									<a class="LienSousMenu" href="<c:url value="${requete.servletPath}/csv" />" title="Page de téléchargement du fichier CSV" >
+										CSV																						
+									</a>
+									<br />
 							</span>
 						</div>
 					</c:when>
