@@ -1,7 +1,6 @@
 package com.emosist.pagessante.physique.io;
 
 import com.emosist.pagessante.exception.SystemNotSupportedException;
-import org.omg.CORBA.SystemException;
 
 /**
  *
@@ -9,8 +8,8 @@ import org.omg.CORBA.SystemException;
  */
 public class PathFactory {
 
-    private PathFactory() {
-    }
+    private PathFactory() {}
+    
     private static String OS = System.getProperty("os.name").toLowerCase();
 
     public static String getPathForWebServer() throws SystemNotSupportedException {
