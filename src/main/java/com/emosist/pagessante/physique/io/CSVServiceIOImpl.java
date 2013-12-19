@@ -31,7 +31,7 @@ public class CSVServiceIOImpl implements CSVServiceIO {
             file.delete();
         }
         file.createNewFile();
-        return file.toURI();
+        return new URI("http://localhost/"+this.fileName);
     }
 
 }

@@ -24,3 +24,13 @@
     background-color:#517AAC;
     text-align:left;
 }
+.TableauLignesAutomatique thead tr th{
+    line-height: 12px;    
+    font-family:Arial;
+    font-weight:bold;
+    font-size: 11px;
+    color:#FFFFFF;
+    background-color:#517AAC;
+    text-align:left;
+}
+

@@ -21,6 +21,18 @@
                 <div style="font-size: 25px; color: white;">Une erreur est survenu. Veuillez réessayer plus tard.<a style="float: right; font-size: 25px;"onclick='$("#alert").hide();'>X&nbsp;</a>
                 </div>
             </div>
-        <jsp:include page="scriptToInclude.jsp" />
+            <table style="width: 100%;" class="TableauLignesAutomatique">
+                <tr>
+                    <td>Exporter la base de donnée sous le format CSV</td>
+                    <td><button onclick="telechargerCSV();">Télécharger</button></td>
+                </tr>
+                 <tr>
+                    <td>Importer un fichier CSV</td>
+                    <td><button>Ouvrir une boite de séléction</button></td>
+                </tr>
+            </table>
+            <div id="downloadProject"></div>
+            <jsp:include page="scriptToInclude.jsp" />
+            <script src="<c:url value="/scripts/damienC-csv.js"/>" type="text/javascript" ></script>
     </body>
 </html>
