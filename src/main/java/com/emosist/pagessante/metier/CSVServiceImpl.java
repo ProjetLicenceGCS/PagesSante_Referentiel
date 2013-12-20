@@ -33,6 +33,13 @@ public class CSVServiceImpl implements CSVService {
         throw new UnsupportedOperationException("Not supported yet. TO DO");
     }
 
+    /**
+     * Permet de génerer un fichier CSV en fonction de la méthode
+     * getClassToGenerateCSV()
+     *
+     * @return URL du fichier crée
+     * @throws Exception
+     */
     @Override
     public URL generateCSV() throws Exception {
         URI createdFile = this.csvSrv.createFile("generatedFile.csv");
@@ -54,12 +61,23 @@ public class CSVServiceImpl implements CSVService {
             for (int i = 0; i < sd.size(); i++) {
                 List<String> values = new ArrayList<String>();
                 Object get = sd.get(i);
-                this.csvSrv.writeLine(this.getContentLine2(get, attributs));
+                this.csvSrv.writeLine(this.getContentLine(get, attributs));
             }
         }
         return createdFile.toURL();
     }
 
+    /**
+     * Cette methode permet tout simplement d'inscire certaines classes a la
+     * création du fichier CSV Pour ajouter une classe il suffit de l'ajouter au
+     * dictionnaire. La clé est le bean. la valeur est une List de ce bean avec
+     * les valeurs inscrite à l'interieur. Attention pour que cela fontionne il
+     * faut que les getters soit crée et qu'il correspondent aux standards. ex:
+     * attribut: monAttribut getter: getMonAttribut
+     *
+     * @return
+     * @throws Exception
+     */
     private Map<Class, List> getClassToGenerateCSV() throws Exception {
         Map<Class, List> classes = new HashMap<Class, List>();
         classes.put(SpecialiteElementRef.class, PersistanceFactory.getSpecialiteElementRefMapper().selectAll());
@@ -68,9 +86,22 @@ public class CSVServiceImpl implements CSVService {
         return classes;
     }
 
-    private String getContentLine2(Object get, List<String> attributs) throws NoSuchMethodException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
+    /**
+     * Permet de retourner la ligne au format CSV en fonction d'un bean et de
+     * ses attributs
+     *
+     * @param get Soit le bean
+     * @param attributs de la classe
+     * @return La ligne normalisé au format CSV, les espaces présent dans un
+     * attribut sont remplacé par *<+
+     * @throws NoSuchMethodException
+     * @throws IllegalAccessException
+     * @throws IllegalArgumentException
+     * @throws InvocationTargetException
+     */
+    private String getContentLine(Object get, List<String> attributs) throws NoSuchMethodException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
         List<String> values = new ArrayList<String>();
-        for (int j = 1; j < attributs.size(); j++) {
+        for (int j = 0; j < attributs.size(); j++) {
             String get1 = attributs.get(j);
             char charAt = get1.charAt(0);
             char toUpperCase = Character.toUpperCase(charAt);
@@ -82,33 +113,110 @@ public class CSVServiceImpl implements CSVService {
             String value = null;
             if (invoke != null) {
                 if (invoke instanceof String) {
-                    value = invoke.toString();
+                    String s = (String) invoke;
+                    if (s.isEmpty()) {
+                        value = "VIDE";
+                    } else {
+                        value = s.toString();
+                    }
                 } else if (invoke instanceof Integer) {
                     value = invoke.toString();
+                } else if (invoke instanceof SpecialiteElementRef) {
+                    SpecialiteElementRef o = (SpecialiteElementRef) invoke;
+                    value = o.getIdspecialiteelementref().toString();
+                } else if (invoke instanceof List) {
+                    try {
+                        List<SpecialiteElementRef> specialiteElementRefs = (List<SpecialiteElementRef>) invoke;
+                        List<String> strings = new ArrayList<String>();
+                        for (SpecialiteElementRef specialiteElementRef : specialiteElementRefs) {
+                            strings.add(specialiteElementRef.getIdspecialiteelementref().toString());
+                        }
+                        if (strings.size() != 0) {
+                            value = this.formatInnerCell(strings);
+                        } else {
+                            value = "VIDE";
+                        }
+                    } catch (ClassCastException e) {
+                        System.out.println(e.getMessage());
+                        List<DictionnaireOffresSoins> dictionnaireOffresSoinses = (List<DictionnaireOffresSoins>) invoke;
+                        List<String> strings = new ArrayList<String>();
+                        for (DictionnaireOffresSoins dictionnaireOffresSoins : dictionnaireOffresSoinses) {
+                            strings.add(dictionnaireOffresSoins.getIddictoffressoins().toString());
+                        }
+                        if (strings.size() != 0) {
+                            value = this.formatInnerCell(strings);
+                        } else {
+                            value = "VIDE";
+                        }
+                    }
+                } else if (invoke instanceof DisciplineRef) {
+                    DisciplineRef o = (DisciplineRef) invoke;
+                    value = o.getIddisciplineref().toString();
                 } else {
-                    // On est en présence d'une cascade d'objets il va dont falloir traiter les listes et autres Objets. Pour l'instant on reste au niveau 0 et traitons les simples String
                     value = "OBJECT";
                 }
             } else {
                 value = "VIDE";
+            }
+            int indexOf;
+            while ((indexOf = value.lastIndexOf(",")) != -1) {
+                if (indexOf != -1) {
+                    char oldChar = value.charAt(indexOf);
+                    String newStr = "*<+";
+                    value = value.replace(Character.toString(oldChar), newStr);
+                }
             }
             values.add(value);
         }
         return this.format(values);
     }
 
-    private String format(List<String> attributs) {
+    /**
+     * Permet de retourner au format CSV une liste d'item. Chaque élément est
+     * séparé par un - A appliquer pour une cellule.
+     *
+     * @param items
+     * @return String de la liste au format CSV pour une cellule
+     */
+    private String formatInnerCell(List<String> items) {
         String line = "";
-        for (int b = 0; b < attributs.size(); b++) {
-            if (b != 0 && b != attributs.size() - 1) {
+        if (items.size() != 1) {
+            for (int b = 0; b < items.size(); b++) {
+                if (b != 0 && b != items.size() - 1) {
+                    line += "-";
+                    line += items.get(b);
+                } else if (b == items.size() - 1) {
+                    line += "-";
+                    line += items.get(b);
+                } else {
+                    line += items.get(b);
+                }
+            }
+        }else{
+            line = items.get(0);
+        }
+        return line;
+    }
+
+    /**
+     * Cette fonction permet de mettre une ligne au format CSV Chaque élément de
+     * cette liste est donc une cellule.
+     *
+     * @param cellule
+     * @return String d'une ligne au format CSV
+     */
+    private String format(List<String> cellule) {
+        String line = "";
+        for (int b = 0; b < cellule.size(); b++) {
+            if (b != 0 && b != cellule.size() - 1) {
                 line += " , ";
-                line += attributs.get(b);
-            } else if (b == attributs.size() - 1) {
+                line += cellule.get(b);
+            } else if (b == cellule.size() - 1) {
                 line += " , ";
-                line += attributs.get(b);
+                line += cellule.get(b);
                 line += "\n";
             } else {
-                line += attributs.get(b);
+                line += cellule.get(b);
             }
         }
         return line;

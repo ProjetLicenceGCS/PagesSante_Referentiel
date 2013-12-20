@@ -4,7 +4,7 @@ function telechargerCSV() {
         type: 'POST',
         dataType: 'text',
         width: 100,
-        timeout: 1000,
+        timeout: 10000000,//No time out long time processing
         error: function() {
             $("#alert").show();
         },

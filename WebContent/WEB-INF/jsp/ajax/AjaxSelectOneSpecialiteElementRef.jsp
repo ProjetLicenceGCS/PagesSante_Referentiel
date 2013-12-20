@@ -1,9 +1,9 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
-<div id="dialog-dictionnaireoffressoins" title="Dictionnaire des offres de soins" style=" display: none;  ">
+<div id="dialog-dictionnaireoffressoins" title="Spécialitées" style=" display: none;  ">
     <table id="selectOneSpecialiteElementRef" style="width: 100%;" class="TableauLignesAutomatique">
                 <thead>
-                    <tr>
+                    <tr >
                         <td><p>Description</p></td>
                         <td></td>
                     </tr>

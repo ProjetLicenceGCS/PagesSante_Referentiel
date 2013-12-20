@@ -26,11 +26,6 @@ public class CSVController extends MainController {
     public String showCsvPage( ModelMap model, HttpServletRequest request ) {
         // ajoute les variables de sessions
         this.addSessionToModel( model, request );
-        try {
-            this.csvSrv.generateCSV();
-        } catch (Exception ex) {
-            Logger.getLogger(CSVController.class.getName()).log(Level.SEVERE, null, ex);
-        }
         return "Csv";
     }
     

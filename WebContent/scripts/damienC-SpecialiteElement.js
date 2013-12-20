@@ -74,6 +74,7 @@ function getDialog() {
         width: 100,
         timeout: 1000,
         error: function() {
+           
             alert('Erreur chargement');
         },
         success: function(text) {
@@ -132,6 +133,7 @@ function addSpecialiteElementRef() {
                             $("#alert").show();
                              $(this).dialog("close");
                         }else if(text.indexOf("DC") != -1){
+                            
                             alert("Donnée déja entré.");
                         } else {
                             var table = document.getElementById("specialiteElementref");
@@ -370,7 +372,7 @@ function getDialogForDiscipline(){
 function getDialogForDisciplineWithUpdate(){
     getDialogForDiscipline();
     if(discipline!=""){
-        alert("discipline"+discipline);
+//        alert("discipline"+discipline);
         document.getElementById("discipline"+discipline).checked = true;
     }
 }

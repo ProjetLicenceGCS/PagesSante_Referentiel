@@ -1,14 +1,9 @@
-<%-- 
-    Document   : AjaxDictionnaireOffreDeSoins
-    Created on : 5 déc. 2013, 17:36:44
-    Author     : Damien Chesneau <contact@damienchesneau.fr>
---%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <div id="dialog-dictionnaireoffressoins" title="Dictionnaire des offres de soins" style=" display: none;  ">
     <table id="Dialog" style="width: 100%;" class="TableauLignesAutomatique">
         <thead>
-            <tr style="font-size: 10px;">
+            <tr>
                 <td>Intitule</td>
                 <td></td>
             </tr>

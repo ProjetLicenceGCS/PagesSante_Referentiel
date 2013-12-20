@@ -1,5 +1,6 @@
-.TableauLignesAutomatique tr:nth-child(2n+1){
-    line-height: 1px;
+.TableauLignesAutomatique tbody tr:nth-child(2n+1){
+    line-height: 5px;
+    height: 5px;
     font-family: Arial;
     font-weight: normal;
     font-size: 11px;
@@ -7,30 +8,23 @@
     background-color: #FFFFFF;
     text-decoration: none;
 }
-.TableauLignesAutomatique tr:nth-child(2n+2){
-    line-height: 1px;
+.TableauLignesAutomatique tbody tr:nth-child(2n+2){
+    line-height: 5px;
+    height: 5px;
     font-family: Arial;
     font-weight: normal;
     font-size: 11px;
     color: #44668C;
     background-color: #CACDD0;
 }
-.TableauLignesAutomatique thead tr td{
-    line-height: 1px;    
+.TableauLignesAutomatique thead tr{
+    line-height: 5px; 
+    height: 5px;
     font-family:Arial;
     font-weight:bold;
     font-size: 11px;
     color:#FFFFFF;
+    text-decoration: none;
     background-color:#517AAC;
     text-align:left;
 }
-.TableauLignesAutomatique thead tr th{
-    line-height: 12px;    
-    font-family:Arial;
-    font-weight:bold;
-    font-size: 11px;
-    color:#FFFFFF;
-    background-color:#517AAC;
-    text-align:left;
-}
-

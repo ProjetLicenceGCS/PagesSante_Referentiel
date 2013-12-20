@@ -22,10 +22,10 @@
                 </div>
             </div>
 
-          <table id="disciplineref" style="width: 100%;line-height: 1px;" class="TableauLignesAutomatique">
+          <table id="disciplineref" style="width: 100%;" class="TableauLignesAutomatique">
                 <thead>
                     <tr>
-                        <td><p style="text-align: center;">Description</p></td>
+                        <td><p>Description</p></td>
                         <td></td>
                         <td><img  src="<c:url value="/images/icone_action_ajouter_creer.png" />"</td>
                     </tr>
