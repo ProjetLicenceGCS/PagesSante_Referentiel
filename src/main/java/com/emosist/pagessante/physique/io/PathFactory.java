@@ -15,7 +15,7 @@ public class PathFactory {
     public static String getPathForWebServer() throws SystemNotSupportedException {
         String ret =null;
         if (isWindows()) {
-            ret ="C://wamp/www/";
+            ret ="C:\\wamp\\www\\";
         } else if (isMac()) {
             throw new SystemNotSupportedException("Le système sous lequel le serveur toune n'est pas supporté");
         } else if (isUnix()) {
