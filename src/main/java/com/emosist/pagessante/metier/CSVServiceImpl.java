@@ -137,7 +137,6 @@ public class CSVServiceImpl implements CSVService {
                             value = "VIDE";
                         }
                     } catch (ClassCastException e) {
-                        System.out.println(e.getMessage());
                         List<DictionnaireOffresSoins> dictionnaireOffresSoinses = (List<DictionnaireOffresSoins>) invoke;
                         List<String> strings = new ArrayList<String>();
                         for (DictionnaireOffresSoins dictionnaireOffresSoins : dictionnaireOffresSoinses) {
@@ -172,7 +171,7 @@ public class CSVServiceImpl implements CSVService {
     }
 
     /**
-     * Permet de retourner au format CSV une liste d'item. Chaque élément est
+     * Permet de retourner au format CSV une liste d'items. Chaque élément est
      * séparé par un - A appliquer pour une cellule.
      *
      * @param items
