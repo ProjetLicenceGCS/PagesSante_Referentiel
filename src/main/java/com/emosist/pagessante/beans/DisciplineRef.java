@@ -29,6 +29,10 @@ import javax.persistence.Table;
 })
 public class DisciplineRef implements Serializable {
     private static final long serialVersionUID = 1L;
+
+    public static long getSerialVersionUID() {
+        return serialVersionUID;
+    }
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
@@ -102,7 +106,7 @@ public class DisciplineRef implements Serializable {
 
     @Override
     public String toString() {
-        return "com.emosist.pagessante.beans.Disciplineref[ iddisciplineref=" + iddisciplineref + " ]";
+        return String.valueOf(iddisciplineref);
     }
     
 }

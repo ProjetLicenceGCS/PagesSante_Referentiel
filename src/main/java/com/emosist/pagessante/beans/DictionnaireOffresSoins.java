@@ -33,6 +33,10 @@ import javax.persistence.Table;
 public class DictionnaireOffresSoins implements Serializable {
 
     private static final long serialVersionUID = 1L;
+
+    public static long getSerialVersionUID() {
+        return serialVersionUID;
+    }
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
@@ -127,7 +131,7 @@ public class DictionnaireOffresSoins implements Serializable {
 
     @Override
     public String toString() {
-        return "com.emosist.pagessante.beans.Dictionnaireoffressoins[ iddictoffressoins=" + iddictoffressoins + " ]";
+        return String.valueOf(iddictoffressoins);
     }
 
 }

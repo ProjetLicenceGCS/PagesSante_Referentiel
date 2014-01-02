@@ -41,6 +41,10 @@ import javax.persistence.Table;
 })
 public class SpecialiteElementRef implements Serializable {
     private static final long serialVersionUID = 1L;
+
+    public static long getSerialVersionUID() {
+        return serialVersionUID;
+    }
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
@@ -131,7 +135,7 @@ public class SpecialiteElementRef implements Serializable {
 
     @Override
     public String toString() {
-        return "com.emosist.pagessante.beans.Specialiteelementref[ idspecialiteelementref=" + idspecialiteelementref + " ]";
+        return String.valueOf(idspecialiteelementref);
     }
     
 }

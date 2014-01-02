@@ -28,7 +28,7 @@ public class CSVController extends MainController {
         this.addSessionToModel( model, request );
         return "Csv";
     }
-    
+
     @RequestMapping( method = RequestMethod.POST,value = "/telecharger" )
     public ModelAndView download( ModelMap model, HttpServletRequest request ) {
         // ajoute les variables de sessions
