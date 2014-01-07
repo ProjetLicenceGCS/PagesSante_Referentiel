@@ -24,7 +24,7 @@
             <table id="csv" style="width: 100%;" class="TableauLignesAutomatique">
                 <thead>
                     <tr style="height: 20px;">
-                        <td>Exportez ou importez votre fichier CSV</td>
+                        <td>Exportez votre fichier CSV</td>
                         <td></td>
                     </tr>
                 </thead>
@@ -32,11 +32,24 @@
                     <td>Exporter la base de donnée sous le format CSV</td>
                     <td><button onclick="telechargerCSV();">Télécharger</button></td>
                 </tr>
+                <thead>
+                    <tr style="height: 20px;">
+                        <td>Importer votre fichier CSV</td>
+                        <td></td>
+                    </tr>
+                </thead>
+                <tr>
+                    <td>Choissisez votre format de fichier</td>
+                    <td><select>
+                            <c:forEach items="${ret}" var="reet" >
+                                <option>${reet}</option>
+                            </c:forEach>
+                        </select></td>
+                </tr>
                 <tr>
                     <td>Importer un fichier CSV</td>
-                    <td><button>Ouvrir une boite de séléction</button></td>
+                    <td><button>Ouvrir une boite de sélèction</button></td>
                 </tr>
-
             </table> 
             <jsp:include page="scriptToInclude.jsp" />
             <script src="<c:url value="/scripts/damienC-csv.js"/>" type="text/javascript" ></script>

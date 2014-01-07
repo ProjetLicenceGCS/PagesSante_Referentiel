@@ -1,6 +1,7 @@
 package com.emosist.pagessante.metier;
 
 import java.net.URL;
+import java.util.List;
 
 /**
  *
@@ -14,9 +15,16 @@ public interface CSVService {
      */
     public void delete(URL fichierCSV) throws Exception;
     /**
-     * Génerer un fichire CSV global des 3 entités et retourner l'adresse où se trouve le fichier temporaire.
+     * Génerer un fichier CSV global des 3 entités et retourner l'adresse où se trouve le fichier temporaire.
      * @return URL du fichier CSV
      * @throws Exception 
      */
     public URL generateCSV() throws Exception;
+    
+    /**
+     * Retourne les differents formats possible du fichier CSV
+     * @return Encodage 
+     * @throws Exception 
+     */
+    public List<String> recupererEncodage() throws Exception;
 }

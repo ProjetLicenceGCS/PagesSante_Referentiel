@@ -221,4 +221,14 @@ public class CSVServiceImpl implements CSVService {
         return line;
     }
 
+    @Override
+    public List<String> recupererEncodage() throws Exception {
+        List<String> ret = new ArrayList<String>();
+        Encodage[] values = Encodage.values();
+        for(int i=0; i < values.length ;i++){
+            ret.add(String.valueOf(values[i]));
+        }
+        return ret;
+    }
+
 }

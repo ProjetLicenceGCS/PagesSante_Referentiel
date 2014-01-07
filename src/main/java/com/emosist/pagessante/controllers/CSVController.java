@@ -3,6 +3,8 @@ package com.emosist.pagessante.controllers;
 import com.emosist.pagessante.metier.CSVService;
 import com.emosist.pagessante.metier.MetierFactory;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.http.HttpServletRequest;
@@ -23,10 +25,16 @@ public class CSVController extends MainController {
     private CSVService csvSrv = MetierFactory.getCSVService();
 
     @RequestMapping( method = RequestMethod.GET )
-    public String showCsvPage( ModelMap model, HttpServletRequest request ) {
+    public ModelAndView showCsvPage( ModelMap model, HttpServletRequest request ) {
         // ajoute les variables de sessions
         this.addSessionToModel( model, request );
-        return "Csv";
+        List<String> ret = new ArrayList<String>();
+        try{
+            ret= this.csvSrv.recupererEncodage();
+        }catch (Exception ex) {
+            Logger.getLogger(CSVController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return new ModelAndView("Csv","ret",ret);
     }
 
     @RequestMapping( method = RequestMethod.POST,value = "/telecharger" )

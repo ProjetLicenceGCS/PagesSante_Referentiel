@@ -22,7 +22,6 @@ public class DisciplineRefServiceImpl implements DisciplineRefService {
     @Override
     public int countAll() throws Exception {
         return this.disciplineRefSrv.countAll();
-
     }
 
     @Override
