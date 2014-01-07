@@ -46,7 +46,6 @@
         <div id="dialog-ajouter" title="Ajouter une spécialité" style=" display: none; ">
             <table style="font-size: 10px;">
                 <tr><td>Description </td><td><input id="description" type="text"  ></input></td></tr>
-                <tr><td>Description normalisé </td><td><input id="descriptionNormalise" type="text"  ></input></td></tr>
                 <tr><td>Offres de soins </td><td><input id="offresoins" type="button" onclick="getDialog();" value="Faite votre séléction"/><td><div id="offreSoinNb" style="position: absolute;"></div></td></td></tr>
                 <tr><td>Discipline </td><td><input id="discipline" onclick="getDialogForDiscipline();" type="button" value="Faite votre séléction" /><td><div id="disciplineNb" style="position: absolute;"></div></td></td></tr>
             </table>
@@ -54,7 +53,6 @@
         <div id="dialog-modifier" title="Modifier une spécialité" style=" display: none; ">
             <table style="font-size: 10px;">
                 <tr><td>Description </td><td><input id="updescription" type="text"  ></input></td></tr>
-                <tr><td>Description normalisé </td><td><input id="updescriptionNormalise" type="text"  ></input></td></tr>
                 <tr><td>Offres de soins </td><td><input id="upoffresoins" type="button" onclick="getDialogForUpdate();" value="Faite votre séléction"/><td><div id="upoffreSoinNb" style="position: absolute;"></div></td></td></tr>
                 <tr><td>Discipline </td><td><input id="updiscipline" onclick="getDialogForDisciplineWithUpdate();" type="button" value="Faite votre séléction" /><td><div id="updisciplineNb" style="position: absolute;"></div></td></td></tr>
             </table>

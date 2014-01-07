@@ -114,12 +114,12 @@ function addSpecialiteElementRef() {
     document.getElementById("offreSoinNb").innerHTML = "";
     $("#dialog-ajouter").dialog({
         resizable: false,
-        height: 175,
+        height: 155,
         modal: true,
         buttons: {
             "Ajouter": function() {
                 $.ajax({
-                    url: 'http://localhost:8080/PagesSante_Referentiel/pagessante/specialiteelement/add?description=' + $('#description').val() + "&descriptionNormalise=" + $("#descriptionNormalise").val() + "&offres=" + dicoOffreSoin.toString()+"&discipline="+discipline,
+                    url: 'http://localhost:8080/PagesSante_Referentiel/pagessante/specialiteelement/add?description=' + $('#description').val() + "&offres=" + dicoOffreSoin.toString()+"&discipline="+discipline,
                     type: 'POST',
                     dataType: 'text',
                     width: 100,
@@ -142,7 +142,7 @@ function addSpecialiteElementRef() {
                             var col2 = ligne.insertCell(1);
                             var col3 = ligne.insertCell(2);
                             ligne.id = text;
-                            col1.innerHTML = "<p title=\"" + $('#descriptionNormalise').val() + "\">" + $('#description').val() + "</p>";
+                            col1.innerHTML = "<p title=\"" + $('#description').val().toUpperCase(); + "\">" + $('#description').val() + "</p>";
                             col3.style = "width: 15px;";
                             col3.innerHTML = "<img style=\"display: block; margin-left: auto;  margin-right: auto;\" src=\"/PagesSante_Referentiel/images/icone_action_modifier.png\" onclick=\"updateSpecialiteElementRef(this.parentNode);\"/>";
                             col2.style = "width: 15px;";
@@ -155,7 +155,6 @@ function addSpecialiteElementRef() {
             },
             Annuler: function() {
                 document.getElementById("description").value = "";
-                document.getElementById("descriptionNormalise").value = "";
                 dicoOffreSoin = new Array();
                 $(this).dialog("close");
             }
@@ -194,7 +193,6 @@ function updateSpecialiteElementRef(element) {
     var descriptionSpecialiteElementRefSelected = element.parentElement.children.item(0).firstChild.innerText;
     var descriptionNormaliseSpecialiteElementRefSelected = element.parentElement.children.item(0).firstChild.title;
     document.getElementById("updescription").value = descriptionSpecialiteElementRefSelected;
-    document.getElementById("updescriptionNormalise").value = descriptionNormaliseSpecialiteElementRefSelected;
     $.ajax({
         url: 'http://localhost:8080/PagesSante_Referentiel/pagessante/specialiteelement/getCountDictionnaireOffreSoinBySpecialiteElement?id=' + id,
         type: 'POST',
@@ -222,12 +220,12 @@ function updateSpecialiteElementRef(element) {
     });
     $("#dialog-modifier").dialog({
         resizable: false,
-        height: 175,
+        height: 155,
         modal: true,
         buttons: {
             "Modifier": function() {
                 $.ajax({
-                    url: 'http://localhost:8080/PagesSante_Referentiel/pagessante/specialiteelement/update?id='+idSpecialiteElementRefSelected+'&description=' + $('#updescription').val() + "&descriptionNormalise=" + $("#updescriptionNormalise").val() + "&offres=" + dicoOffreSoin.toString(),
+                    url: 'http://localhost:8080/PagesSante_Referentiel/pagessante/specialiteelement/update?id='+idSpecialiteElementRefSelected+'&description=' + $('#updescription').val() + "&offres=" + dicoOffreSoin.toString(),
                     type: 'POST',
                     dataType: 'text',
                     width: 100,
@@ -241,7 +239,7 @@ function updateSpecialiteElementRef(element) {
                             $("#alert").show();
                         } else {
                             element.parentElement.children.item(0).firstChild.innerText = document.getElementById("updescription").value;
-                            element.parentElement.children.item(0).firstChild.title = document.getElementById("updescriptionNormalise").value;
+                            element.parentElement.children.item(0).firstChild.title = document.getElementById("updescription").value.toUpperCase();
                         }
                         dicoOffreSoin = new Array();
                     }

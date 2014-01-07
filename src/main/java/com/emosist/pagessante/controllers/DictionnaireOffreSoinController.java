@@ -83,7 +83,6 @@ public class DictionnaireOffreSoinController extends MainController {
     public ModelAndView update(ModelMap model, HttpServletRequest request) {
         String idStr = request.getParameter("id");
         String intitule = request.getParameter("intitule");
-        String intituleNormalise = request.getParameter("intituleNormalise");
         String description = request.getParameter("description");
         String motCles = request.getParameter("motscles");
         String idSpecialiteStr = request.getParameter("specialite");
@@ -98,7 +97,7 @@ public class DictionnaireOffreSoinController extends MainController {
             Logger.getLogger(DictionnaireOffreSoinController.class.getName()).log(Level.SEVERE, null, ex);
         }
         dictionnaireOffresSoins.setIntitule(intitule);
-        dictionnaireOffresSoins.setIntituleNorm(intituleNormalise);
+        dictionnaireOffresSoins.setIntituleNorm(intitule.toUpperCase());
         dictionnaireOffresSoins.setMotscles(motCles);
         try {
             this.dictionnaireOffreSoinsSrv.updateByPrimaryKey(dictionnaireOffresSoins);
@@ -113,7 +112,6 @@ public class DictionnaireOffreSoinController extends MainController {
     public ModelAndView add(ModelMap model, HttpServletRequest request) {
         String ret = "OK";
         String intitule = request.getParameter("intitule");
-        String intituleNormalise = request.getParameter("intituleNormalise");
         String description = request.getParameter("description");
         String motCles = request.getParameter("motscles");
         String idSpecialiteStr = request.getParameter("specialite");
@@ -123,7 +121,7 @@ public class DictionnaireOffreSoinController extends MainController {
         }
         DictionnaireOffresSoins add =null;
         try {
-             add = this.dictionnaireOffreSoinsSrv.add(intitule, intituleNormalise, description, motCles,idSpecialite) ;
+             add = this.dictionnaireOffreSoinsSrv.add(intitule, description, motCles,idSpecialite) ;
         } catch (DataConflictException ex) {
             ret="DC";
             Logger.getLogger(DictionnaireOffreSoinController.class.getName()).log(Level.SEVERE, null, ex);

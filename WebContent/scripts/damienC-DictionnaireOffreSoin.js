@@ -2,7 +2,7 @@ var specialiteSelected = "";
 function addOffreDeSoin() {
     $("#dialog-ajouter").dialog({
         resizable: false,
-        height: 220,
+        height: 200,
         modal: true,
         buttons: {
             "Ajouter": function() {
@@ -14,7 +14,7 @@ function addOffreDeSoin() {
                         idSpecialite = "AUCUNE";
                     }
                     $.ajax({
-                        url: 'http://localhost:8080/PagesSante_Referentiel/pagessante/dictionnaireoffressoins/add?intitule=' + $('#addIntitule').val() + "&intituleNormalise=" + $("#addIntituleNormalise").val() + "&description=" + $("#addDescription").val() + "&motscles=" + $("#addMotsCles").val() + "&specialite=" + idSpecialite,
+                        url: 'http://localhost:8080/PagesSante_Referentiel/pagessante/dictionnaireoffressoins/add?intitule=' + $('#addIntitule').val() + "&description=" + $("#addDescription").val() + "&motscles=" + $("#addMotsCles").val() + "&specialite=" + idSpecialite,
                         type: 'POST',
                         dataType: 'text',
                         width: 100,
@@ -36,7 +36,7 @@ function addOffreDeSoin() {
                                 var col4 = ligne.insertCell(3);
                                 var col5 = ligne.insertCell(4);
                                 ligne.id = text;
-                                col1.innerHTML = "<p title=\"" + $("#addIntituleNormalise").val() + "\">" + $('#addIntitule').val() + "</p>";
+                                col1.innerHTML = "<p title=\"" + $("#addIntitule").val().toUpperCase(); + "\">" + $('#addIntitule').val() + "</p>";
                                 col2.innerHTML = "<p>" + $("#addDescription").val() + "</p>";
                                 col3.innerHTML = "<p>" + $("#addMotsCles").val() + "</p>";
                                 col5.style = "width: 15px;";
@@ -61,7 +61,6 @@ function addOffreDeSoin() {
     });
 }
 function cleanInputs() {
-    document.getElementById("addIntituleNormalise").value = "";
     document.getElementById("addIntitule").value = "";
     document.getElementById("addDescription").value = "";
     document.getElementById("addMotsCles").value = "";
@@ -70,9 +69,6 @@ function cleanInputs() {
 }
 function testIfWeCanAdd() {
     if (specialiteSelected == "") {
-        return false;
-    }
-    if ($("#addIntituleNormalise").val() == "") {
         return false;
     }
     if ($("#addIntitule").val() == "") {
@@ -162,11 +158,10 @@ function dictionnaireOffreDeSoinDelete(id, index) {
 function updateDictionnaireOffreDeSoinRef(element) {
     var idOffreSoinSelected = element.parentElement.id;
     var intituleOffreSoinSelected = element.parentElement.children.item(0).firstChild.innerText;
-    var intituleNormaliseOffreSoinSelected = element.parentElement.children.item(0).firstChild.title;
+//    var intituleNormaliseOffreSoinSelected = element.parentElement.children.item(0).firstChild.title;
     var descriptionOffreDeSoinSelected = element.parentElement.children.item(1).firstChild.innerText;
     var motsClesOffreDeSoinSelected = element.parentElement.children.item(2).firstChild.innerText;
     document.getElementById("upIntitule").value = intituleOffreSoinSelected;
-    document.getElementById("upIntituleNormalise").value = intituleNormaliseOffreSoinSelected;
     document.getElementById("upDescription").value = descriptionOffreDeSoinSelected;
     document.getElementById("upMotsCles").value = motsClesOffreDeSoinSelected;
     document.getElementById("upSpecialitePrinter").value = " ";
@@ -193,7 +188,7 @@ function updateDictionnaireOffreDeSoinRef(element) {
     });
     $("#dialog-modifier").dialog({
         resizable: false,
-        height: 220,
+        height: 200,
         modal: true,
         buttons: {
             "Modifier": function() {
@@ -213,7 +208,6 @@ function updateDictionnaireOffreDeSoinRef(element) {
                         }
                         else {
                             element.parentElement.children.item(0).firstChild.innerText = document.getElementById("upIntitule").value;
-                            element.parentElement.children.item(0).firstChild.title = document.getElementById("upIntituleNormalise").value;
                             element.parentElement.children.item(1).firstChild.innerText = document.getElementById("upDescription").value;
                             element.parentElement.children.item(2).firstChild.innerText = document.getElementById("upMotsCles").value;
                         }

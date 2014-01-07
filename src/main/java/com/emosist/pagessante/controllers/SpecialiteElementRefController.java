@@ -86,7 +86,6 @@ public class SpecialiteElementRefController extends MainController {
         DisciplineRefService disciplineRefSrv = MetierFactory.getDisciplineRefService();
         String ret = "OK";
         String description = request.getParameter("description");
-        String descriptionNormalise = request.getParameter("descriptionNormalise");
         String trameOffreSoin = request.getParameter("offres");
         String disciplineStrID = request.getParameter("discipline");
         DisciplineRef disciplineRef = null;
@@ -106,7 +105,7 @@ public class SpecialiteElementRefController extends MainController {
         }
         SpecialiteElementRef add = null;
         try {
-            add = this.specialiteElementRefSrv.add(description, descriptionNormalise, dictionnaireOffresSoinses, disciplineRef);
+            add = this.specialiteElementRefSrv.add(description, dictionnaireOffresSoinses, disciplineRef);
         } catch (DataConflictException ex) {
             ret = "DC";
             Logger.getLogger(SpecialiteElementRefController.class.getName()).log(Level.SEVERE, null, ex);
@@ -157,7 +156,7 @@ public class SpecialiteElementRefController extends MainController {
             Logger.getLogger(SpecialiteElementRefController.class.getName()).log(Level.SEVERE, null, ex);
         }
         selectByPrimaryKey.setDescription(description);
-        selectByPrimaryKey.setDescriptionNorm(descriptionNormalise);
+        selectByPrimaryKey.setDescriptionNorm(description.toUpperCase());
         selectByPrimaryKey.setDictionnaireoffressoinsList(dictionnaireOffresSoinses);
         try {
             this.specialiteElementRefSrv.updateByPrimaryKeySelective(selectByPrimaryKey);

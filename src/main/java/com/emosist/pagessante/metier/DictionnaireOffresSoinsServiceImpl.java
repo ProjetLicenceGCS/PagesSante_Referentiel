@@ -105,19 +105,18 @@ public class DictionnaireOffresSoinsServiceImpl implements DictionnaireOffresSoi
     }
 
     @Override
-    public DictionnaireOffresSoins add(String intitule, String intituleNormalise, String description, String motsCles, Integer specialiteElementRef) throws DataConflictException, Exception {
+    public DictionnaireOffresSoins add(String intitule, String description, String motsCles, Integer specialiteElementRef) throws DataConflictException, Exception {
         SpecialiteElementRef selectByPrimaryKey = null;
         if (specialiteElementRef != null) {
             selectByPrimaryKey = this.SpecialiteElementRefSrv.selectByPrimaryKey(specialiteElementRef);
         }
-        return this.add(intitule, intituleNormalise, description, motsCles, selectByPrimaryKey);
+        return this.add(intitule, description, motsCles, selectByPrimaryKey);
     }
 
     @Override
-    public DictionnaireOffresSoins add(String intitule, String intituleNormalise, String description, String motsCles, SpecialiteElementRef specialiteElementRef) throws DataConflictException, Exception {
+    public DictionnaireOffresSoins add(String intitule, String description, String motsCles, SpecialiteElementRef specialiteElementRef) throws DataConflictException, Exception {
         DictionnaireOffresSoins dictionnaireOffresSoins = null;
         if (intitule != null) {
-            if (intituleNormalise != null) {
                 if (description != null) {
                     if (motsCles != null) {
                         if (specialiteElementRef != null) {// ne devrait jamais arriver mais on ne sais jamais.
@@ -125,7 +124,7 @@ public class DictionnaireOffresSoinsServiceImpl implements DictionnaireOffresSoi
                             dictionnaireOffresSoin.setDescription(description);
                             dictionnaireOffresSoin.setIdspecialiteelementref(specialiteElementRef);
                             dictionnaireOffresSoin.setIntitule(intitule);
-                            dictionnaireOffresSoin.setIntituleNorm(intituleNormalise);
+                            dictionnaireOffresSoin.setIntituleNorm(intitule.toUpperCase());
                             dictionnaireOffresSoin.setMotscles(motsCles);
                             dictionnaireOffresSoins = this.dictionnaireOffresSoinsSrv.add(dictionnaireOffresSoin);
                         } else {
@@ -137,9 +136,7 @@ public class DictionnaireOffresSoinsServiceImpl implements DictionnaireOffresSoi
                 } else {
                     throw new NullPointerException("L'objet string nommé = description passé en paramétre est égale a null");
                 }
-            } else {
-                throw new NullPointerException("L'objet string nommé = intituleNormalise passé en paramétre est égale a null");
-            }
+           
         } else {
             throw new NullPointerException("L'objet string nommé = intitule passé en paramétre est égale a null");
         }

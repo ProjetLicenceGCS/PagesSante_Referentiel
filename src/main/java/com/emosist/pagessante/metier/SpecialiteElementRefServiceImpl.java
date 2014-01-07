@@ -126,19 +126,18 @@ public class SpecialiteElementRefServiceImpl implements SpecialiteElementRefServ
     }
 
     @Override
-    public SpecialiteElementRef add(String description, String descriptionNormalise, List<DictionnaireOffresSoins> dictionnaireOffresSoinses, DisciplineRef discipline) throws DataConflictException, Exception {
+    public SpecialiteElementRef add(String description, List<DictionnaireOffresSoins> dictionnaireOffresSoinses, DisciplineRef discipline) throws DataConflictException, Exception {
         SpecialiteElementRef specialiteElementRef = new SpecialiteElementRef();
         if (description != null) {
             specialiteElementRef.setDescription(description);
-        }
-        if (descriptionNormalise != null) {
-            specialiteElementRef.setDescriptionNorm(descriptionNormalise);
+            specialiteElementRef.setDescriptionNorm(description.toUpperCase());
         }
         if (dictionnaireOffresSoinses != null) {
             specialiteElementRef.setDictionnaireoffressoinsList(dictionnaireOffresSoinses);
         }
         if (discipline != null) {
             specialiteElementRef.setIddisciplineref(discipline);
+            
         }
         return this.add(specialiteElementRef);
     }

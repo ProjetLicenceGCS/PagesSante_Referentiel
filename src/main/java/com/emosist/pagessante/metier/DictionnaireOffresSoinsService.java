@@ -14,7 +14,6 @@ public interface DictionnaireOffresSoinsService {
     /**
      * Permet de déléguer la création de l'objet ! 
      * @param intitule
-     * @param intituleNormalise
      * @param description
      * @param motsCles
      * @param specialiteElementRef
@@ -22,11 +21,10 @@ public interface DictionnaireOffresSoinsService {
      * @throws DataConflictException
      * @throws Exception 
      */
-    public DictionnaireOffresSoins add(String intitule, String intituleNormalise, String description, String motsCles, Integer specialiteElementRef) throws DataConflictException, Exception;
+    public DictionnaireOffresSoins add(String intitule, String description, String motsCles, Integer specialiteElementRef) throws DataConflictException, Exception;
 /**
      * Permet de déléguer la création de l'objet ! 
      * @param intitule
-     * @param intituleNormalise
      * @param description
      * @param motsCles
      * @param specialiteElementRef
@@ -34,7 +32,7 @@ public interface DictionnaireOffresSoinsService {
      * @throws DataConflictException
      * @throws Exception 
      */
-    public DictionnaireOffresSoins add(String intitule, String intituleNormalise, String description, String motsCles, SpecialiteElementRef specialiteElementRef) throws DataConflictException, Exception;
+    public DictionnaireOffresSoins add(String intitule, String description, String motsCles, SpecialiteElementRef specialiteElementRef) throws DataConflictException, Exception;
 
     /**
      * Compte le nombre d'enregistrements de la table DictionnaireOffresSoins.

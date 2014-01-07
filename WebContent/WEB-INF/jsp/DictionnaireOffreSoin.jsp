@@ -45,7 +45,6 @@
                 <p id="alertADD"></p>
                 <table style="font-size: 10px;">
                     <tr><td>Intitulé </td><td><input id="addIntitule" type="text"  ></input></td></tr>
-                    <tr><td>Intitulé normalisé </td><td><input id="addIntituleNormalise" type="text"  ></input></td></tr>
                     <tr><td>Description </td><td><textarea id="addDescription" type="text"> </textarea></td></tr>
                     <tr><td>Mots clés </td><td><input id="addMotsCles" title="Veuillez séparer chaque mot par une virgule." type="text"  ></input></td></tr>
                     <tr><td>Spécialite </td><td><input id="addSpecialite" type="button" onclick="showSelectOneSpecialite();" value="Faite votre séléction" /></td><td><div id="addSpecialitePrinter" style="position: relative;"></div></td></tr>
@@ -55,7 +54,6 @@
                 <p id="alertUP"></p>
                 <table style="font-size: 10px;">
                     <tr><td>Intitulé </td><td><input id="upIntitule" type="text"  ></input></td></tr>
-                    <tr><td>Intitulé normalisé </td><td><input id="upIntituleNormalise" type="text"  ></input></td></tr>
                     <tr><td>Description </td><td><textarea id="upDescription" type="text"> </textarea></td></tr>
                     <tr><td>Mots clés </td><td><input id="upMotsCles" title="Veuillez séparer chaque mot par une virgule." type="text"  ></input></td></tr>
                     <tr><td>Spécialite </td><td><input id="upSpecialite" type="button" onclick="showSelectOneSpecialite();" value="Faite votre séléction" /></td><td><div id="upSpecialitePrinter" style="position: relative;"></div></td></tr>

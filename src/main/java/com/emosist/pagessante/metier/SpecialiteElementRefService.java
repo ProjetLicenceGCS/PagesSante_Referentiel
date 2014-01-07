@@ -37,14 +37,13 @@ public interface SpecialiteElementRefService {
     /**
      * 
      * @param description
-     * @param descriptionNormalise
      * @param dictionnaireOffresSoinses
      * @param discipline
      * @return
      * @throws Exception
      * @throws DataConflictException 
      */ 
-    public SpecialiteElementRef add(String description, String descriptionNormalise, List<DictionnaireOffresSoins> dictionnaireOffresSoinses, DisciplineRef discipline) throws Exception,DataConflictException;
+    public SpecialiteElementRef add(String description, List<DictionnaireOffresSoins> dictionnaireOffresSoinses, DisciplineRef discipline) throws Exception,DataConflictException;
     /**
      * Cette methode permet de retourner l'objet qui a été crée avec l'id qui a été choisi par la base de données
      * @param specialiteElementRef
