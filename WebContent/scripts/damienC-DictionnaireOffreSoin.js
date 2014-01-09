@@ -1,11 +1,12 @@
 var specialiteSelected = "";
 function addOffreDeSoin() {
+
     $("#dialog-ajouter").dialog({
         resizable: false,
         height: 200,
         modal: true,
         buttons: {
-            "Ajouter": function() {
+            "Ajouter": function() { 
                 if (testIfWeCanAdd()) {
                     var idSpecialite = "";
                     if (specialiteSelected != "") {
@@ -13,8 +14,11 @@ function addOffreDeSoin() {
                     } else {
                         idSpecialite = "AUCUNE";
                     }
+                    var intitule = $('#addIntitule').val();
+                    var description = $("#addDescription").val();
+                    var motsCles = $("#addMotsCles").val();
                     $.ajax({
-                        url: 'http://localhost:8080/PagesSante_Referentiel/pagessante/dictionnaireoffressoins/add?intitule=' + $('#addIntitule').val() + "&description=" + $("#addDescription").val() + "&motscles=" + $("#addMotsCles").val() + "&specialite=" + idSpecialite,
+                        url: 'http://localhost:8080/PagesSante_Referentiel/pagessante/dictionnaireoffressoins/add?intitule=' + intitule + "&description=" + description + "&motscles=" + motsCles + "&specialite=" + idSpecialite,
                         type: 'POST',
                         dataType: 'text',
                         width: 100,
@@ -36,9 +40,9 @@ function addOffreDeSoin() {
                                 var col4 = ligne.insertCell(3);
                                 var col5 = ligne.insertCell(4);
                                 ligne.id = text;
-                                col1.innerHTML = "<p title=\"" + $("#addIntitule").val().toUpperCase(); + "\">" + $('#addIntitule').val() + "</p>";
-                                col2.innerHTML = "<p>" + $("#addDescription").val() + "</p>";
-                                col3.innerHTML = "<p>" + $("#addMotsCles").val() + "</p>";
+                                col1.innerHTML = "<p title=\"\">" + intitule + "</p>";
+                                col2.innerHTML = "<p>" + description + "</p>";
+                                col3.innerHTML = "<p>" + motsCles + "</p>";
                                 col5.style = "width: 15px;";
                                 col5.innerHTML = "<img style=\"display: block; margin-left: auto;  margin-right: auto;\" src=\"/PagesSante_Referentiel/images/icone_action_modifier.png\" onclick=\"updateSpecialiteElementRef(this.parentNode);\"/>";
                                 col4.style = "width: 15px;";

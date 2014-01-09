@@ -142,7 +142,7 @@ function addSpecialiteElementRef() {
                             var col2 = ligne.insertCell(1);
                             var col3 = ligne.insertCell(2);
                             ligne.id = text;
-                            col1.innerHTML = "<p title=\"" + $('#description').val().toUpperCase(); + "\">" + $('#description').val() + "</p>";
+                            col1.innerHTML = "<p title=\"\">" + $('#description').val() + "</p>";
                             col3.style = "width: 15px;";
                             col3.innerHTML = "<img style=\"display: block; margin-left: auto;  margin-right: auto;\" src=\"/PagesSante_Referentiel/images/icone_action_modifier.png\" onclick=\"updateSpecialiteElementRef(this.parentNode);\"/>";
                             col2.style = "width: 15px;";
