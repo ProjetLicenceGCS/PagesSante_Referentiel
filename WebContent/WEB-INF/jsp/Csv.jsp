@@ -29,7 +29,7 @@
                     </tr>
                 </thead>
                 <tr>
-                    <td>Quel entitée voulez-vous exporter ? </td>
+                    <td>Quelle entité voulez-vous exporter ? </td>
                     <td><input type="hidden"/></td>
                 </tr>
                 <c:forEach items="${ret.classes}" var="reet"  >
