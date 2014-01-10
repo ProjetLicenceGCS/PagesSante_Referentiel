@@ -3,6 +3,7 @@ package com.emosist.pagessante.physique.io;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.net.URI;
+import org.springframework.beans.factory.annotation.Value;
 
 /**
  *

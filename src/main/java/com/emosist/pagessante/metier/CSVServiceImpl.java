@@ -46,7 +46,6 @@ public class CSVServiceImpl implements CSVService {
     @Override
     public URL generateCSV() throws Exception {
         URI createdFile = this.csvSrv.createFile("generatedFile.csv");
-//        Map<Class, List> classes = this.getClassToGenerateCSV();
         Map<Class, List> classes = this.data;
         Set<Class> keySet = classes.keySet();
         Iterator<Map.Entry<Class, List>> iterator = classes.entrySet().iterator();
@@ -71,25 +70,7 @@ public class CSVServiceImpl implements CSVService {
         return createdFile.toURL();
     }
 
-    /**
-     * Cette methode permet tout simplement d'inscire certaines classes a la
-     * création du fichier CSV Pour ajouter une classe il suffit de l'ajouter au
-     * dictionnaire. La clé est le bean. la valeur est une List de ce bean avec
-     * les valeurs inscrite à l'interieur. Attention pour que cela fontionne il
-     * faut que les getters soit crée et qu'il correspondent aux standards. ex:
-     * attribut: monAttribut getter: getMonAttribut
-     *
-     * @return
-     * @throws Exception
-     */
-    private Map<Class, List> getClassToGenerateCSV() throws Exception {
-        Map<Class, List> classes = new HashMap<Class, List>();
-        classes.put(SpecialiteElementRef.class, PersistanceFactory.getSpecialiteElementRefMapper().selectAll());
-        classes.put(DisciplineRef.class, PersistanceFactory.getDisciplineRefMapper().selectAll());
-        classes.put(DictionnaireOffresSoins.class, PersistanceFactory.getDictionnaireOffresSoinsMapper().selectAll());
-        return classes;
-    }
-
+    
     /**
      * Permet de retourner la ligne au format CSV en fonction d'un bean et de
      * ses attributs.

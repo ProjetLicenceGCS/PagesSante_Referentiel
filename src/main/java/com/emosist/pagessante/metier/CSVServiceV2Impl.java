@@ -1,4 +1,3 @@
-
 package com.emosist.pagessante.metier;
 
 import com.emosist.pagessante.beans.DictionnaireOffresSoins;
@@ -14,7 +13,6 @@ import java.lang.reflect.Method;
 import java.net.URI;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -24,14 +22,16 @@ import java.util.Set;
  *
  * @author Damien Chesneau <contact@damienchesneau.fr>
  */
-public class CSVServiceV2Impl implements CSVService{
+public class CSVServiceV2Impl implements CSVService {
 
     private SpecialiteElementRefMapper speialiteElementRefSrv = PersistanceFactory.getSpecialiteElementRefMapper();
     private CSVServiceIO csvSrv = PhysiqueIOFactory.getCSVService();
-    private Map<Class,List> data;
-    public CSVServiceV2Impl(Map<Class,List> map){
+    private Map<Class, List> data;
+
+    public CSVServiceV2Impl(Map<Class, List> map) {
         this.data = map;
     }
+
     @Override
     public void delete(URL fichierCSV) throws Exception {
         throw new UnsupportedOperationException("Not supported yet. TO DO");
@@ -47,132 +47,158 @@ public class CSVServiceV2Impl implements CSVService{
     @Override
     public URL generateCSV() throws Exception {
         URI createdFile = this.csvSrv.createFile("generatedFile.csv");
-//        Map<Class, List> classes = this.getClassToGenerateCSV();
         Map<Class, List> classes = this.data;
         Set<Class> keySet = classes.keySet();
         Iterator<Map.Entry<Class, List>> iterator = classes.entrySet().iterator();
+        List<String> attributs = new ArrayList<String>();
+        attributs.add("discipline_id");
+        attributs.add("discipline_description");
+        attributs.add("specialite_id");
+        attributs.add("specialite_description");
+        attributs.add("offressoins_id");
+        attributs.add("offressoins_intitule");
+        attributs.add("offressoins_description");
+        attributs.add("offressoins_motscles");
+        this.csvSrv.writeLine(this.format(attributs));
         while (iterator.hasNext()) {
             Map.Entry<Class, List> next = iterator.next();
             Class key = next.getKey();
             Field[] declaredFields = key.getDeclaredFields();
-            List<String> attributs = new ArrayList<String>();
             for (int j = 1; j < declaredFields.length; j++) {
                 if (!declaredFields[j].getName().equals("serialVersionUID")) {
                     attributs.add(declaredFields[j].getName());
                 }
             }
-            this.csvSrv.writeLine(this.format(attributs));
-            List<Object> sd = next.getValue();
-            for (int i = 0; i < sd.size(); i++) {
-                List<String> values = new ArrayList<String>();
-                Object get = sd.get(i);
-                this.csvSrv.writeLine(this.getContentLine(get, attributs));
+            if (key.getName().equals(DisciplineRef.class.getName())) {
+                System.out.println("DISCIPLINE");
+                List<DisciplineRef> value = next.getValue();
+                for (int i = 0; i < value.size(); i++) {
+                    DisciplineRef discipline = value.get(i);
+                    if (value.get(i).getSpecialiteelementrefList() != null) {
+                        List<SpecialiteElementRef> specialiteelementrefList = value.get(i).getSpecialiteelementrefList();
+                        for (int j = 0; j < specialiteelementrefList.size(); j++) {
+                            SpecialiteElementRef specialite = specialiteelementrefList.get(j);
+                            if (specialite.getDictionnaireoffressoinsList() == null) {
+                                this.addLineInCSV(discipline.getIddisciplineref(), discipline.getDescription(), specialite.getIdspecialiteelementref(), specialite.getDescription(), null, "", "", "");
+                            } else {
+
+                                List<DictionnaireOffresSoins> dictionnaireOffresSoinses = specialite.getDictionnaireoffressoinsList();
+                                for (int x = 0; x < dictionnaireOffresSoinses.size(); x++) {
+                                    DictionnaireOffresSoins dictionnaireOffresSoin = dictionnaireOffresSoinses.get(x);
+                                    System.out.println("I = " + i + " J = " + j + " X = " + x);
+                                    this.addLineInCSV(discipline.getIddisciplineref(), discipline.getDescription(), specialite.getIdspecialiteelementref(), specialite.getDescription(), dictionnaireOffresSoin.getIddictoffressoins(), dictionnaireOffresSoin.getIntitule(), dictionnaireOffresSoin.getDescription(), dictionnaireOffresSoin.getMotscles());
+                                }
+                            }
+                        }
+                    } else {
+                        this.addLineInCSV(discipline.getIddisciplineref(), discipline.getDescription(), null, "", null, "", "", "");
+                    }
+                }
+            } else if (key.getName().equals(DictionnaireOffresSoins.class.getName())) {
+                System.out.println("DICTIONNAIRE OFFRE SOIN");
+                List<DictionnaireOffresSoins> value = next.getValue();
+                for (int i = 0; i < value.size(); i++) {
+                    DictionnaireOffresSoins dictionnaireOffresSoins = value.get(i);
+                    this.addLineInCSV(null, "", null, null, dictionnaireOffresSoins.getIddictoffressoins(), dictionnaireOffresSoins.getIntitule(), dictionnaireOffresSoins.getDescription(), dictionnaireOffresSoins.getMotscles());
+
+                }
+            } else if (key.getName().equals(SpecialiteElementRef.class.getName())) {
+                System.out.println("Specialite ELEMENT REF");
+                List<SpecialiteElementRef> specialiteElementRefs = next.getValue();
+                for (int i = 0; i < specialiteElementRefs.size(); i++) {
+                    SpecialiteElementRef specialiteElementRef = specialiteElementRefs.get(i);
+                    if (specialiteElementRef.getDictionnaireoffressoinsList() != null) {
+                        List<DictionnaireOffresSoins> dictionnaireoffressoinsList = specialiteElementRef.getDictionnaireoffressoinsList();
+                        for (int j = 0; j < dictionnaireoffressoinsList.size(); j++) {
+                            DictionnaireOffresSoins dictionnaireOffresSoins = dictionnaireoffressoinsList.get(j);
+                            this.addLineInCSV(null, "", specialiteElementRef.getIdspecialiteelementref(), specialiteElementRef.getDescription(), dictionnaireOffresSoins.getIddictoffressoins(), dictionnaireOffresSoins.getIntitule(), dictionnaireOffresSoins.getDescription(), dictionnaireOffresSoins.getMotscles());
+                        }
+                    } else {
+                        this.addLineInCSV(null, "", specialiteElementRef.getIdspecialiteelementref(), specialiteElementRef.getDescription(), null, "", "", "");
+                    }
+                }
             }
         }
+
         return createdFile.toURL();
     }
 
     /**
-     * Cette methode permet tout simplement d'inscire certaines classes a la
-     * création du fichier CSV Pour ajouter une classe il suffit de l'ajouter au
-     * dictionnaire. La clé est le bean. la valeur est une List de ce bean avec
-     * les valeurs inscrite à l'interieur. Attention pour que cela fontionne il
-     * faut que les getters soit crée et qu'il correspondent aux standards. ex:
-     * attribut: monAttribut getter: getMonAttribut
      *
-     * @return
-     * @throws Exception
+     * @param disciplineId
+     * @param disciplineDescription
+     * @param specialiteId
+     * @param specialiteDescription
+     * @param offreDeSoinId
+     * @param offreDeSoinIntitule
+     * @param offreDeSoinDescription
+     * @param offreDeSoinMotCle
      */
-    private Map<Class, List> getClassToGenerateCSV() throws Exception {
-        Map<Class, List> classes = new HashMap<Class, List>();
-        classes.put(SpecialiteElementRef.class, PersistanceFactory.getSpecialiteElementRefMapper().selectAll());
-        classes.put(DisciplineRef.class, PersistanceFactory.getDisciplineRefMapper().selectAll());
-        classes.put(DictionnaireOffresSoins.class, PersistanceFactory.getDictionnaireOffresSoinsMapper().selectAll());
-        return classes;
+    private void addLineInCSV(Integer disciplineId, String disciplineDescription, Integer specialiteId, String specialiteDescription, Integer offreDeSoinId, String offreDeSoinIntitule, String offreDeSoinDescription, String offreDeSoinMotCle) throws Exception {
+        List<String> ligne = new ArrayList<String>();
+        if (disciplineId == null) {
+            ligne.add(" ");
+        } else {
+            ligne.add(String.valueOf(disciplineId));
+        }
+
+        if (disciplineDescription == null) {
+            ligne.add(" ");
+        } else {
+            ligne.add(this.commaOut(disciplineDescription));
+        }
+        if (specialiteId == null) {
+            ligne.add(" ");
+        } else {
+            ligne.add(String.valueOf(specialiteId));
+        }
+        if (specialiteDescription == null) {
+            ligne.add(" ");
+        } else {
+            ligne.add(this.commaOut(specialiteDescription));
+        }
+        if (offreDeSoinId == null) {
+            ligne.add(" ");
+        } else {
+            ligne.add(String.valueOf(offreDeSoinId));
+        }
+        ligne.add(offreDeSoinIntitule);
+        if (offreDeSoinDescription == null) {
+            ligne.add(" ");
+        } else {
+            ligne.add(this.commaOut(offreDeSoinDescription));
+        }
+        if (offreDeSoinMotCle != null) {
+            ligne.add(this.commaOut(offreDeSoinMotCle));
+        } else {
+            ligne.add(" ");
+        }
+
+        String format = this.format(ligne);
+        this.csvSrv.writeLine(format);
+    }
+
+    private String commaOut(String value) {
+        return this.replaceBy(value, ',', "*<+");
     }
 
     /**
-     * Permet de retourner la ligne au format CSV en fonction d'un bean et de
-     * ses attributs.
      *
-     * @param get Soit le bean
-     * @param attributs de la classe
-     * @return La ligne normalisé au format CSV, les virgules présent dans un
-     * attribut sont remplacé par *<+
-     * @throws NoSuchMethodException
-     * @throws IllegalAccessException
-     * @throws IllegalArgumentException
-     * @throws InvocationTargetException
+     * @param valueToReplace
+     * @param by
+     * @return
      */
-    private String getContentLine(Object get, List<String> attributs) throws NoSuchMethodException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
-        List<String> values = new ArrayList<String>();
-        for (int j = 0; j < attributs.size(); j++) {
-            String get1 = attributs.get(j);
-            char charAt = get1.charAt(0);
-            char toUpperCase = Character.toUpperCase(charAt);
-            String p = get1.substring(1);
-            String getter = "get" + toUpperCase + p;
-            Method declaredField = get.getClass().getDeclaredMethod(getter);
-            declaredField.setAccessible(true);
-            Object invoke = declaredField.invoke(get);
-            String value = null;
-            if (invoke != null) {
-                if (invoke instanceof String) {
-                    String s = (String) invoke;
-                    if (s.isEmpty()) {
-                        value = "VIDE";
-                    } else {
-                        value = s.toString();
-                    }
-                } else if (invoke instanceof Integer) {
-                    value = invoke.toString();
-                } else if (invoke instanceof SpecialiteElementRef) {
-                    SpecialiteElementRef o = (SpecialiteElementRef) invoke;
-                    value = o.getIdspecialiteelementref().toString();
-                } else if (invoke instanceof List) {
-                    try {
-                        List<SpecialiteElementRef> specialiteElementRefs = (List<SpecialiteElementRef>) invoke;
-                        List<String> strings = new ArrayList<String>();
-                        for (SpecialiteElementRef specialiteElementRef : specialiteElementRefs) {
-                            strings.add(specialiteElementRef.getIdspecialiteelementref().toString());
-                        }
-                        if (strings.size() != 0) {
-                            value = this.formatInnerCell(strings);
-                        } else {
-                            value = "VIDE";
-                        }
-                    } catch (ClassCastException e) {
-                        List<DictionnaireOffresSoins> dictionnaireOffresSoinses = (List<DictionnaireOffresSoins>) invoke;
-                        List<String> strings = new ArrayList<String>();
-                        for (DictionnaireOffresSoins dictionnaireOffresSoins : dictionnaireOffresSoinses) {
-                            strings.add(dictionnaireOffresSoins.getIddictoffressoins().toString());
-                        }
-                        if (strings.size() != 0) {
-                            value = this.formatInnerCell(strings);
-                        } else {
-                            value = "VIDE";
-                        }
-                    }
-                } else if (invoke instanceof DisciplineRef) {
-                    DisciplineRef o = (DisciplineRef) invoke;
-                    value = o.getIddisciplineref().toString();
-                } else {
-                    value = "OBJECT";
-                }
-            } else {
-                value = "VIDE";
+    private String replaceBy(String valueToReplace, char wantToReplace, String by) {
+        int indexOf;
+        while ((indexOf = valueToReplace.lastIndexOf(String.valueOf(wantToReplace))) != -1) {
+            if (indexOf != -1) {
+                char oldChar = valueToReplace.charAt(indexOf);
+                String newStr = by;
+                valueToReplace = valueToReplace.replace(Character.toString(oldChar), newStr);
             }
-            int indexOf;
-            while ((indexOf = value.lastIndexOf(",")) != -1) {
-                if (indexOf != -1) {
-                    char oldChar = value.charAt(indexOf);
-                    String newStr = "*<+";
-                    value = value.replace(Character.toString(oldChar), newStr);
-                }
-            }
-            values.add(value);
         }
-        return this.format(values);
+
+        return valueToReplace;
     }
 
     /**
@@ -196,7 +222,7 @@ public class CSVServiceV2Impl implements CSVService{
                     line += items.get(b);
                 }
             }
-        }else{
+        } else {
             line = items.get(0);
         }
         return line;

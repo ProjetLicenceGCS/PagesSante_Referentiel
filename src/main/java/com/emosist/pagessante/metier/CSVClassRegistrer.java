@@ -18,7 +18,17 @@ import java.util.logging.Logger;
  * @author Damien Chesneau <contact@damienchesneau.fr>
  */
 public class CSVClassRegistrer {
-
+    /**
+     * Cette methode permet tout simplement d'inscire certaines classes a la
+     * création du fichier CSV Pour ajouter une classe il suffit de l'ajouter au
+     * dictionnaire. La clé est le bean. la valeur est une List de ce bean avec
+     * les valeurs inscrite à l'interieur. Attention pour que cela fontionne il
+     * faut que les getters soit crée et qu'il correspondent aux standards. ex:
+     * attribut: monAttribut getter: getMonAttribut
+     *
+     * @return
+     * @throws Exception
+     */
     public static Map<Class, List> getClassToGenerateCSV(boolean data) throws Exception {
         Map<Class, List> classes = new HashMap<Class, List>();
         if (data) {
