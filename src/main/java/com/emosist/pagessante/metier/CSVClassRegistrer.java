@@ -33,6 +33,19 @@ public class CSVClassRegistrer {
         return classes;
     }
 
+    public static Map<Class, List> getClassToGenerateCSV(List<Class> classes) throws Exception {
+
+        Map<Class, List> classToGenerateCSV = getClassToGenerateCSV(true);
+        Map<Class, List> ret = new HashMap<Class, List>();
+        for (int i = 0; i < classes.size(); i++) {
+            if (classToGenerateCSV.containsKey(classes.get(i))) {
+                List get = classToGenerateCSV.get(classes.get(i));
+                ret.put(classes.get(i), get);
+            }
+        }
+        return ret;
+    }
+
     public static List<String> getClassToGenerateCSV() {
         List<String> classes = new ArrayList<String>();
         Map<Class, List> classToGenerateCSV = null;

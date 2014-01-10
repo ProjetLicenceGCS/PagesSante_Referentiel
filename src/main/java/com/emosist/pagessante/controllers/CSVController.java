@@ -50,7 +50,8 @@ public class CSVController extends MainController {
 
         private List<String> encodage;
         private List<String> classes;
-        private int i=0;
+        private int i = 0;
+
         public List<String> getEncodage() {
             return encodage;
         }
@@ -79,18 +80,16 @@ public class CSVController extends MainController {
     @RequestMapping(method = RequestMethod.POST, value = "/telecharger")
     public ModelAndView download(ModelMap model, HttpServletRequest request) {
         this.addSessionToModel(model, request);
-//        List<String> classToGenerateCSV = CSVClassRegistrer.getClassToGenerateCSV();
         List<String> classToGenerateCSV = null;
         classToGenerateCSV = CSVClassRegistrer.getClassToGenerateCSV();
         Map<Class, List> classToGenerateCSV1 = null;
         try {
-           classToGenerateCSV1  = CSVClassRegistrer.getClassToGenerateCSV(false);
+            classToGenerateCSV1 = CSVClassRegistrer.getClassToGenerateCSV(false);
         } catch (Exception ex) {
             Logger.getLogger(CSVController.class.getName()).log(Level.SEVERE, null, ex);
         }
-
+        Map<Class, Boolean> choix = new HashMap<Class, Boolean>();
         for (int i = 0; i < classToGenerateCSV.size(); i++) {
-            Map<Class, Boolean> choix = new HashMap<Class, Boolean>();
             String className = classToGenerateCSV.get(i);
             String retourStr = request.getParameter(className);
             boolean retour = Boolean.parseBoolean(retourStr);
@@ -98,7 +97,7 @@ public class CSVController extends MainController {
             Iterator<Class> iterator = keySet.iterator();
             for (Iterator<Class> it = keySet.iterator(); it.hasNext();) {
                 Class class1 = it.next();
-                if(class1.getSimpleName().equals(className)){
+                if (class1.getSimpleName().equals(className)) {
                     choix.put(class1, retour);
                     break;
                 }
@@ -107,10 +106,22 @@ public class CSVController extends MainController {
         }
         URL generateCSV = null;
         try {
-            generateCSV = this.csvSrv.generateCSV();
+            generateCSV = MetierFactory.getCSVService(this.getClassHasTrue(choix)).generateCSV();
         } catch (Exception ex) {
             Logger.getLogger(CSVController.class.getName()).log(Level.SEVERE, null, ex);
         }
         return new ModelAndView("ajax/AjaxSimpleResult", "ret", generateCSV);
+    }
+
+    private List<Class> getClassHasTrue(Map<Class, Boolean> choix) {
+        List<Class> classes = new ArrayList<Class>();
+        Set<Class> keySet = choix.keySet();
+        for (Iterator<Class> it = keySet.iterator(); it.hasNext();) {
+            Class class1 = it.next();
+            if (choix.get(class1).booleanValue() == true) {
+                classes.add(class1);
+            }
+        }
+        return classes;
     }
 }

@@ -13,6 +13,7 @@ function telechargerCSV() {
             $("#alert").show();
         },
         success: function(text) {
+            alert(text);
             if (text.indexOf("PB") != -1) {
                 $("#alert").show();
             } else {

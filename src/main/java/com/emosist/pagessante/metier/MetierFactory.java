@@ -5,6 +5,11 @@
  */
 package com.emosist.pagessante.metier;
 
+import java.util.List;
+import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 /**
  *
  * @author Damien Chesneau <contact@damienchesneau.fr>
@@ -22,13 +27,27 @@ public class MetierFactory {
 
     public static CSVService getCSVService() {
         if (csvSrv == null) {
-            csvSrv = new CSVServiceImpl();
+            csvSrv = new CSVServiceImpl(null);
+        }
+        return csvSrv;
+    }
+
+    public static CSVService getCSVService(List<Class> classes) {
+        Map<Class, List> classToGenerateCSV = null;
+            try {
+                 classToGenerateCSV = CSVClassRegistrer.getClassToGenerateCSV(classes);
+            } catch (Exception ex) {
+                Logger.getLogger(MetierFactory.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        if (classes.size() > 1) {
+            csvSrv = new CSVServiceV2Impl(classToGenerateCSV);
+        } else {
+            csvSrv = new CSVServiceImpl(classToGenerateCSV);
         }
         return csvSrv;
     }
 
     public enum FormatCSV {
-
         BeansParBean, BeansAvecRelations
     }
 

@@ -27,7 +27,10 @@ public class CSVServiceImpl implements CSVService {
 
     private SpecialiteElementRefMapper speialiteElementRefSrv = PersistanceFactory.getSpecialiteElementRefMapper();
     private CSVServiceIO csvSrv = PhysiqueIOFactory.getCSVService();
-
+    private Map<Class,List> data;
+    public CSVServiceImpl(Map<Class,List> map){
+        this.data = map;
+    }
     @Override
     public void delete(URL fichierCSV) throws Exception {
         throw new UnsupportedOperationException("Not supported yet. TO DO");
@@ -43,7 +46,8 @@ public class CSVServiceImpl implements CSVService {
     @Override
     public URL generateCSV() throws Exception {
         URI createdFile = this.csvSrv.createFile("generatedFile.csv");
-        Map<Class, List> classes = this.getClassToGenerateCSV();
+//        Map<Class, List> classes = this.getClassToGenerateCSV();
+        Map<Class, List> classes = this.data;
         Set<Class> keySet = classes.keySet();
         Iterator<Map.Entry<Class, List>> iterator = classes.entrySet().iterator();
         while (iterator.hasNext()) {
@@ -230,12 +234,5 @@ public class CSVServiceImpl implements CSVService {
         }
         return ret;
     }
-
-    @Override
-    public List<Class> getClassAvalableToGenerateCSV() {
-        throw new UnsupportedOperationException("Not supported yet. TO DO");
-    }
-
-
 
 }

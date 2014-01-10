@@ -28,5 +28,4 @@ public interface CSVService {
      */
     public List<String> recupererEncodage() throws Exception;
     
-    public List<Class> getClassAvalableToGenerateCSV();
 }
