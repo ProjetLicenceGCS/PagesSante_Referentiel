@@ -21,7 +21,7 @@
                 <div style="font-size: 25px; color: white;">Une erreur est survenu. Veuillez réessayer plus tard.<a style="float: right; font-size: 25px;"onclick='$("#alert").hide();'>X&nbsp;</a>
                 </div>
             </div>
-            <table id="csv" style="width: 100%;" class="TableauLignesAutomatique">
+            <table id="csvExport" style="width: 100%;" class="TableauLignesAutomatique">
                 <thead>
                     <tr style="height: 20px;">
                         <td>Exportez votre fichier CSV</td>
@@ -29,9 +29,21 @@
                     </tr>
                 </thead>
                 <tr>
+                    <td>Quel entitée voulez-vous exporter ? </td>
+                    <td><input type="hidden"/></td>
+                </tr>
+                <c:forEach items="${ret.classes}" var="reet"  >
+                    <tr>
+                    <td>${reet}</td>
+                    <td><input type="checkbox" id="${reet}" value="${reet}"></input></td>
+                </tr>
+                </c:forEach>
+                <tr>
                     <td>Exporter la base de donnée sous le format CSV</td>
                     <td><button onclick="telechargerCSV();">Télécharger</button></td>
                 </tr>
+            </table>
+            <table id="csvImport" style="width: 100%;" class="TableauLignesAutomatique">
                 <thead>
                     <tr style="height: 20px;">
                         <td>Importer votre fichier CSV</td>
@@ -40,11 +52,13 @@
                 </thead>
                 <tr>
                     <td>Choissisez votre format de fichier</td>
-                    <td><select>
-                            <c:forEach items="${ret}" var="reet" >
+                    <td>
+                        <select>
+                            <c:forEach items="${ret.encodage}" var="reet" >
                                 <option>${reet}</option>
                             </c:forEach>
-                        </select></td>
+                        </select>
+                    </td>
                 </tr>
                 <tr>
                     <td>Importer un fichier CSV</td>

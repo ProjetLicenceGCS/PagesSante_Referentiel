@@ -1,3 +1,4 @@
+
 package com.emosist.pagessante.metier;
 
 import com.emosist.pagessante.beans.DictionnaireOffresSoins;
@@ -23,7 +24,7 @@ import java.util.Set;
  *
  * @author Damien Chesneau <contact@damienchesneau.fr>
  */
-public class CSVServiceImpl implements CSVService {
+public class CSVServiceV2Impl implements CSVService{
 
     private SpecialiteElementRefMapper speialiteElementRefSrv = PersistanceFactory.getSpecialiteElementRefMapper();
     private CSVServiceIO csvSrv = PhysiqueIOFactory.getCSVService();
@@ -223,19 +224,12 @@ public class CSVServiceImpl implements CSVService {
 
     @Override
     public List<String> recupererEncodage() throws Exception {
-        List<String> ret = new ArrayList<String>();
-        Encodage[] values = Encodage.values();
-        for(int i=0; i < values.length ;i++){
-            ret.add(String.valueOf(values[i]));
-        }
-        return ret;
-    }
-
-    @Override
-    public List<Class> getClassAvalableToGenerateCSV() {
         throw new UnsupportedOperationException("Not supported yet. TO DO");
     }
 
-
+    @Override
+    public List<Class> getClassAvalableToGenerateCSV()  {
+        throw new UnsupportedOperationException("Not supported yet. TO DO");
+    }
 
 }
