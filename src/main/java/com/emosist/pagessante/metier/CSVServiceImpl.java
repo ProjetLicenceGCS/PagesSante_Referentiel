@@ -7,6 +7,7 @@ import com.emosist.pagessante.physique.io.CSVServiceIO;
 import com.emosist.pagessante.physique.io.PhysiqueIOFactory;
 import com.emosist.pagessante.physique.persistence.PersistanceFactory;
 import com.emosist.pagessante.physique.persistence.SpecialiteElementRefMapper;
+import java.io.File;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -27,10 +28,12 @@ public class CSVServiceImpl implements CSVService {
 
     private SpecialiteElementRefMapper speialiteElementRefSrv = PersistanceFactory.getSpecialiteElementRefMapper();
     private CSVServiceIO csvSrv = PhysiqueIOFactory.getCSVService();
-    private Map<Class,List> data;
-    public CSVServiceImpl(Map<Class,List> map){
+    private Map<Class, List> data;
+
+    public CSVServiceImpl(Map<Class, List> map) {
         this.data = map;
     }
+
     @Override
     public void delete(URL fichierCSV) throws Exception {
         throw new UnsupportedOperationException("Not supported yet. TO DO");
@@ -70,7 +73,6 @@ public class CSVServiceImpl implements CSVService {
         return createdFile.toURL();
     }
 
-    
     /**
      * Permet de retourner la ligne au format CSV en fonction d'un bean et de
      * ses attributs.
@@ -176,7 +178,7 @@ public class CSVServiceImpl implements CSVService {
                     line += items.get(b);
                 }
             }
-        }else{
+        } else {
             line = items.get(0);
         }
         return line;
@@ -210,10 +212,105 @@ public class CSVServiceImpl implements CSVService {
     public List<String> recupererEncodage() throws Exception {
         List<String> ret = new ArrayList<String>();
         Encodage[] values = Encodage.values();
-        for(int i=0; i < values.length ;i++){
+        for (int i = 0; i < values.length; i++) {
             ret.add(String.valueOf(values[i]));
         }
         return ret;
+    }
+
+    @Override
+    public void loadCSV(String url) throws Exception {
+        if (this.getFileExtension(url).equals("csv")) {
+            List<String> listFichier = new ArrayList<String>();
+            listFichier = this.csvSrv.recuperationFichier(url);
+//            Set<Class> keySet = data.keySet();
+//            Class next = keySet.iterator().next();
+//            if(DisciplineRef.class.equals(next)){
+//                List<DisciplineRef> disciplineRefs = new ArrayList<DisciplineRef>();
+//                next
+//            }
+//            if (listFichier.get(0).equals(disciplineRef)) {
+            List<DisciplineRef> listDisciplineBdd = this.data.get(DisciplineRef.class);
+            List<DisciplineRef> listDisciplineFichier = new ArrayList<DisciplineRef>();
+            for (int i = 1; i < listFichier.size(); i++) {
+                DisciplineRef disciplineRef = new DisciplineRef();
+                String[] split = listFichier.get(i).split(" , ");
+                String[] splitElementRef = split[3].split("-");
+                List<SpecialiteElementRef> elementRefs = new ArrayList<SpecialiteElementRef>();
+                for (int j = 0; j < splitElementRef.length; j++) {
+                    SpecialiteElementRef elementRef = new SpecialiteElementRef();
+                    elementRef.setIdspecialiteelementref(Integer.parseInt(splitElementRef[j]));
+                    elementRefs.add(elementRef);
+                }
+                disciplineRef.setIddisciplineref(Integer.parseInt(split[0]));
+                disciplineRef.setDescription(split[1]);
+                disciplineRef.setDescriptionNorm(split[2]);
+                disciplineRef.setSpecialiteelementrefList(elementRefs);
+                listDisciplineFichier.add(disciplineRef);
+            }
+
+//                Field[] declaredFields = DisciplineRef.class.getDeclaredFields();
+//                List<String> attributs = new ArrayList<String>();
+//                for (int j = 1; j < declaredFields.length; j++) {
+//                    if (!declaredFields[j].getName().equals("serialVersionUID")) {
+//                        attributs.add(declaredFields[j].getName());
+//                        System.out.println(j);
+//                    }
+//                }
+            for (int i = 0; i < listDisciplineFichier.size(); i++) {
+                int mod = 0;
+                for (int j = 0; j < listDisciplineBdd.size(); j++) {
+                    if ((listDisciplineFichier.get(i).getIddisciplineref().equals(listDisciplineBdd.get(j).getIddisciplineref()))) {
+                        if (listDisciplineFichier.get(i).getDescription().equals(listDisciplineBdd.get(j).getDescription())) {
+                            if (listDisciplineFichier.get(i).getDescriptionNorm().equals(listDisciplineBdd.get(j).getDescriptionNorm())) {
+                                if ((listDisciplineFichier.get(i).getSpecialiteelementrefList().equals(listDisciplineBdd.get(j).getSpecialiteelementrefList()))) {
+                                mod = 1; // Existe à l'identique dans la Bdd donc RIEN A FAIRE
+                                break;
+                                } else {
+                                    mod = 2; // Existe mais pas à l'identique donc faire UPDATE
+                                    break;
+                                }
+                            } else {
+                                mod = 2; // Existe mais pas à l'identique donc faire UPDATE
+                                break;
+                            }
+                        } else {
+                            mod = 2; // Existe mais pas à l'identique donc faire UPDATE
+                            break;
+                        }
+
+                    } else {
+                        mod = 3; // N'existe pas du tout dans la Bdd donc faire INSERT
+                    }
+                }
+                switch (mod) {
+                    case 1:
+                        System.out.println("Existe à l'identique dans la Bdd donc RIEN A FAIRE");
+                        break;
+                    case 2:
+                        System.out.println("Existe mais pas à l'identique donc faire UPDATE");
+                        //Faire delete de la ligne dans bdd et insert de cette meme ligne du fichier.
+                        break;
+                    case 3:
+                        System.out.println("N'existe pas du tout dans la Bdd donc faire INSERT");
+                        //Faire insert du fichier dans la bdd
+                        break;
+                }
+            }
+        } else {
+            System.err.println("Erreur de format CSV");
+            //Faire remonter l'erreur : Indiquer que le format n'est pas le bon
+        }
+    }
+
+    public String getFileExtension(String NomFichier) {
+        File tmpFichier = new File(NomFichier);
+        tmpFichier.getName();
+        int posPoint = tmpFichier.getName().lastIndexOf('.');
+        if (0 < posPoint && posPoint <= tmpFichier.getName().length() - 2) {
+            return tmpFichier.getName().substring(posPoint + 1);
+        }
+        return "";
     }
 
 }

@@ -257,4 +257,10 @@ public class CSVServiceV2Impl implements CSVService {
         throw new UnsupportedOperationException("Not supported yet. TO DO");
     }
 
+    @Override
+    public void loadCSV(String url) throws Exception {
+        String complet = "discipline_id , discipline_description , specialite_id , specialite_description , offressoins_id , offressoins_intitule , offressoins_description , offressoins_motscles";
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
 }

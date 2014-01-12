@@ -113,6 +113,19 @@ public class CSVController extends MainController {
         return new ModelAndView("ajax/AjaxSimpleResult", "ret", generateCSV);
     }
 
+    @RequestMapping(method = RequestMethod.POST, value = "/charger")
+    public ModelAndView load(ModelMap model, HttpServletRequest request) {
+        this.addSessionToModel(model, request);
+        List<Class> classToLoadCSV = CSVClassRegistrer.getClassToLoadCSV("C:\\wamp\\www\\disciplineRef.csv");
+        CSVService csvService = MetierFactory.getCSVService(classToLoadCSV);
+        try {
+            csvService.loadCSV("C:\\wamp\\www\\disciplineRef.csv");
+        } catch (Exception ex) {
+            Logger.getLogger(CSVController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return new ModelAndView("Csv");
+    }
+
     private List<Class> getClassHasTrue(Map<Class, Boolean> choix) {
         List<Class> classes = new ArrayList<Class>();
         Set<Class> keySet = choix.keySet();

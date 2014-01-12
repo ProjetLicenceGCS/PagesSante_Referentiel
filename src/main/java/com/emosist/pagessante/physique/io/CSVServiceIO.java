@@ -2,6 +2,8 @@
 package com.emosist.pagessante.physique.io;
 
 import java.net.URI;
+import java.net.URL;
+import java.util.List;
 
 /**
  *
@@ -10,4 +12,5 @@ import java.net.URI;
 public interface CSVServiceIO {
     public void writeLine(String line) throws Exception;
     public URI createFile(String name) throws Exception;
+    public List<String> recuperationFichier(String url) throws Exception;
 }

@@ -1,8 +1,12 @@
 package com.emosist.pagessante.physique.io;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.FileReader;
 import java.net.URI;
+import java.util.ArrayList;
+import java.util.List;
 import org.springframework.beans.factory.annotation.Value;
 
 /**
@@ -33,6 +37,17 @@ public class CSVServiceIOImpl implements CSVServiceIO {
         }
         file.createNewFile();
         return new URI("http://localhost/"+this.fileName);
+    }
+
+    @Override
+    public List<String> recuperationFichier(String url) throws Exception {
+        BufferedReader in = new BufferedReader(new FileReader(new File(url)));
+        String line;
+        List<String> list= new ArrayList<String>();
+        while((line = in.readLine()) != null){
+        list.add(line);
+    }
+        return list;
     }
 
 }

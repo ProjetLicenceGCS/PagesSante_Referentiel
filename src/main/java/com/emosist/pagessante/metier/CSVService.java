@@ -22,10 +22,17 @@ public interface CSVService {
     public URL generateCSV() throws Exception;
     
     /**
-     * Retourne les differents formats possible du fichier CSV
+     * Retourne les differents formats possible du fichier CSV.
      * @return Encodage 
      * @throws Exception 
      */
     public List<String> recupererEncodage() throws Exception;
+    
+    /**
+     * Charge le fichier CSV.
+     * @param url
+     * @throws Exception 
+     */
+    public void loadCSV(String url) throws Exception;
     
 }

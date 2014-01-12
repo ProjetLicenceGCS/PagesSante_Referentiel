@@ -29,7 +29,7 @@
                     </tr>
                 </thead>
                 <tr>
-                    <td>Quel entitée voulez-vous exporter ? </td>
+                    <td>Quelle entité voulez-vous exporter ? </td>
                     <td><input type="hidden"/></td>
                 </tr>
                 <c:forEach items="${ret.classes}" var="reet"  >
@@ -62,10 +62,11 @@
                 </tr>
                 <tr>
                     <td>Importer un fichier CSV</td>
-                    <td><button>Ouvrir une boite de sélèction</button></td>
+                    <td><button onclick="chargerCSV();">Ouvrir une boite de sélection</button></td>
                 </tr>
             </table> 
             <jsp:include page="scriptToInclude.jsp" />
             <script src="<c:url value="/scripts/damienC-csv.js"/>" type="text/javascript" ></script>
+            <script src="<c:url value="/scripts/alexandreM-csvChargement.js"/>" type="text/javascript" ></script>
     </body>
 </html>
