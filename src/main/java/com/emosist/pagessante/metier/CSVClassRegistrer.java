@@ -79,7 +79,7 @@ public class CSVClassRegistrer {
     }
 
     public static List<Class> getClassToLoadCSV(String url) {
-        String complet = "discipline_id , discipline_description , specialite_id , specialite_description , offressoins_id , offressoins_intitule , offressoins_description , offressoins_motscles";
+        String complet = "discipline_id ; discipline_description ; specialite_id ; specialite_description ; offressoins_id ; offressoins_intitule ; offressoins_description ; offressoins_motscles";
         List<Class> classes = new ArrayList<Class>();
         List<String> listFichier = new ArrayList<String>();
         CSVServiceIO csvService = PhysiqueIOFactory.getCSVService();
@@ -89,9 +89,9 @@ public class CSVClassRegistrer {
                 // 2 ou 3
             } else {
                 // 1
-                String disciplineRef = "iddisciplineref , description , descriptionNorm , specialiteelementrefList";
-                String dictionnaireOffresSoins = "iddictoffressoins , intitule , description , motscles , intituleNorm , idspecialiteelementref";
-                String specialiteElementRef = "idspecialiteelementref , description , descriptionNorm , dictionnaireoffressoinsList , iddisciplineref";
+                String disciplineRef = "iddisciplineref ; description ; descriptionNorm ; specialiteelementrefList";
+                String dictionnaireOffresSoins = "iddictoffressoins ; intitule ; description;motscles ; intituleNorm ; idspecialiteelementref";
+                String specialiteElementRef = "idspecialiteelementref ; description ; descriptionNorm ; dictionnaireoffressoinsList ; iddisciplineref";
                 if (listFichier.get(0).equals(disciplineRef)) {
                     classes.add(DisciplineRef.class);
                 } else if (listFichier.get(0).equals(dictionnaireOffresSoins)) {

@@ -239,10 +239,10 @@ public class CSVServiceV2Impl implements CSVService {
         String line = "";
         for (int b = 0; b < cellule.size(); b++) {
             if (b != 0 && b != cellule.size() - 1) {
-                line += " , ";
+                line += " ; ";
                 line += cellule.get(b);
             } else if (b == cellule.size() - 1) {
-                line += " , ";
+                line += " ; ";
                 line += cellule.get(b);
                 line += "\n";
             } else {

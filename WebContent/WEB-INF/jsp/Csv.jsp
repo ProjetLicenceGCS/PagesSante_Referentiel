@@ -34,9 +34,9 @@
                 </tr>
                 <c:forEach items="${ret.classes}" var="reet"  >
                     <tr>
-                    <td>${reet}</td>
-                    <td><input type="checkbox" id="${reet}" value="${reet}"></input></td>
-                </tr>
+                        <td>${reet}</td>
+                        <td><input type="checkbox" id="${reet}" value="${reet}"></input></td>
+                    </tr>
                 </c:forEach>
                 <tr>
                     <td>Exporter la base de donnée sous le format CSV</td>
