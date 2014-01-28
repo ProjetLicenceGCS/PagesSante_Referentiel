@@ -96,13 +96,12 @@ public class DisciplineRefMapperImpl implements DisciplineRefMapper {
 
     @Override
     public int getCountByDescription(String description) throws Exception {
-//        this.em = Connexion.getPersistance();
-//        Query query = this.em.createNamedQuery("DisciplineRef.countByDescription");
-//        query.setParameter("descrption", description);
-//        Long value = (Long) query.getSingleResult();
-//        Connexion.disconect(this.em);
-//        return Long.valueOf(value).intValue();
-        throw new UnsupportedOperationException("TO DO");
+        this.em = Connexion.getPersistance();
+        Query query = this.em.createNamedQuery("DisciplineRef.countByDescription");
+        query.setParameter("descrption", description);
+        Long value = (Long) query.getSingleResult();
+        Connexion.disconect(this.em);
+        return Long.valueOf(value).intValue();
     }
 
     @Override

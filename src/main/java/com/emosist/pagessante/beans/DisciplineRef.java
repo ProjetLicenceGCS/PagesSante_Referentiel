@@ -23,9 +23,10 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "disciplineref")
 @NamedQueries({
-    @NamedQuery(name = "Disciplineref.findAll", query = "SELECT d FROM DisciplineRef d"),
+    @NamedQuery(name = "Disciplineref.findAll", query = "SELECT d FROM DisciplineRef d ORDER BY d.description ASC"),
     @NamedQuery(name = "DisciplineRef.findByIddisciplineref", query = "SELECT d FROM DisciplineRef d WHERE d.iddisciplineref = :iddisciplineref"),
     @NamedQuery(name = "DisciplineRef.findByDescription", query = "SELECT d FROM DisciplineRef d WHERE d.description = :description"),
+    @NamedQuery(name = "DisciplineRef.countByDescription", query = "SELECT COUNT(d) FROM DisciplineRef d WHERE d.description = :descrption"),
     @NamedQuery(name = "DisciplineRef.findByDescriptionNorm", query = "SELECT d FROM DisciplineRef d WHERE d.descriptionNorm = :descriptionNorm")
 })
 public class DisciplineRef implements Serializable {

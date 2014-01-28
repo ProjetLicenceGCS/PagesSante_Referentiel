@@ -22,20 +22,20 @@
                 </div>
             </div>
 
-          <table id="disciplineref" style="width: 100%;" class="TableauLignesAutomatique">
+            <table id="table-disciplineref" style="width: 100%;" class="TableauLignesAutomatique">
                 <thead>
                     <tr>
                         <td><p>Description</p></td>
                         <td></td>
-                        <td><img  src="<c:url value="/images/icone_action_ajouter_creer.png" />"</td>
+                        <td><img onclick="addDisipline();" src="<c:url value="/images/icone_action_ajouter_creer.png" />"</td>
                     </tr>
                 </thead>
 
                 <c:forEach items="${disciplineRef}" var="disciplinesRef" varStatus="status">
                     <tr id="${disciplinesRef.iddisciplineref}" > 
                         <td><p title="${disciplinesRef.descriptionNorm}">${disciplinesRef.description}</p></td>
-                        <td style="width: 15px;"><img  style="display: block; margin-left: auto;  margin-right: auto;" src="<c:url value="/images/croix.png"/>"  /></td>
-                        <td style="width: 15px;"><img style="display: block; margin-left: auto;  margin-right: auto;" src="<c:url value="/images/icone_action_modifier.png" />" /></td>
+                        <td style="width: 15px;"><img  style="display: block; margin-left: auto;  margin-right: auto;" src="<c:url value="/images/croix.png"/>" onclick="disciplineRefDelete('${disciplinesRef.iddisciplineref}', this.parentNode);"  /></td>
+                        <td style="width: 15px;"><img style="display: block; margin-left: auto;  margin-right: auto;" src="<c:url value="/images/icone_action_modifier.png" />"  onclick="updateDisciplineRef(this.parentNode);"/></td>
                     </tr>
                 </c:forEach>
             </table> 
@@ -47,16 +47,17 @@
         <div id="dialog-ajouter" title="Ajouter une discipline" style=" display: none; ">
             <table style="font-size: 10px;">
                 <tr><td>Description </td><td><input id="description" type="text"  ></input></td></tr>
-                <tr><td>Description normalisé </td><td><input id="descriptionNormalise" type="text"  ></input></td></tr>
+                <tr><td>Spécialitées </td><td><input id="spécialite" type="button" onclick="getDialogForAdd();"value="Faite votre séléction"></input><td><div id="specialtiteNB" style="position: absolute;"></div></td></td></tr>
             </table>
         </div>           
         <div id="dialog-modifier" title="Modifier une discipline" style=" display: none; ">
             <table style="font-size: 10px;">
-                <tr><td>Description </td><td><input id="updescription" type="text"  ></input></td></tr>
-                <tr><td>Description normalisé </td><td><input id="updescriptionNormalise" type="text"  ></input></td></tr>
+                <tr><td>Description </td><td><input id="descriptionMODIFIER" type="text"  ></input></td></tr>
+                <tr><td>Spécialitées </td><td><input id="spécialite" type="button" onclick="getDialogForAdd();"value="Faite votre séléction"></input><td><div id="specialtiteNBMODIFIER" style="position: absolute;"></div></td></td></tr>
             </table>
-        </div>
+        </div>  
         <div id="inner"></div>
         <jsp:include page="scriptToInclude.jsp" />
+        <script type="text/javascript" src="<c:url value="/scripts/damienC-disiplineRef.js"/>"></script>
     </body>
 </html>

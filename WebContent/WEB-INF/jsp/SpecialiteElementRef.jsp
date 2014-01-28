@@ -21,7 +21,6 @@
                 <div style="font-size: 25px; color: white;">Une erreur est survenu. Veuillez réessayer plus tard.<a style="float: right; font-size: 25px;"onclick='$("#alert").hide();'>X&nbsp;</a>
                 </div>
             </div>
-
             <table id="specialiteElementref" style="width: 100%;" class="TableauLignesAutomatique">
                 <thead>
                     <tr>

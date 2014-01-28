@@ -3,13 +3,13 @@
  * Ce fichier permet de faire des requêtes ajax au serveur
  * @returns {undefined}
  */
-var dicoOffreSoin = new Array();
+
 var discipline ="";
 
 function setDisciplineSelected(id){
     discipline = id;
 }
-
+var dicoOffreSoin = new Array();
 function setSelectedElements(id) {
     var i;
     var test = false;
@@ -119,7 +119,7 @@ function addSpecialiteElementRef() {
         buttons: {
             "Ajouter": function() {
                 $.ajax({
-                    url: 'http://localhost:8080/PagesSante_Referentiel/pagessante/specialiteelement/add?description=' + $('#description').val() + "&offres=" + dicoOffreSoin.toString()+"&discipline="+discipline,
+                    url: '/specialiteelement/add?description=' + $('#description').val() + "&offres=" + dicoOffreSoin.toString()+"&discipline="+discipline,
                     type: 'POST',
                     dataType: 'text',
                     width: 100,

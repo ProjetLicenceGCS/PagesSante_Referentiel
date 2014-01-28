@@ -120,9 +120,6 @@ public class DisciplineRefServiceImpl implements DisciplineRefService {
         if (this.getCountByDescription(disciplineRef.getDescription()) != 0) {
             throw new DataConflictException("La description entré est déjà présente dans la base de données.");
         }
-        if (this.getCountByDescriptionNormalise(disciplineRef.getDescriptionNorm()) != 0) {
-            throw new DataConflictException("La description entré est déjà présente dans la base de données.");
-        }
     }
 
     @Override
