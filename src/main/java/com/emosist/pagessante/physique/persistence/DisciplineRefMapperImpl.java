@@ -27,12 +27,11 @@ public class DisciplineRefMapperImpl implements DisciplineRefMapper {
 
     @Override
     public int deleteByPrimaryKey(Integer iddisciplineref) throws Exception{
-//        this.em = Connexion.getPersistance();
-//        Query query =  this.em.createNamedQuery("DisciplineRef.deleteByPrimaryKey");
-//        query.setParameter("id", iddisciplineref);
-//        Connexion.disconect(this.em);
-//        return 1;
-        throw new UnsupportedOperationException("TO DO");
+        this.em = Connexion.getPersistance();
+        Query query =  this.em.createNamedQuery("DisciplineRef.deleteByPrimaryKey");
+        query.setParameter("id", iddisciplineref);
+        Connexion.disconect(this.em);
+        return 1;
     }
 
     @Override
@@ -96,24 +95,22 @@ public class DisciplineRefMapperImpl implements DisciplineRefMapper {
 
     @Override
     public int getCountByDescription(String description) throws Exception {
-//        this.em = Connexion.getPersistance();
-//        Query query = this.em.createNamedQuery("DisciplineRef.countByDescription");
-//        query.setParameter("descrption", description);
-//        Long value = (Long) query.getSingleResult();
-//        Connexion.disconect(this.em);
-//        return Long.valueOf(value).intValue();
-        throw new UnsupportedOperationException("TO DO");
+        this.em = Connexion.getPersistance();
+        Query query = this.em.createNamedQuery("DisciplineRef.countByDescription");
+        query.setParameter("descrption", description);
+        Long value = (Long) query.getSingleResult();
+        Connexion.disconect(this.em);
+        return Long.valueOf(value).intValue();
     }
 
     @Override
     public int getCountByDescriptionNormalise(String descriptionNormalise) throws Exception {
-//        this.em = Connexion.getPersistance();
-//        Query query = this.em.createNamedQuery("DisciplineRef.countByDescriptionNormalise");
-//        query.setParameter("descrption", descriptionNormalise);
-//        Long value = (Long) query.getSingleResult();
-//        Connexion.disconect(this.em);
-//        return Long.valueOf(value).intValue();
-        throw new UnsupportedOperationException("TO DO");
+        this.em = Connexion.getPersistance();
+        Query query = this.em.createNamedQuery("DisciplineRef.countByDescriptionNormalise");
+        query.setParameter("descrption", descriptionNormalise);
+        Long value = (Long) query.getSingleResult();
+        Connexion.disconect(this.em);
+        return Long.valueOf(value).intValue();
     }
     
 }

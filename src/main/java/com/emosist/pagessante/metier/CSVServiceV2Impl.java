@@ -24,7 +24,6 @@ import java.util.Set;
  */
 public class CSVServiceV2Impl implements CSVService {
 
-    private SpecialiteElementRefMapper speialiteElementRefSrv = PersistanceFactory.getSpecialiteElementRefMapper();
     private CSVServiceIO csvSrv = PhysiqueIOFactory.getCSVService();
     private Map<Class, List> data;
 
@@ -258,7 +257,7 @@ public class CSVServiceV2Impl implements CSVService {
     }
 
     @Override
-    public void loadCSV(String url) throws Exception {
+    public int loadCSV(String url) throws Exception {
         String complet = "discipline_id , discipline_description , specialite_id , specialite_description , offressoins_id , offressoins_intitule , offressoins_description , offressoins_motscles";
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
