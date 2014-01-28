@@ -31,8 +31,9 @@ public interface CSVService {
     /**
      * Charge le fichier CSV.
      * @param url
+     * @return Erreur si il y a
      * @throws Exception 
      */
-    public void loadCSV(String url) throws Exception;
+    public int loadCSV(String url) throws Exception;
     
 }
