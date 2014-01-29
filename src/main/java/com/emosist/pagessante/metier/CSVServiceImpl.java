@@ -321,7 +321,9 @@ public class CSVServiceImpl implements CSVService {
                     break;
                 case 3:
                     System.out.println("N'existe pas du tout dans la Bdd donc faire INSERT" + listDisciplineFichier.get(i));
-                    this.disciplineRefMapperSrv.insert(listDisciplineFichier.get(i));
+                    DisciplineRef disciplineRef = this.disciplineRefMapperSrv.add(listDisciplineFichier.get(i));
+                    disciplineRef = this.disciplineRefMapperSrv.selectByPrimaryKey(disciplineRef.getIddisciplineref());
+                    this.disciplineRefMapperSrv.updateByPrimaryKey(disciplineRef);
                     //Faire insert du fichier dans la bdd
                     break;
             }

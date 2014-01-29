@@ -5,8 +5,11 @@ import com.emosist.pagessante.beans.DisciplineRef;
 import com.emosist.pagessante.beans.SpecialiteElementRef;
 import com.emosist.pagessante.physique.io.CSVServiceIO;
 import com.emosist.pagessante.physique.io.PhysiqueIOFactory;
+import com.emosist.pagessante.physique.persistence.DictionnaireOffresSoinsMapper;
+import com.emosist.pagessante.physique.persistence.DisciplineRefMapper;
 import com.emosist.pagessante.physique.persistence.PersistanceFactory;
 import com.emosist.pagessante.physique.persistence.SpecialiteElementRefMapper;
+import java.io.File;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -24,7 +27,10 @@ import java.util.Set;
  */
 public class CSVServiceV2Impl implements CSVService {
 
+    private SpecialiteElementRefMapper speialiteElementRefSrv = PersistanceFactory.getSpecialiteElementRefMapper();
     private CSVServiceIO csvSrv = PhysiqueIOFactory.getCSVService();
+    private DisciplineRefMapper disciplineRefMapperSrv = PersistanceFactory.getDisciplineRefMapper();
+    private DictionnaireOffresSoinsMapper dictionnaireOffresSoinsMapperSrv = PersistanceFactory.getDictionnaireOffresSoinsMapper();
     private Map<Class, List> data;
 
     public CSVServiceV2Impl(Map<Class, List> map) {
@@ -259,7 +265,291 @@ public class CSVServiceV2Impl implements CSVService {
     @Override
     public int loadCSV(String url) throws Exception {
         String complet = "discipline_id , discipline_description , specialite_id , specialite_description , offressoins_id , offressoins_intitule , offressoins_description , offressoins_motscles";
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        if (this.getFileExtension(url).equals("csv")) {
+            List<String> listFichier = new ArrayList<String>();
+            listFichier = this.csvSrv.recuperationFichier(url);
+            for (int i = 1; i < listFichier.size(); i++) {
+                String valeur = listFichier.get(i);
+                String[] split = listFichier.get(i).split(";");
+                if (!(split[0].equals("  "))) {
+                    this.loadCSVDisciplineRef(listFichier,valeur);
+                } else if (!(split[2].equals("   ") && split[0].equals("  "))) {
+                    this.loadCSVSpecialiteElementRef(listFichier,valeur);
+                } else if (!(split[4].equals("  "))) {
+                    this.loadCSVDictionnaireOffreDeSoins(listFichier,valeur);
+                }
+            }
+
+        } else {
+            System.err.println("Erreur de format CSV");
+            return -1;
+            //Faire remonter l'erreur : Indiquer que le format n'est pas le bon
+        }
+        return 0;
+    }
+
+    public String getFileExtension(String NomFichier) {
+        File tmpFichier = new File(NomFichier);
+        tmpFichier.getName();
+        int posPoint = tmpFichier.getName().lastIndexOf('.');
+        if (0 < posPoint && posPoint <= tmpFichier.getName().length() - 2) {
+            return tmpFichier.getName().substring(posPoint + 1);
+        }
+        return "";
+    }
+
+    public void loadCSVDisciplineRef(List<String> listFichier,String valeur) throws Exception {
+        System.out.println("loadCSVDisciplineRef");
+        List<DisciplineRef> listDisciplineBdd = this.data.get(DisciplineRef.class);
+        List<DisciplineRef> listDisciplineFichier = new ArrayList<DisciplineRef>();
+        for (int i = 1; i < listFichier.size(); i++) {
+            DisciplineRef disciplineRef = new DisciplineRef();
+            String[] split = listFichier.get(i).split(";");
+            String[] splitElementRef = split[3].split("-");
+            List<SpecialiteElementRef> elementRefs = new ArrayList<SpecialiteElementRef>();
+            for (int j = 0; j < splitElementRef.length; j++) {
+                SpecialiteElementRef elementRef = new SpecialiteElementRef();
+                if (splitElementRef[j].trim().equals("NULL")) {
+                    elementRef.setIdspecialiteelementref(0);
+                } else {
+                    elementRef.setIdspecialiteelementref(Integer.parseInt(splitElementRef[j].trim()));
+                }
+                elementRefs.add(elementRef);
+            }
+            disciplineRef.setIddisciplineref(Integer.parseInt(split[0].trim()));
+            disciplineRef.setDescription(split[1].trim());
+            disciplineRef.setDescriptionNorm(split[2].trim());
+            disciplineRef.setSpecialiteelementrefList(elementRefs);
+            listDisciplineFichier.add(disciplineRef);
+        }
+        for (int i = 0; i < listDisciplineFichier.size(); i++) {
+            int mod = 0;
+            for (int j = 0; j < listDisciplineBdd.size(); j++) {
+                if ((listDisciplineFichier.get(i).getIddisciplineref().equals(listDisciplineBdd.get(j).getIddisciplineref()))) {
+                    if (listDisciplineFichier.get(i).getDescription().equals(listDisciplineBdd.get(j).getDescription())) {
+                        if (listDisciplineFichier.get(i).getDescriptionNorm().equals(listDisciplineBdd.get(j).getDescriptionNorm())) {
+                            if ((listDisciplineFichier.get(i).getSpecialiteelementrefList().equals(listDisciplineBdd.get(j).getSpecialiteelementrefList()))) {
+                                mod = 1; // Existe à l'identique dans la Bdd donc RIEN A FAIRE
+                                break;
+                            } else {
+                                mod = 2; // Existe mais pas à l'identique donc faire UPDATE
+                                break;
+                            }
+                        } else {
+                            mod = 2; // Existe mais pas à l'identique donc faire UPDATE
+                            break;
+                        }
+                    } else {
+                        mod = 2; // Existe mais pas à l'identique donc faire UPDATE
+                        break;
+                    }
+
+                } else {
+                    mod = 3; // N'existe pas du tout dans la Bdd donc faire INSERT
+                }
+            }
+            switch (mod) {
+                case 1:
+                    System.out.println("Existe à l'identique dans la Bdd donc RIEN A FAIRE");
+                    break;
+                case 2:
+                    System.out.println("Existe mais pas à l'identique donc faire UPDATE" + listDisciplineFichier.get(i));
+                    this.disciplineRefMapperSrv.updateByPrimaryKey(listDisciplineFichier.get(i));
+                    //Faire delete de la ligne dans bdd et insert de cette meme ligne du fichier.
+                    break;
+                case 3:
+                    System.out.println("N'existe pas du tout dans la Bdd donc faire INSERT" + listDisciplineFichier.get(i));
+                    this.disciplineRefMapperSrv.insert(listDisciplineFichier.get(i));
+                    //Faire insert du fichier dans la bdd
+                    break;
+            }
+        }
+        for (int i = 0; i < listDisciplineBdd.size(); i++) {
+            int mod = 0;
+            for (int j = 0; j < listDisciplineFichier.size(); j++) {
+                if ((listDisciplineBdd.get(i).getIddisciplineref().equals(listDisciplineFichier.get(j).getIddisciplineref()))) {
+                    mod = 1;
+                    break;
+                }
+            }
+            if (mod != 1) {
+                //delete fichier de la BDD
+                this.disciplineRefMapperSrv.deleteByPrimaryKey(listDisciplineBdd.get(i).getIddisciplineref());
+                System.out.println("Existe dans la BDD mais pas dans le fichier donc faire DELETE" + listDisciplineBdd.get(i).getIddisciplineref());
+            }
+        }
+    }
+
+    public void loadCSVDictionnaireOffreDeSoins(List<String> listFichier,String valeur) throws Exception {
+
+        System.out.println("loadCSVDictionnaireOffreDeSoins");
+        List<DictionnaireOffresSoins> listDiscionnaireOffreDeSoinsBDD = this.data.get(DictionnaireOffresSoins.class);
+        List<DictionnaireOffresSoins> listDiscionnaireOffreDeSoinsFichier = new ArrayList<DictionnaireOffresSoins>();
+            DictionnaireOffresSoins dictionnaireOffresSoins = new DictionnaireOffresSoins();
+            String[] split = valeur.split(";");
+            SpecialiteElementRef elementRef = new SpecialiteElementRef();
+            dictionnaireOffresSoins.setIddictoffressoins(Integer.parseInt(split[2].trim()));
+            dictionnaireOffresSoins.setIntitule(split[1].trim());
+            dictionnaireOffresSoins.setDescription(split[2].trim());
+            dictionnaireOffresSoins.setMotscles(split[3].trim());
+            dictionnaireOffresSoins.setIntituleNorm(split[4].trim());
+            elementRef.setIdspecialiteelementref(Integer.parseInt(split[5].trim()));
+            dictionnaireOffresSoins.setIdspecialiteelementref(elementRef);
+            listDiscionnaireOffreDeSoinsFichier.add(dictionnaireOffresSoins);
+        for (int i = 0; i < listDiscionnaireOffreDeSoinsFichier.size(); i++) {
+            int mod = 0;
+            for (int j = 0; j < listDiscionnaireOffreDeSoinsBDD.size(); j++) {
+                if ((listDiscionnaireOffreDeSoinsFichier.get(i).getIddictoffressoins().equals(listDiscionnaireOffreDeSoinsBDD.get(j).getIddictoffressoins()))) {
+                    if (listDiscionnaireOffreDeSoinsFichier.get(i).getIntitule().equals(listDiscionnaireOffreDeSoinsBDD.get(j).getIntitule())) {
+                        if (listDiscionnaireOffreDeSoinsFichier.get(i).getDescription().equals(listDiscionnaireOffreDeSoinsBDD.get(j).getDescription())) {
+                            if ((listDiscionnaireOffreDeSoinsFichier.get(i).getMotscles().equals(listDiscionnaireOffreDeSoinsBDD.get(j).getMotscles()))) {
+                                if ((listDiscionnaireOffreDeSoinsFichier.get(i).getMotscles().equals(listDiscionnaireOffreDeSoinsBDD.get(j).getMotscles()))) {
+                                    if ((listDiscionnaireOffreDeSoinsFichier.get(i).getMotscles().equals(listDiscionnaireOffreDeSoinsBDD.get(j).getMotscles()))) {
+                                        mod = 1; // Existe à l'identique dans la Bdd donc RIEN A FAIRE
+                                        break;
+                                    } else {
+                                        mod = 2; // Existe mais pas à l'identique donc faire UPDATE
+                                        break;
+                                    }
+                                } else {
+                                    mod = 2; // Existe mais pas à l'identique donc faire UPDATE
+                                    break;
+                                }
+
+                            } else {
+                                mod = 2; // Existe mais pas à l'identique donc faire UPDATE
+                                break;
+                            }
+                        } else {
+                            mod = 2; // Existe mais pas à l'identique donc faire UPDATE
+                            break;
+                        }
+                    } else {
+                        mod = 2; // Existe mais pas à l'identique donc faire UPDATE
+                        break;
+                    }
+
+                } else {
+                    mod = 3; // N'existe pas du tout dans la Bdd donc faire INSERT
+                }
+            }
+            switch (mod) {
+                case 1:
+                    System.out.println("Existe à l'identique dans la Bdd donc RIEN A FAIRE");
+                    break;
+                case 2:
+                    System.out.println("Existe mais pas à l'identique donc faire UPDATE");
+                    this.dictionnaireOffresSoinsMapperSrv.updateByPrimaryKey(listDiscionnaireOffreDeSoinsFichier.get(i));
+                    //Faire delete de la ligne dans bdd et insert de cette meme ligne du fichier.
+                    break;
+                case 3:
+                    System.out.println("N'existe pas du tout dans la Bdd donc faire INSERT");
+                    this.dictionnaireOffresSoinsMapperSrv.insert(listDiscionnaireOffreDeSoinsFichier.get(i));
+                    //Faire insert du fichier dans la bdd
+                    break;
+            }
+        }
+        for (int i = 0; i < listDiscionnaireOffreDeSoinsBDD.size(); i++) {
+            int mod = 0;
+            for (int j = 0; j < listDiscionnaireOffreDeSoinsFichier.size(); j++) {
+                if ((listDiscionnaireOffreDeSoinsBDD.get(i).getIddictoffressoins().equals(listDiscionnaireOffreDeSoinsFichier.get(i).getIddictoffressoins()))) {
+                    mod = 1;
+                    break;
+                }
+            }
+            if (mod != 1) {
+                //delete fichier de la BDD
+                this.dictionnaireOffresSoinsMapperSrv.deleteByPrimaryKey(listDiscionnaireOffreDeSoinsBDD.get(i).getIddictoffressoins());
+                System.out.println("Existe dans la BDD mais pas dans le fichier donc faire DELETE");
+            }
+        }
+    }
+
+    public void loadCSVSpecialiteElementRef(List<String> listFichier,String valeur) throws Exception {
+
+        System.out.println("loadCSVSpecialiteElementRef");
+        List<SpecialiteElementRef> listSpecialiteElementRefBdd = this.data.get(SpecialiteElementRef.class);
+        List<SpecialiteElementRef> listSpecialiteElementRefFichier = new ArrayList<SpecialiteElementRef>();
+        for (int i = 1; i < listFichier.size(); i++) {
+            SpecialiteElementRef elementRef = new SpecialiteElementRef();
+            String[] split = listFichier.get(i).split(";");
+            String[] splitElementRef = split[3].split("-");
+            List<DictionnaireOffresSoins> dictionnaireOffresSoinses = new ArrayList<DictionnaireOffresSoins>();
+            for (int j = 0; j < splitElementRef.length; j++) {
+                DictionnaireOffresSoins dictionnaireOffresSoins = new DictionnaireOffresSoins();
+                dictionnaireOffresSoins.setIddictoffressoins(Integer.parseInt(splitElementRef[j].trim()));
+                dictionnaireOffresSoinses.add(dictionnaireOffresSoins);
+            }
+            elementRef.setIdspecialiteelementref(Integer.parseInt(split[0].trim()));
+            elementRef.setDescription(split[1].trim());
+            elementRef.setDescriptionNorm(split[2].trim());
+            elementRef.setDictionnaireoffressoinsList(dictionnaireOffresSoinses);
+            DisciplineRef disciplineRef = new DisciplineRef();
+            disciplineRef.setIddisciplineref(Integer.parseInt(split[4].trim()));
+            elementRef.setIddisciplineref(disciplineRef);
+            listSpecialiteElementRefFichier.add(elementRef);
+        }
+        for (int i = 0; i < listSpecialiteElementRefFichier.size(); i++) {
+            int mod = 0;
+            for (int j = 0; j < listSpecialiteElementRefBdd.size(); j++) {
+                if ((listSpecialiteElementRefFichier.get(i).getIdspecialiteelementref().equals(listSpecialiteElementRefBdd.get(j).getIdspecialiteelementref()))) {
+                    if (listSpecialiteElementRefFichier.get(i).getDescription().equals(listSpecialiteElementRefBdd.get(j).getDescription())) {
+                        if (listSpecialiteElementRefFichier.get(i).getDescriptionNorm().equals(listSpecialiteElementRefBdd.get(j).getDescriptionNorm())) {
+                            if ((listSpecialiteElementRefFichier.get(i).getDictionnaireoffressoinsList().equals(listSpecialiteElementRefBdd.get(j).getDictionnaireoffressoinsList()))) {
+                                if ((listSpecialiteElementRefFichier.get(i).getIddisciplineref().equals(listSpecialiteElementRefBdd.get(j).getIddisciplineref()))) {
+                                    mod = 1; // Existe à l'identique dans la Bdd donc RIEN A FAIRE
+                                    break;
+                                } else {
+                                    mod = 2; // Existe mais pas à l'identique donc faire UPDATE
+                                    break;
+                                }
+                            } else {
+                                mod = 2; // Existe mais pas à l'identique donc faire UPDATE
+                                break;
+                            }
+                        } else {
+                            mod = 2; // Existe mais pas à l'identique donc faire UPDATE
+                            break;
+                        }
+                    } else {
+                        mod = 2; // Existe mais pas à l'identique donc faire UPDATE
+                        break;
+                    }
+
+                } else {
+                    mod = 3; // N'existe pas du tout dans la Bdd donc faire INSERT
+                }
+            }
+            switch (mod) {
+                case 1:
+                    System.out.println("Existe à l'identique dans la Bdd donc RIEN A FAIRE");
+                    break;
+                case 2:
+                    System.out.println("Existe mais pas à l'identique donc faire UPDATE");
+                    this.speialiteElementRefSrv.updateByPrimaryKey(listSpecialiteElementRefFichier.get(i));
+                    //Faire delete de la ligne dans bdd et insert de cette meme ligne du fichier.
+                    break;
+                case 3:
+                    System.out.println("N'existe pas du tout dans la Bdd donc faire INSERT");
+                    this.speialiteElementRefSrv.insert(listSpecialiteElementRefFichier.get(i));
+                    //Faire insert du fichier dans la bdd
+                    break;
+            }
+        }
+        for (int i = 0; i < listSpecialiteElementRefBdd.size(); i++) {
+            int mod = 0;
+            for (int j = 0; j < listSpecialiteElementRefFichier.size(); j++) {
+                if ((listSpecialiteElementRefBdd.get(i).getIdspecialiteelementref().equals(listSpecialiteElementRefFichier.get(i).getIdspecialiteelementref()))) {
+                    mod = 1;
+                    break;
+                }
+            }
+            if (mod != 1) {
+                //delete fichier de la BDD
+                this.speialiteElementRefSrv.deleteByPrimaryKey(listSpecialiteElementRefBdd.get(i).getIdspecialiteelementref());
+                System.out.println("Existe dans la BDD mais pas dans le fichier donc faire DELETE");
+            }
+        }
     }
 
 }

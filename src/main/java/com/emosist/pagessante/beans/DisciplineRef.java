@@ -27,7 +27,8 @@ import javax.persistence.Table;
     @NamedQuery(name = "DisciplineRef.findByIddisciplineref", query = "SELECT d FROM DisciplineRef d WHERE d.iddisciplineref = :iddisciplineref"),
     @NamedQuery(name = "DisciplineRef.findByDescription", query = "SELECT d FROM DisciplineRef d WHERE d.description = :description"),
     @NamedQuery(name = "DisciplineRef.countByDescription", query = "SELECT COUNT(d) FROM DisciplineRef d WHERE d.description = :descrption"),
-    @NamedQuery(name = "DisciplineRef.findByDescriptionNorm", query = "SELECT d FROM DisciplineRef d WHERE d.descriptionNorm = :descriptionNorm")
+    @NamedQuery(name = "DisciplineRef.findByDescriptionNorm", query = "SELECT d FROM DisciplineRef d WHERE d.descriptionNorm = :descriptionNorm"),
+    @NamedQuery(name = "DisciplineRef.deleteByPrimaryKey" , query = "DELETE FROM DisciplineRef d WHERE d.iddisciplineref = :id")
 })
 public class DisciplineRef implements Serializable {
     private static final long serialVersionUID = 1L;

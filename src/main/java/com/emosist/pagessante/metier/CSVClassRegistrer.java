@@ -87,6 +87,9 @@ public class CSVClassRegistrer {
             listFichier = csvService.recuperationFichier(url);
             if (listFichier.get(0).equals(complet)) {
                 // 2 ou 3
+                classes.add(DisciplineRef.class);
+                classes.add(DictionnaireOffresSoins.class);
+                classes.add(SpecialiteElementRef.class);
             } else {
                 // 1
                 String disciplineRef = "iddisciplineref ; description ; descriptionNorm ; specialiteelementrefList";

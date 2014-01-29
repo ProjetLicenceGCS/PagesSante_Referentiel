@@ -76,7 +76,6 @@ public class DisciplineRefMapperImpl implements DisciplineRefMapper {
         Connexion.disconect(em);
         return 1;
     }
-    
     public void delete(DisciplineRef record) throws Exception{
         this.em= Connexion.getPersistance();
         this.em.remove(this.em.merge(record));

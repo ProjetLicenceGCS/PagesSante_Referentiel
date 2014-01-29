@@ -116,10 +116,10 @@ public class CSVController extends MainController {
     @RequestMapping(method = RequestMethod.POST, value = "/charger")
     public ModelAndView load(ModelMap model, HttpServletRequest request) {
         this.addSessionToModel(model, request);
-        List<Class> classToLoadCSV = CSVClassRegistrer.getClassToLoadCSV("C:\\wamp\\www\\disciplineRef.csv");
+        List<Class> classToLoadCSV = CSVClassRegistrer.getClassToLoadCSV("C:\\wamp\\www\\disciplineRefs.csv");
         CSVService csvService = MetierFactory.getCSVService(classToLoadCSV);
         try {
-            csvService.loadCSV("C:\\wamp\\www\\disciplineRef.csv");
+            csvService.loadCSV("C:\\wamp\\www\\disciplineRefs.csv");
         } catch (Exception ex) {
             Logger.getLogger(CSVController.class.getName()).log(Level.SEVERE, null, ex);
         }
