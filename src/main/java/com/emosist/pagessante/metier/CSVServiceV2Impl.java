@@ -10,9 +10,6 @@ import com.emosist.pagessante.physique.persistence.DisciplineRefMapper;
 import com.emosist.pagessante.physique.persistence.PersistanceFactory;
 import com.emosist.pagessante.physique.persistence.SpecialiteElementRefMapper;
 import java.io.File;
-import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.net.URI;
 import java.net.URL;
 import java.util.ArrayList;
@@ -49,11 +46,91 @@ public class CSVServiceV2Impl implements CSVService {
      * @return URL du fichier crée
      * @throws Exception
      */
+//    @Override
+//    public URL generateCSV() throws Exception {
+//        URI createdFile = this.csvSrv.createFile("generatedFile.csv");
+//        Map<Class, List> classes = this.data;
+//        Set<Class> keySet = classes.keySet();
+//        Iterator<Map.Entry<Class, List>> iterator = classes.entrySet().iterator();
+//        List<String> attributs = new ArrayList<String>();
+//        attributs.add("discipline_id");
+//        attributs.add("discipline_description");
+//        attributs.add("specialite_id");
+//        attributs.add("specialite_description");
+//        attributs.add("offressoins_id");
+//        attributs.add("offressoins_intitule");
+//        attributs.add("offressoins_description");
+//        attributs.add("offressoins_motscles");
+//        this.csvSrv.writeLine(this.format(attributs));
+//        while (iterator.hasNext()) {
+//            Map.Entry<Class, List> next = iterator.next();
+//            Class key = next.getKey();
+//            Field[] declaredFields = key.getDeclaredFields();
+//            for (int j = 1; j < declaredFields.length; j++) {
+//                if (!declaredFields[j].getName().equals("serialVersionUID")) {
+//                    attributs.add(declaredFields[j].getName());
+//                }
+//            }
+//            if (key.getName().equals(DisciplineRef.class.getName())) {
+//                System.out.println("DISCIPLINE");
+//                List<DisciplineRef> value = next.getValue();
+//                for (int i = 0; i < value.size(); i++) {
+//                    DisciplineRef discipline = value.get(i);
+//                    if (value.get(i).getSpecialiteelementrefList() != null) {
+//                        List<SpecialiteElementRef> specialiteelementrefList = value.get(i).getSpecialiteelementrefList();
+//                        for (int j = 0; j < specialiteelementrefList.size(); j++) {
+//                            SpecialiteElementRef specialite = specialiteelementrefList.get(j);
+//                            if (specialite.getDictionnaireoffressoinsList() == null) {
+//                                this.addLineInCSV(discipline.getIddisciplineref(), discipline.getDescription(), specialite.getIdspecialiteelementref(), specialite.getDescription(), null, "", "", "");
+//                            } else {
+//
+//                                List<DictionnaireOffresSoins> dictionnaireOffresSoinses = specialite.getDictionnaireoffressoinsList();
+//                                for (int x = 0; x < dictionnaireOffresSoinses.size(); x++) {
+//                                    DictionnaireOffresSoins dictionnaireOffresSoin = dictionnaireOffresSoinses.get(x);
+//                                    System.out.println("I = " + i + " J = " + j + " X = " + x);
+//                                    this.addLineInCSV(discipline.getIddisciplineref(), discipline.getDescription(), specialite.getIdspecialiteelementref(), specialite.getDescription(), dictionnaireOffresSoin.getIddictoffressoins(), dictionnaireOffresSoin.getIntitule(), dictionnaireOffresSoin.getDescription(), dictionnaireOffresSoin.getMotscles());
+//                                }
+//                            }
+//                        }
+//                    } else {
+//                        this.addLineInCSV(discipline.getIddisciplineref(), discipline.getDescription(), null, "", null, "", "", "");
+//                    }
+//                }
+//            } else if (key.getName().equals(DictionnaireOffresSoins.class.getName())) {
+//                System.out.println("DICTIONNAIRE OFFRE SOIN");
+//                List<DictionnaireOffresSoins> value = next.getValue();
+//                for (int i = 0; i < value.size(); i++) {
+//                    DictionnaireOffresSoins dictionnaireOffresSoins = value.get(i);
+//                    this.addLineInCSV(null, "", null, null, dictionnaireOffresSoins.getIddictoffressoins(), dictionnaireOffresSoins.getIntitule(), dictionnaireOffresSoins.getDescription(), dictionnaireOffresSoins.getMotscles());
+//
+//                }
+//            } else if (key.getName().equals(SpecialiteElementRef.class.getName())) {
+//                System.out.println("Specialite ELEMENT REF");
+//                List<SpecialiteElementRef> specialiteElementRefs = next.getValue();
+//                for (int i = 0; i < specialiteElementRefs.size(); i++) {
+//                    SpecialiteElementRef specialiteElementRef = specialiteElementRefs.get(i);
+//                    if (specialiteElementRef.getDictionnaireoffressoinsList() != null) {
+//                        List<DictionnaireOffresSoins> dictionnaireoffressoinsList = specialiteElementRef.getDictionnaireoffressoinsList();
+//                        for (int j = 0; j < dictionnaireoffressoinsList.size(); j++) {
+//                            DictionnaireOffresSoins dictionnaireOffresSoins = dictionnaireoffressoinsList.get(j);
+//                            this.addLineInCSV(null, "", specialiteElementRef.getIdspecialiteelementref(), specialiteElementRef.getDescription(), dictionnaireOffresSoins.getIddictoffressoins(), dictionnaireOffresSoins.getIntitule(), dictionnaireOffresSoins.getDescription(), dictionnaireOffresSoins.getMotscles());
+//                        }
+//                    } else {
+//                        this.addLineInCSV(null, "", specialiteElementRef.getIdspecialiteelementref(), specialiteElementRef.getDescription(), null, "", "", "");
+//                    }
+//                }
+//            }
+//        }
+//
+//        return createdFile.toURL();
+//    }
+
     @Override
     public URL generateCSV() throws Exception {
         URI createdFile = this.csvSrv.createFile("generatedFile.csv");
         Map<Class, List> classes = this.data;
         Set<Class> keySet = classes.keySet();
+        
         Iterator<Map.Entry<Class, List>> iterator = classes.entrySet().iterator();
         List<String> attributs = new ArrayList<String>();
         attributs.add("discipline_id");
@@ -65,18 +142,9 @@ public class CSVServiceV2Impl implements CSVService {
         attributs.add("offressoins_description");
         attributs.add("offressoins_motscles");
         this.csvSrv.writeLine(this.format(attributs));
-        while (iterator.hasNext()) {
-            Map.Entry<Class, List> next = iterator.next();
-            Class key = next.getKey();
-            Field[] declaredFields = key.getDeclaredFields();
-            for (int j = 1; j < declaredFields.length; j++) {
-                if (!declaredFields[j].getName().equals("serialVersionUID")) {
-                    attributs.add(declaredFields[j].getName());
-                }
-            }
-            if (key.getName().equals(DisciplineRef.class.getName())) {
-                System.out.println("DISCIPLINE");
-                List<DisciplineRef> value = next.getValue();
+        int sizeOfkeys = keySet.size();
+        if(sizeOfkeys == 3 ){
+            List<DisciplineRef> value = MetierFactory.getDisciplineRefService().selectAll();
                 for (int i = 0; i < value.size(); i++) {
                     DisciplineRef discipline = value.get(i);
                     if (value.get(i).getSpecialiteelementrefList() != null) {
@@ -86,7 +154,6 @@ public class CSVServiceV2Impl implements CSVService {
                             if (specialite.getDictionnaireoffressoinsList() == null) {
                                 this.addLineInCSV(discipline.getIddisciplineref(), discipline.getDescription(), specialite.getIdspecialiteelementref(), specialite.getDescription(), null, "", "", "");
                             } else {
-
                                 List<DictionnaireOffresSoins> dictionnaireOffresSoinses = specialite.getDictionnaireoffressoinsList();
                                 for (int x = 0; x < dictionnaireOffresSoinses.size(); x++) {
                                     DictionnaireOffresSoins dictionnaireOffresSoin = dictionnaireOffresSoinses.get(x);
@@ -99,17 +166,37 @@ public class CSVServiceV2Impl implements CSVService {
                         this.addLineInCSV(discipline.getIddisciplineref(), discipline.getDescription(), null, "", null, "", "", "");
                     }
                 }
-            } else if (key.getName().equals(DictionnaireOffresSoins.class.getName())) {
-                System.out.println("DICTIONNAIRE OFFRE SOIN");
-                List<DictionnaireOffresSoins> value = next.getValue();
+        }else{
+            Map.Entry<Class, List> next = iterator.next();
+            Class key = next.getKey();
+            Map.Entry<Class, List> next2 = iterator.next();
+            Class key2 = next2.getKey();
+            if ( (key.equals(DisciplineRef.class) && key2.equals(DictionnaireOffresSoins.class))||(key2.equals(DisciplineRef.class) && key.equals(DictionnaireOffresSoins.class)) ) {
+                System.out.println("DISCIPLINE");
+                List<DisciplineRef> value = MetierFactory.getDisciplineRefService().selectAll();
                 for (int i = 0; i < value.size(); i++) {
-                    DictionnaireOffresSoins dictionnaireOffresSoins = value.get(i);
-                    this.addLineInCSV(null, "", null, null, dictionnaireOffresSoins.getIddictoffressoins(), dictionnaireOffresSoins.getIntitule(), dictionnaireOffresSoins.getDescription(), dictionnaireOffresSoins.getMotscles());
-
+                    DisciplineRef discipline = value.get(i);
+                    if (value.get(i).getSpecialiteelementrefList() != null) {
+                        List<SpecialiteElementRef> specialiteelementrefList = value.get(i).getSpecialiteelementrefList();
+                        for (int j = 0; j < specialiteelementrefList.size(); j++) {
+                            SpecialiteElementRef specialite = specialiteelementrefList.get(j);
+                            if (specialite.getDictionnaireoffressoinsList() == null) {
+                                this.addLineInCSV(discipline.getIddisciplineref(), discipline.getDescription(), specialite.getIdspecialiteelementref(), specialite.getDescription(), null, "", "", "");
+                            } else {
+                                List<DictionnaireOffresSoins> dictionnaireOffresSoinses = specialite.getDictionnaireoffressoinsList();
+                                for (int x = 0; x < dictionnaireOffresSoinses.size(); x++) {
+                                    DictionnaireOffresSoins dictionnaireOffresSoin = dictionnaireOffresSoinses.get(x);
+                                    System.out.println("I = " + i + " J = " + j + " X = " + x);
+                                    this.addLineInCSV(discipline.getIddisciplineref(), discipline.getDescription(), specialite.getIdspecialiteelementref(), specialite.getDescription(), dictionnaireOffresSoin.getIddictoffressoins(), dictionnaireOffresSoin.getIntitule(), dictionnaireOffresSoin.getDescription(), dictionnaireOffresSoin.getMotscles());
+                                }
+                            }
+                        }
+                    } else {
+                        this.addLineInCSV(discipline.getIddisciplineref(), discipline.getDescription(), null, "", null, "", "", "");
+                    }
                 }
-            } else if (key.getName().equals(SpecialiteElementRef.class.getName())) {
-                System.out.println("Specialite ELEMENT REF");
-                List<SpecialiteElementRef> specialiteElementRefs = next.getValue();
+            }else if ((key.equals(SpecialiteElementRef.class) && key2.equals(DictionnaireOffresSoins.class))|| (key2.equals(SpecialiteElementRef.class) && key.equals(DictionnaireOffresSoins.class)) ) {
+                List<SpecialiteElementRef> specialiteElementRefs = PersistanceFactory.getSpecialiteElementRefMapper().selectAll();
                 for (int i = 0; i < specialiteElementRefs.size(); i++) {
                     SpecialiteElementRef specialiteElementRef = specialiteElementRefs.get(i);
                     if (specialiteElementRef.getDictionnaireoffressoinsList() != null) {
@@ -122,12 +209,23 @@ public class CSVServiceV2Impl implements CSVService {
                         this.addLineInCSV(null, "", specialiteElementRef.getIdspecialiteelementref(), specialiteElementRef.getDescription(), null, "", "", "");
                     }
                 }
-            }
+            }else if ((key.equals(SpecialiteElementRef.class) && key2.equals(DisciplineRef.class))|| (key2.equals(SpecialiteElementRef.class) && key.equals(DisciplineRef.class))  ) {
+                List<DisciplineRef> value = MetierFactory.getDisciplineRefService().selectAll();
+                for (int i = 0; i < value.size(); i++) {
+                    DisciplineRef discipline = value.get(i);
+                    if (value.get(i).getSpecialiteelementrefList() != null) {
+                        List<SpecialiteElementRef> specialiteelementrefList = value.get(i).getSpecialiteelementrefList();
+                        for (int j = 0; j < specialiteelementrefList.size(); j++) {
+                            SpecialiteElementRef specialite = specialiteelementrefList.get(j);
+                            this.addLineInCSV(discipline.getIddisciplineref(), discipline.getDescription(), specialite.getIdspecialiteelementref(), specialite.getDescription(), null, "", "", "");
+                        }
+                    } else {
+                        this.addLineInCSV(discipline.getIddisciplineref(), discipline.getDescription(), null, "", null, "", "", "");
+                    }
+            }}
         }
-
         return createdFile.toURL();
     }
-
     /**
      *
      * @param disciplineId

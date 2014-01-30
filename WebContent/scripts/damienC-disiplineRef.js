@@ -79,10 +79,10 @@ function getDialogForAdd() {
                     buttons: {
                         "Fermer": function() {
                             var t = specialiteElementRef.length + " spécialitées séléctionnés";
-                            if(specialiteElementRef.length == 1 ){
+                            if (specialiteElementRef.length == 1) {
                                 t = " Une spécialité séléctionné.";
-                            }else if (specialiteElementRef.length == 0 ){
-                                t="";
+                            } else if (specialiteElementRef.length == 0) {
+                                t = "";
                             }
                             $("#specialtiteNB").text(t);
                             $(this).dialog("close");
@@ -138,13 +138,13 @@ function addDisipline() {
     });
 }
 var id;
-function updateDisciplineRef(node){
+function updateDisciplineRef(node) {
     var idDisciplineRefSelected = node.parentElement.id;
     id = idDisciplineRefSelected;
     var descriptionDisciplineRefSelected = node.parentElement.children.item(0).firstChild.innerText;
     var descriptionNormaliseDisciplinetRefSelected = node.parentElement.children.item(0).firstChild.title;
     document.getElementById("descriptionMODIFIER").value = descriptionDisciplineRefSelected;
-  
+
     $.ajax({
         url: 'discipline/countSpecialitebyID?id=' + id,
         type: 'POST',
@@ -156,10 +156,10 @@ function updateDisciplineRef(node){
             $("#dialog-modifier").dialog("close");
         },
         success: function(text) {
-            if (text.indexOf("PB") != -1){
+            if (text.indexOf("PB") != -1) {
                 $("#alert").show();
-            } else if  (text.indexOf("aucuneOffre") != -1){
-               document.getElementById("upoffreSoinNb").innerHTML = "0 offre";
+            } else if (text.indexOf("aucuneOffre") != -1) {
+                document.getElementById("upoffreSoinNb").innerHTML = "0 offre";
             } else {
                 var pluriel = "spécialitées";
                 if (text == 1) {
@@ -176,7 +176,7 @@ function updateDisciplineRef(node){
         buttons: {
             "Modifier": function() {
                 $.ajax({
-                    url: 'http://localhost:8080/PagesSante_Referentiel/pagessante/specialiteelement/update?id='+idDisciplineRefSelected+'&description=' + $('#updescription').val() + "&offres=" + dicoOffreSoin.toString(),
+                    url: 'specialiteelement/update?id=' + idDisciplineRefSelected + '&description=' + $('#updescription').val() + "&offres=" + dicoOffreSoin.toString(),
                     type: 'POST',
                     dataType: 'text',
                     width: 100,
@@ -199,6 +199,42 @@ function updateDisciplineRef(node){
             },
             Annuler: function() {
                 $(this).dialog("close");
+            }
+        }
+    });
+}
+function getDialogForUpdate() {
+     $.ajax({
+        url: 'discipline/getSpecialitesByID?id=' + id,
+        type: 'POST',
+        dataType: 'text',
+        width: 100,
+        timeout: 1000,
+        error: function() {
+            $("#alert").show();
+            $("#dialog-modifier").dialog("close");
+        },
+        success: function(text) {
+            if (text.indexOf("PB") != -1) {
+                $("#alert").show();
+            } else if  (text.indexOf("aucuneOffre") != -1) {
+                getDialogUpdate();
+            } else {
+                if (dicoOffreSoin == 0) {
+                    var start = true;
+                    while (start) {
+                        var id;
+                        if (text.indexOf(",") == -1) {
+                            id = text.substring(0, text.length);
+                            start = false;
+                        } else {
+                            id = text.substring(0, text.indexOf(","));
+                            text = text.substring(text.indexOf(",") + 1, text.length);
+                        }
+                        dicoOffreSoin.push(id);
+                    }
+                }
+                getDialogUpdate();
             }
         }
     });

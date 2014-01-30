@@ -31,7 +31,7 @@ import org.springframework.web.servlet.ModelAndView;
  * @version 1.0.0
  *
  */
-@Controller   
+@Controller
 @RequestMapping(value = "/discipline")
 public class DisciplineRefController extends MainController {
 
@@ -71,10 +71,11 @@ public class DisciplineRefController extends MainController {
         }
         return new ModelAndView("ajax/AjaxDisciplineRef", "id", idVersionStr);
     }
+
     @RequestMapping(method = RequestMethod.POST, value = "/countSpecialitebyID")
     public ModelAndView getCountOfSpecialite(ModelMap model, HttpServletRequest request) {
         String idVersionStr = request.getParameter("id");
-        DisciplineRef selectByPrimaryKey =null;
+        DisciplineRef selectByPrimaryKey = null;
         try {
             selectByPrimaryKey = this.disciplineRefSrv.selectByPrimaryKey(Integer.valueOf(idVersionStr));
         } catch (Exception ex) {
@@ -82,7 +83,7 @@ public class DisciplineRefController extends MainController {
             Logger.getLogger(DisciplineRefController.class.getName()).log(Level.SEVERE, null, ex);
         }
         int size = 0;
-        if(selectByPrimaryKey.getSpecialiteelementrefList()!=null){
+        if (selectByPrimaryKey.getSpecialiteelementrefList() != null) {
             size = selectByPrimaryKey.getSpecialiteelementrefList().size();
         }
         return new ModelAndView("ajax/AjaxSimpleResult", "ret", size);
@@ -90,12 +91,13 @@ public class DisciplineRefController extends MainController {
 
     @RequestMapping(method = RequestMethod.POST, value = "/add")
     public ModelAndView add(ModelAndView model, HttpServletRequest request) {
-        String ret = "OK";System.out.println("COUCOu");
+        String ret = "OK";
+        System.out.println("COUCOu");
         String description = request.getParameter("description");
         String specialite = request.getParameter("specialite");
-        List<SpecialiteElementRef> parseTram =null;
+        List<SpecialiteElementRef> parseTram = null;
         try {
-             parseTram = this.parseTram(specialite);
+            parseTram = this.parseTram(specialite);
         } catch (Exception ex) {
             Logger.getLogger(DisciplineRefController.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -108,7 +110,7 @@ public class DisciplineRefController extends MainController {
         } catch (DataConflictException ex) {
             ret = "DC";
             Logger.getLogger(SpecialiteElementRefController.class.getName()).log(Level.SEVERE, null, ex);
-        }catch (Exception ex) {
+        } catch (Exception ex) {
             ret = "PB";
             Logger.getLogger(DisciplineRefController.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -156,6 +158,31 @@ public class DisciplineRefController extends MainController {
         }
         return new ModelAndView("ajax/AjaxUpdateDiscipline", "ret", ret);
     }
+
+    @RequestMapping(method = RequestMethod.POST, value = "/getSpecialitesByID")
+    public ModelAndView getSpecialitesByID(ModelMap model, HttpServletRequest request) {
+        String ret = "OK";
+        String idInString = request.getParameter("id");
+        DisciplineRef disciplineRef = null;
+        try {
+            disciplineRef = this.disciplineRefSrv.selectByPrimaryKey(Integer.valueOf(idInString));
+        } catch (Exception ex) {
+            ret = "PB";
+            Logger.getLogger(SpecialiteElementRefController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        try {
+            if (disciplineRef.getSpecialiteelementrefList() == null) {
+                ret = "aucuneOffre";
+            } else {
+                List<SpecialiteElementRef> specialiteElementRefs = disciplineRef.getSpecialiteelementrefList();
+                ret = String.valueOf(specialiteElementRefs.size());
+            }
+        } catch (NullPointerException e) {
+            ret = "aucuneOffre";
+        }
+        return new ModelAndView("ajax/AjaxSimpleResult", "ret", ret);
+    }
+
     /**
      * *
      * Exemple de fonction:
