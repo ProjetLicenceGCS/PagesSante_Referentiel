@@ -29,15 +29,21 @@
                     </tr>
                 </thead>
                 <tr>
-                    <td>Quelle entité voulez-vous exporter ? </td>
+                    <td>Quelle entitée voulez-vous exporter ? </td>
                     <td><input type="hidden"/></td>
                 </tr>
-                <c:forEach items="${ret.classes}" var="reet"  >
-                    <tr>
-                        <td>${reet}</td>
-                        <td><input type="checkbox" id="${reet}" value="${reet}"></input></td>
-                    </tr>
-                </c:forEach>
+                <tr>
+                    <td>Discipline</td>
+                    <td><input type="checkbox" id="DisciplineRef" onclick="onClickInCheckBox(this);" value="DisciplineRef"></input></td>
+                </tr>
+                <tr>
+                    <td>Specialitée</td>
+                    <td><input type="checkbox" id="SpecialiteElementRef" onclick="onClickInCheckBox(this);" value="SpecialiteElementRef"></input></td>
+                </tr>
+                <tr>
+                    <td>Offres de soins</td>
+                    <td><input type="checkbox" id="DictionnaireOffresSoins" onclick="onClickInCheckBox(this);" value="DictionnaireOffresSoins"></input></td>
+                </tr>
                 <tr>
                     <td>Exporter la base de donnée sous le format CSV</td>
                     <td><button onclick="telechargerCSV();">Télécharger</button></td>

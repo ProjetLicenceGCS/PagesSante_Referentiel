@@ -4,7 +4,7 @@ function telechargerCSV() {
     var specialiteElementRef = $("#SpecialiteElementRef").is(':checked');
     var discipline = $("#DisciplineRef").is(':checked');
     $.ajax({
-        url: 'http://localhost:8080/PagesSante_Referentiel/pagessante/csv/telecharger?DictionnaireOffresSoins='+dictionnaireOffre+"&SpecialiteElementRef="+specialiteElementRef+"&DisciplineRef="+discipline,
+        url: 'http://localhost:8080/PagesSante_Referentiel/pagessante/csv/telecharger?DictionnaireOffresSoins=' + dictionnaireOffre + "&SpecialiteElementRef=" + specialiteElementRef + "&DisciplineRef=" + discipline,
         type: 'POST',
         dataType: 'text',
         width: 100,
@@ -21,3 +21,9 @@ function telechargerCSV() {
         }
     });
 }
+function onClickInCheckBox(element) {
+    if (($("#DisciplineRef").is(':checked') == true && element.id == "DictionnaireOffresSoins") || ($("#DictionnaireOffresSoins").is(':checked') == true && element.id == "DisciplineRef")) {
+        $("#SpecialiteElementRef").attr('checked', true);
+    }
+}
+
