@@ -139,46 +139,53 @@ public class DisciplineRefController extends MainController {
         String ret = "OK";
         String idStr = request.getParameter("id");
         String description = request.getParameter("description");
-        String descriptionNormalise = request.getParameter("descriptionNormalise");
+        String descriptionNormalise = request.getParameter("specialites");
         DisciplineRef disciplineRef = null;
-        DisciplineRef sbpk = null;
         try {
-            sbpk = this.disciplineRefSrv.selectByPrimaryKey(Integer.valueOf(idStr));
+            disciplineRef = this.disciplineRefSrv.selectByPrimaryKey(Integer.valueOf(idStr));
         } catch (Exception ex) {
             ret = "PB";
             Logger.getLogger(DisciplineRefController.class.getName()).log(Level.SEVERE, null, ex);
         }
-        sbpk.setDescription(description);
-        sbpk.setDescriptionNorm(descriptionNormalise);
+        disciplineRef.setDescription(description);
+        disciplineRef.setDescriptionNorm(description.toUpperCase());
         try {
-            this.disciplineRefSrv.updateByPrimaryKeySelective(sbpk);
+            this.disciplineRefSrv.updateByPrimaryKey(disciplineRef);
         } catch (Exception ex) {
             ret = "PB";
             Logger.getLogger(DisciplineRefController.class.getName()).log(Level.SEVERE, null, ex);
         }
-        return new ModelAndView("ajax/AjaxUpdateDiscipline", "ret", ret);
+        return new ModelAndView("ajax/AjaxSimpleResult", "ret", ret);
     }
 
     @RequestMapping(method = RequestMethod.POST, value = "/getSpecialitesByID")
     public ModelAndView getSpecialitesByID(ModelMap model, HttpServletRequest request) {
         String ret = "OK";
         String idInString = request.getParameter("id");
-        DisciplineRef disciplineRef = null;
+        DisciplineRef specialiteElementRefSelected = null;
         try {
-            disciplineRef = this.disciplineRefSrv.selectByPrimaryKey(Integer.valueOf(idInString));
+            specialiteElementRefSelected = this.disciplineRefSrv.selectByPrimaryKey(Integer.valueOf(idInString));
         } catch (Exception ex) {
             ret = "PB";
             Logger.getLogger(SpecialiteElementRefController.class.getName()).log(Level.SEVERE, null, ex);
         }
-        try {
-            if (disciplineRef.getSpecialiteelementrefList() == null) {
+        if (specialiteElementRefSelected.getSpecialiteelementrefList()== null) {
+            ret = "aucuneOffre";
+        } else {
+            List<SpecialiteElementRef> specialiteElementRefs = specialiteElementRefSelected.getSpecialiteelementrefList();
+            if (specialiteElementRefs.size() == 0) {
                 ret = "aucuneOffre";
             } else {
-                List<SpecialiteElementRef> specialiteElementRefs = disciplineRef.getSpecialiteelementrefList();
-                ret = String.valueOf(specialiteElementRefs.size());
+                String toAdd = new String();
+                for (int i = 0; i < specialiteElementRefs.size(); i++) {
+                    toAdd += specialiteElementRefs.get(i).getIdspecialiteelementref().toString();
+                    if (specialiteElementRefs.size() != i + 1) {
+                        toAdd += ",";
+                    }
+                }
+                ret = "<script> var myDico = new Array(['" + toAdd + "']) </script>";
+                ret = toAdd;
             }
-        } catch (NullPointerException e) {
-            ret = "aucuneOffre";
         }
         return new ModelAndView("ajax/AjaxSimpleResult", "ret", ret);
     }

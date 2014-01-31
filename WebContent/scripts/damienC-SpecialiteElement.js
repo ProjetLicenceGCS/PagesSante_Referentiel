@@ -370,7 +370,6 @@ function getDialogForDiscipline(){
 function getDialogForDisciplineWithUpdate(){
     getDialogForDiscipline();
     if(discipline!=""){
-//        alert("discipline"+discipline);
         document.getElementById("discipline"+discipline).checked = true;
     }
 }

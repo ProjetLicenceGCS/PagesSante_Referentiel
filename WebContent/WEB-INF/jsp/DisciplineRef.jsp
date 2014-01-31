@@ -53,7 +53,7 @@
         <div id="dialog-modifier" title="Modifier une discipline" style=" display: none; ">
             <table style="font-size: 10px;">
                 <tr><td>Description </td><td><input id="descriptionMODIFIER" type="text"  ></input></td></tr>
-                <tr><td>Spécialitées </td><td><input id="spécialite" type="button" onclick="getDialogForAdd();"value="Faite votre séléction"></input><td><div id="specialtiteNBMODIFIER" style="position: absolute;"></div></td></td></tr>
+                <tr><td>Spécialitées </td><td><input id="spécialite" type="button" onclick="getDialogForUpdateDiscipline();"value="Faite votre séléction"></input><td><div id="specialtiteNBMODIFIER" style="position: absolute;"></div></td></td></tr>
             </table>
         </div>  
         <div id="inner"></div>

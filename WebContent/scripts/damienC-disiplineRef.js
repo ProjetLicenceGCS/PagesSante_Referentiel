@@ -71,6 +71,12 @@ function getDialogForAdd() {
                 $(this).dialog("close");
             } else {
                 document.getElementById("inner").innerHTML = text;
+                if (specialiteElementRef.length > 0) {
+                    var i;
+                    for (i = 0; i < specialiteElementRef.length; i++) {
+                        document.getElementById("spec" + specialiteElementRef[i]).checked = true;
+                    }
+                }
                 $("#dialog-selectManySpecialite").dialog({
                     resizable: false,
                     height: 500,
@@ -144,7 +150,6 @@ function updateDisciplineRef(node) {
     var descriptionDisciplineRefSelected = node.parentElement.children.item(0).firstChild.innerText;
     var descriptionNormaliseDisciplinetRefSelected = node.parentElement.children.item(0).firstChild.title;
     document.getElementById("descriptionMODIFIER").value = descriptionDisciplineRefSelected;
-
     $.ajax({
         url: 'discipline/countSpecialitebyID?id=' + id,
         type: 'POST',
@@ -171,12 +176,12 @@ function updateDisciplineRef(node) {
     });
     $("#dialog-modifier").dialog({
         resizable: false,
-        height: 155,
+        height: 140,
         modal: true,
         buttons: {
             "Modifier": function() {
                 $.ajax({
-                    url: 'specialiteelement/update?id=' + idDisciplineRefSelected + '&description=' + $('#updescription').val() + "&offres=" + dicoOffreSoin.toString(),
+                    url: 'discipline/update?id=' + idDisciplineRefSelected + '&description=' + $('#descriptionMODIFIER').val() + "&specialites=" + specialiteElementRef.toString(),
                     type: 'POST',
                     dataType: 'text',
                     width: 100,
@@ -189,10 +194,11 @@ function updateDisciplineRef(node) {
                         if (text.indexOf("PB") != -1) {
                             $("#alert").show();
                         } else {
-                            element.parentElement.children.item(0).firstChild.innerText = document.getElementById("updescription").value;
-                            element.parentElement.children.item(0).firstChild.title = document.getElementById("updescription").value.toUpperCase();
+                            
+                            node.parentElement.children.item(0).firstChild.innerText = document.getElementById("descriptionMODIFIER").value;
+                            node.parentElement.children.item(0).firstChild.title = document.getElementById("descriptionMODIFIER").value.toUpperCase();
                         }
-                        dicoOffreSoin = new Array();
+                        specialiteElementRef = new Array();
                     }
                 });
                 $(this).dialog("close");
@@ -203,7 +209,7 @@ function updateDisciplineRef(node) {
         }
     });
 }
-function getDialogForUpdate() {
+function getDialogForUpdateDiscipline() {
      $.ajax({
         url: 'discipline/getSpecialitesByID?id=' + id,
         type: 'POST',
@@ -214,13 +220,13 @@ function getDialogForUpdate() {
             $("#alert").show();
             $("#dialog-modifier").dialog("close");
         },
-        success: function(text) {
+        success: function(text) {alert(text);
             if (text.indexOf("PB") != -1) {
                 $("#alert").show();
             } else if  (text.indexOf("aucuneOffre") != -1) {
-                getDialogUpdate();
+                getDialogForAdd();
             } else {
-                if (dicoOffreSoin == 0) {
+                if (specialiteElementRef == 0) {
                     var start = true;
                     while (start) {
                         var id;
@@ -231,10 +237,10 @@ function getDialogForUpdate() {
                             id = text.substring(0, text.indexOf(","));
                             text = text.substring(text.indexOf(",") + 1, text.length);
                         }
-                        dicoOffreSoin.push(id);
+                        specialiteElementRef.push(id);
                     }
                 }
-                getDialogUpdate();
+                getDialogForAdd();
             }
         }
     });
