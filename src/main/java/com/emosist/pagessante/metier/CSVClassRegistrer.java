@@ -93,7 +93,7 @@ public class CSVClassRegistrer {
             } else {
                 // 1
                 String disciplineRef = "iddisciplineref ; description ; descriptionNorm ; specialiteelementrefList";
-                String dictionnaireOffresSoins = "iddictoffressoins ; intitule ; description;motscles ; intituleNorm ; idspecialiteelementref";
+                String dictionnaireOffresSoins = "iddictoffressoins ; intitule ; description ; motscles ; intituleNorm ; idspecialiteelementref";
                 String specialiteElementRef = "idspecialiteelementref ; description ; descriptionNorm ; dictionnaireoffressoinsList ; iddisciplineref";
                 if (listFichier.get(0).equals(disciplineRef)) {
                     classes.add(DisciplineRef.class);

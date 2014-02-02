@@ -50,8 +50,8 @@ public class DictionnaireOffresSoins implements Serializable {
     private String motscles;
     @Column(name = "intitule_norm")
     private String intituleNorm;
-    @JoinColumn(name = "idspecialiteelementref", referencedColumnName = "idspecialiteelementref")
-    @ManyToOne
+    @JoinColumn(name = "idspecialiteelementref", referencedColumnName = "idspecialiteelementref",updatable = false,insertable = false)
+    @ManyToOne()
     private SpecialiteElementRef idspecialiteelementref;
 
     public DictionnaireOffresSoins() {

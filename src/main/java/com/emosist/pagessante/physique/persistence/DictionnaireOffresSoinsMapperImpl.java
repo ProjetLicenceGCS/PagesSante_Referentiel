@@ -79,6 +79,13 @@ public class DictionnaireOffresSoinsMapperImpl implements DictionnaireOffresSoin
         return 1;
     }
 
+        @Override
+        public int delete(DictionnaireOffresSoins record) throws Exception{
+        this.em= Connexion.getPersistance();
+        this.em.remove(this.em.merge(record));
+        Connexion.disconect(em);
+        return 1;
+    }
     @Override 
     public List<DictionnaireOffresSoins> selectByIdSpecialite(Integer idspecialite) throws Exception {
         this.em = Connexion.getPersistance();

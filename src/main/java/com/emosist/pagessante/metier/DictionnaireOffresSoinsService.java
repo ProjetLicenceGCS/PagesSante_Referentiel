@@ -119,4 +119,11 @@ public interface DictionnaireOffresSoinsService {
      */
     public List<DictionnaireOffresSoins> selectByIdSpecialite(Integer idspecialite) throws Exception;
 
+        /**
+     * Supprimer une entitée
+     * 
+     * @param record entitée
+     * @throws java.lang.Exception
+     */
+    public int delete(DictionnaireOffresSoins record) throws Exception;
 }

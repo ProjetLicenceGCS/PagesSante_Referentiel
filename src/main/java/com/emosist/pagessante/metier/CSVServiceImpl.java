@@ -239,7 +239,7 @@ public class CSVServiceImpl implements CSVService {
                 this.loadCSVSpecialiteElementRef(listFichier);
             } else if (next.getName().equals(DictionnaireOffresSoinsName)) {
                 this.loadCSVDictionnaireOffreDeSoins(listFichier);
-            }else {
+            } else {
                 return -2;
             }
         } else {
@@ -271,10 +271,10 @@ public class CSVServiceImpl implements CSVService {
             List<SpecialiteElementRef> elementRefs = new ArrayList<SpecialiteElementRef>();
             for (int j = 0; j < splitElementRef.length; j++) {
                 SpecialiteElementRef elementRef = new SpecialiteElementRef();
-                if(splitElementRef[j].trim().equals("VIDE")){
+                if (splitElementRef[j].trim().equals("VIDE")) {
                     elementRef = null;
-                }else{
-                elementRef.setIdspecialiteelementref(Integer.parseInt(splitElementRef[j].trim()));
+                } else {
+                    elementRef.setIdspecialiteelementref(Integer.parseInt(splitElementRef[j].trim()));
                 }
                 elementRefs.add(elementRef);
             }
@@ -312,15 +312,12 @@ public class CSVServiceImpl implements CSVService {
             }
             switch (mod) {
                 case 1:
-                    System.out.println("Existe à l'identique dans la Bdd donc RIEN A FAIRE");
                     break;
                 case 2:
-                    System.out.println("Existe mais pas à l'identique donc faire UPDATE " + listDisciplineFichier.get(i));
                     this.disciplineRefMapperSrv.updateByPrimaryKey(listDisciplineFichier.get(i));
                     //Faire delete de la ligne dans bdd et insert de cette meme ligne du fichier.
                     break;
                 case 3:
-                    System.out.println("N'existe pas du tout dans la Bdd donc faire INSERT " + listDisciplineFichier.get(i));
                     this.disciplineRefMapperSrv.insert(listDisciplineFichier.get(i));
                     //Faire insert du fichier dans la bdd
                     break;
@@ -337,7 +334,6 @@ public class CSVServiceImpl implements CSVService {
             if (mod != 1) {
                 //delete fichier de la BDD
                 this.disciplineRefMapperSrv.delete(listDisciplineBdd.get(i));
-                System.out.println("Existe dans la BDD mais pas dans le fichier donc faire DELETE" + listDisciplineBdd.get(i).getIddisciplineref());
             }
         }
     }
@@ -356,12 +352,19 @@ public class CSVServiceImpl implements CSVService {
             dictionnaireOffresSoins.setDescription(split[2].trim());
             dictionnaireOffresSoins.setMotscles(split[3].trim());
             dictionnaireOffresSoins.setIntituleNorm(split[4].trim());
-            elementRef.setIdspecialiteelementref(Integer.parseInt(split[5].trim()));
+            if (this.ifexistSpecialite(Integer.parseInt(split[5].trim())) == 1) {
+                elementRef.setIdspecialiteelementref(Integer.parseInt(split[5].trim()));
+            } else {
+                elementRef.setIdspecialiteelementref(null);
+            }
             dictionnaireOffresSoins.setIdspecialiteelementref(elementRef);
             listDiscionnaireOffreDeSoinsFichier.add(dictionnaireOffresSoins);
         }
         for (int i = 0; i < listDiscionnaireOffreDeSoinsFichier.size(); i++) {
             int mod = 0;
+            if (listDiscionnaireOffreDeSoinsBDD.get(i).getMotscles() == null) {
+                listDiscionnaireOffreDeSoinsBDD.get(i).setMotscles("VIDE");
+            }
             for (int j = 0; j < listDiscionnaireOffreDeSoinsBDD.size(); j++) {
                 if ((listDiscionnaireOffreDeSoinsFichier.get(i).getIddictoffressoins().equals(listDiscionnaireOffreDeSoinsBDD.get(j).getIddictoffressoins()))) {
                     if (listDiscionnaireOffreDeSoinsFichier.get(i).getIntitule().equals(listDiscionnaireOffreDeSoinsBDD.get(j).getIntitule())) {
@@ -514,6 +517,19 @@ public class CSVServiceImpl implements CSVService {
                 System.out.println("Existe dans la BDD mais pas dans le fichier donc faire DELETE");
             }
         }
+    }
+
+    public int ifexistSpecialite(int id) {
+        int ret = 0;
+        List<SpecialiteElementRef> listSpecialiteElementRefBdd = this.data.get(SpecialiteElementRef.class);
+        for (int i = 0; i < listSpecialiteElementRefBdd.size(); i++) {
+            if (listSpecialiteElementRefBdd.get(i).getIdspecialiteelementref() == id) {
+                ret = 1;
+                break;
+            }
+        }
+        return ret;
+
     }
 
 }

@@ -143,4 +143,15 @@ public class DictionnaireOffresSoinsServiceImpl implements DictionnaireOffresSoi
         return dictionnaireOffresSoins;
     }
 
+    @Override
+    public int delete(DictionnaireOffresSoins record) throws Exception {
+        int ret;
+        if (record != null) {
+            ret = this.dictionnaireOffresSoinsSrv.delete(record);
+        } else {
+            throw new NullPointerException("L'objet passé en paramétre est égale a null");
+        }
+        return ret;
+    }
+
 }
