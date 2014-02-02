@@ -8,9 +8,11 @@ import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
@@ -45,7 +47,8 @@ public class DisciplineRef implements Serializable {
     private String description;
     @Column(name = "description_norm")
     private String descriptionNorm; 
-    @OneToMany(mappedBy = "iddisciplineref",orphanRemoval = true)
+    @OneToMany(mappedBy = "iddisciplineref",fetch = FetchType.LAZY,orphanRemoval = true)
+    @JoinColumn(updatable = false)
     private List<SpecialiteElementRef> specialiteelementrefList;
 
     public DisciplineRef() {

@@ -271,8 +271,8 @@ public class CSVServiceImpl implements CSVService {
             List<SpecialiteElementRef> elementRefs = new ArrayList<SpecialiteElementRef>();
             for (int j = 0; j < splitElementRef.length; j++) {
                 SpecialiteElementRef elementRef = new SpecialiteElementRef();
-                if(splitElementRef[j].trim().equals("NULL")){
-                    elementRef.setIdspecialiteelementref(0);
+                if(splitElementRef[j].trim().equals("VIDE")){
+                    elementRef = null;
                 }else{
                 elementRef.setIdspecialiteelementref(Integer.parseInt(splitElementRef[j].trim()));
                 }
@@ -315,15 +315,13 @@ public class CSVServiceImpl implements CSVService {
                     System.out.println("Existe à l'identique dans la Bdd donc RIEN A FAIRE");
                     break;
                 case 2:
-                    System.out.println("Existe mais pas à l'identique donc faire UPDATE" + listDisciplineFichier.get(i));
+                    System.out.println("Existe mais pas à l'identique donc faire UPDATE " + listDisciplineFichier.get(i));
                     this.disciplineRefMapperSrv.updateByPrimaryKey(listDisciplineFichier.get(i));
                     //Faire delete de la ligne dans bdd et insert de cette meme ligne du fichier.
                     break;
                 case 3:
-                    System.out.println("N'existe pas du tout dans la Bdd donc faire INSERT" + listDisciplineFichier.get(i));
-                    DisciplineRef disciplineRef = this.disciplineRefMapperSrv.add(listDisciplineFichier.get(i));
-                    disciplineRef = this.disciplineRefMapperSrv.selectByPrimaryKey(disciplineRef.getIddisciplineref());
-                    this.disciplineRefMapperSrv.updateByPrimaryKey(disciplineRef);
+                    System.out.println("N'existe pas du tout dans la Bdd donc faire INSERT " + listDisciplineFichier.get(i));
+                    this.disciplineRefMapperSrv.insert(listDisciplineFichier.get(i));
                     //Faire insert du fichier dans la bdd
                     break;
             }
@@ -338,7 +336,7 @@ public class CSVServiceImpl implements CSVService {
             }
             if (mod != 1) {
                 //delete fichier de la BDD
-                this.disciplineRefMapperSrv.deleteByPrimaryKey(listDisciplineBdd.get(i).getIddisciplineref());
+                this.disciplineRefMapperSrv.delete(listDisciplineBdd.get(i));
                 System.out.println("Existe dans la BDD mais pas dans le fichier donc faire DELETE" + listDisciplineBdd.get(i).getIddisciplineref());
             }
         }
