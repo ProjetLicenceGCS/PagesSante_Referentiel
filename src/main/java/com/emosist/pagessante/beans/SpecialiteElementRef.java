@@ -9,7 +9,6 @@ package com.emosist.pagessante.beans;
 import java.io.Serializable;
 import java.util.List;
 import javax.persistence.Basic;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -55,7 +54,7 @@ public class SpecialiteElementRef implements Serializable {
     private String description;
     @Column(name = "description_norm")
     private String descriptionNorm;
-    @OneToMany(mappedBy = "idspecialiteelementref",orphanRemoval = true,cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "idspecialiteelementref",orphanRemoval = true)
     private List<DictionnaireOffresSoins> dictionnaireoffressoinsList;
     @JoinColumn(name = "iddisciplineref", referencedColumnName = "iddisciplineref")
     @ManyToOne

@@ -36,6 +36,14 @@ public class SpecialiteElementRefServiceImpl implements SpecialiteElementRefServ
         }
         return 1;
     }
+        @Override
+    public void delete(SpecialiteElementRef record) throws Exception {
+        if (record != null) {
+            this.specialiteElementRefSrv.delete(record);
+        } else {
+            throw new NullPointerException("L'objet DisciplineRef est null");
+        }
+    }
 
     @Override
     public int insert(SpecialiteElementRef record) throws DataConflictException, Exception {
@@ -97,16 +105,6 @@ public class SpecialiteElementRefServiceImpl implements SpecialiteElementRefServ
         }
         return ret;
     }
-
-    @Override
-    public void delete(SpecialiteElementRef ref) throws Exception {
-        if (ref != null) {
-            this.specialiteElementRefSrv.delete(ref);
-        } else {
-            throw new NullPointerException("L'objet SpecialiteElementRef est null");
-        }
-    }
-
     @Override
     public void insert(String description, String descriptionNormalise, List<DictionnaireOffresSoins> dictionnaireOffresSoinses, DisciplineRef discipline) throws DataConflictException, Exception {
         SpecialiteElementRef specialiteElementRef = new SpecialiteElementRef();

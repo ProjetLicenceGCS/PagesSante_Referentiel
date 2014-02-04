@@ -1,27 +1,29 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xmlns="http://java.sun.com/xml/ns/javaee" xmlns:web="http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
-	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
-	id="WebApp_ID" version="3.0" metadata-complete="true">
-
-	<display-name>PagesSante</display-name>
-	
-	<servlet>
-	    <servlet-name>pagessante</servlet-name>
-	    <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
-	    <load-on-startup>1</load-on-startup>
-	</servlet>
-  
-   <servlet-mapping>
-      <servlet-name>pagessante</servlet-name>
-      <url-pattern>/pagessante/*</url-pattern>
-   </servlet-mapping>
-
-	<welcome-file-list>
-		<welcome-file>index.jsp</welcome-file>
-	</welcome-file-list>
-	
-	<filter>
+<web-app id="WebApp_ID" metadata-complete="true" version="3.0" xmlns="http://java.sun.com/xml/ns/javaee" xmlns:web="http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd">
+    <display-name>PagesSante</display-name>
+    <servlet>
+        <servlet-name>pagessante</servlet-name>
+        <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>pagessante</servlet-name>
+        <url-pattern>/pagessante/*</url-pattern>
+    </servlet-mapping> 
+    <servlet>
+        <servlet-name>RecupererFluxFichierCSV</servlet-name>
+        <servlet-class>com.emosist.pagessante.Controllers.RecupererFluxFichierCSV</servlet-class>
+        <multipart-config>
+            <location>c:/fichiers</location>
+            <max-file-size>10485760</max-file-size> <!-- 10 Mo -->
+            <max-request-size>52428800</max-request-size> <!-- 5 x 10 Mo -->
+            <file-size-threshold>1048576</file-size-threshold> <!-- 1 Mo -->
+        </multipart-config>
+    </servlet>
+    <welcome-file-list>
+        <welcome-file>index.jsp</welcome-file>
+    </welcome-file-list>
+    <filter>
         <filter-name>encoding-filter</filter-name>
         <filter-class>
             org.springframework.web.filter.CharacterEncodingFilter
@@ -31,20 +33,19 @@
             <param-value>UTF-8</param-value>
         </init-param>
         <init-param>
-        	<param-name>forceEncoding</param-name>
-        	<param-value>true</param-value>
+            <param-name>forceEncoding</param-name>
+            <param-value>true</param-value>
         </init-param>
     </filter>
     <filter>
-	    <filter-name>AttributesFilter</filter-name>
-	    <filter-class>com.emosist.pagessante.filters.AttributesFilter</filter-class>
-	    <init-param>
+        <filter-name>AttributesFilter</filter-name>
+        <filter-class>com.emosist.pagessante.filters.AttributesFilter</filter-class>
+        <init-param>
             <param-name>version</param-name>
             <param-value>0.8</param-value>
         </init-param>
-	</filter>
-	
-	<filter-mapping>
+    </filter>
+    <filter-mapping>
         <filter-name>encoding-filter</filter-name>
         <url-pattern>/*</url-pattern>
     </filter-mapping>
@@ -52,20 +53,16 @@
         <filter-name>AttributesFilter</filter-name>
         <url-pattern>/*</url-pattern>
     </filter-mapping>
-
-	<context-param> 
-		<param-name>contextConfigLocation</param-name> 
-		<param-value>/WEB-INF/pagessante-servlet.xml</param-value> 
-	</context-param>
-
+    <context-param>
+        <param-name>contextConfigLocation</param-name>
+        <param-value>/WEB-INF/pagessante-servlet.xml</param-value>
+    </context-param>
     <listener>
-	    <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
-	</listener>
-
-	<session-config>
+        <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+    </listener>
+    <session-config>
         <session-timeout>120</session-timeout>
     </session-config>
-    
     <error-page>
         <error-code>404</error-code>
         <location>/pagessante/error</location>

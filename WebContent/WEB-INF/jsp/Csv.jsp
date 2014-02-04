@@ -66,10 +66,12 @@
                         </select>
                     </td>
                 </tr>
-                <tr>
-                    <td>Importer un fichier CSV</td>
-                    <td><button onclick="chargerCSV();">Ouvrir une boite de sélection</button></td>
-                </tr>
+                <form action="./csv/charger" method="POST" enctype="multipart/form-data">
+                      <tr>
+                        <td>Importer un fichier CSV</td>
+                        <td><input type="file" id="fichier" name="fichier" /><input type="submit" value="Importer" /></td>
+                    </tr>
+                </form>
             </table> 
             <jsp:include page="scriptToInclude.jsp" />
             <script src="<c:url value="/scripts/damienC-csv.js"/>" type="text/javascript" ></script>

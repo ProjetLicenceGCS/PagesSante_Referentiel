@@ -40,11 +40,10 @@ public class CSVServiceIOImpl implements CSVServiceIO {
 
     @Override
     public List<String> recuperationFichier(String url) throws Exception {
-        BufferedReader in = new BufferedReader(new FileReader(new File(url)));
-        String line;
+        String[] lines = url.split("\n");
         List<String> list= new ArrayList<String>();
-        while((line = in.readLine()) != null){
-        list.add(line);
+        for(int i =0; i < lines.length ; i++){
+        list.add(lines[i]);
     }
         return list;
     }

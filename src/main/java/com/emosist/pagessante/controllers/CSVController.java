@@ -3,16 +3,36 @@ package com.emosist.pagessante.controllers;
 import com.emosist.pagessante.metier.CSVClassRegistrer;
 import com.emosist.pagessante.metier.CSVService;
 import com.emosist.pagessante.metier.MetierFactory;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.PrintWriter;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.mail.MessagingException;
+import javax.mail.Part;
+import javax.servlet.ServletException;
+import javax.servlet.ServletOutputStream;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.apache.commons.fileupload.FileItem;
+import org.apache.commons.fileupload.FileUploadException;
+import org.apache.commons.fileupload.disk.DiskFileItemFactory;
+import org.apache.commons.fileupload.servlet.ServletFileUpload;
+import org.apache.commons.io.FilenameUtils;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -114,16 +134,46 @@ public class CSVController extends MainController {
     }
 
     @RequestMapping(method = RequestMethod.POST, value = "/charger")
-    public String load(ModelMap model, HttpServletRequest request) {
-        this.addSessionToModel(model, request);
-        List<Class> classToLoadCSV = CSVClassRegistrer.getClassToLoadCSV("C:\\wamp\\www\\dictionnaireOffreDeSoins.csv");
+    public ModelAndView load(ModelMap model, HttpServletRequest request) {
+        List<FileItem> items = null;
+        String nomFichier = null;
+        String[] lines = null;
+        String dataString = null;
+        String erreur =null;
+        try {
+            items = new ServletFileUpload(new DiskFileItemFactory()).parseRequest(request);
+        } catch (FileUploadException ex) {
+            Logger.getLogger(CSVController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        InputStream contenuFichier = null;
+        for (FileItem item : items) {
+            try {
+                contenuFichier = item.getInputStream();
+            } catch (IOException ex) {
+                Logger.getLogger(CSVController.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            byte[] data = this.inputStreamToByteArray(contenuFichier);
+            try {
+                contenuFichier.read(data);
+            } catch (IOException ex) {
+                Logger.getLogger(CSVController.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            dataString = new String(data);
+            lines = dataString.split("\n");
+            nomFichier = FilenameUtils.getName(item.getName());
+        }
+        if (this.getFileExtension(nomFichier).equals("csv")) {
+        List<Class> classToLoadCSV = CSVClassRegistrer.getClassToLoadCSV(lines[0]);
         CSVService csvService = MetierFactory.getCSVService(classToLoadCSV);
         try {
-            csvService.loadCSV("C:\\wamp\\www\\dictionnaireOffreDeSoins.csv");
+            csvService.loadCSV(dataString);
         } catch (Exception ex) {
             Logger.getLogger(CSVController.class.getName()).log(Level.SEVERE, null, ex);
         }
-        return "Csv";
+        } else {
+            erreur = "Le fichier importer n'est pas un fichier CSV";
+        }
+        return new ModelAndView("Csv", "ret", erreur);
     }
 
     private List<Class> getClassHasTrue(Map<Class, Boolean> choix) {
@@ -136,5 +186,29 @@ public class CSVController extends MainController {
             }
         }
         return classes;
+    }
+
+    public byte[] inputStreamToByteArray(InputStream in) {
+
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        byte[] buf = new byte[8092];
+        int len;
+        try {
+            while ((len = in.read(buf)) > 0) {
+                baos.write(buf, 0, len);
+            }
+        } catch (IOException ex) {
+            Logger.getLogger(CSVController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return baos.toByteArray();
+    }
+    public String getFileExtension(String NomFichier) {
+        File tmpFichier = new File(NomFichier);
+        tmpFichier.getName();
+        int posPoint = tmpFichier.getName().lastIndexOf('.');
+        if (0 < posPoint && posPoint <= tmpFichier.getName().length() - 2) {
+            return tmpFichier.getName().substring(posPoint + 1);
+        }
+        return "";
     }
 }
