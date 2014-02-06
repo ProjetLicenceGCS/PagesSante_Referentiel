@@ -12,5 +12,4 @@ import java.util.List;
 public interface CSVServiceIO {
     public void writeLine(String line) throws Exception;
     public URI createFile(String name) throws Exception;
-    public List<String> recuperationFichier(String url) throws Exception;
 }

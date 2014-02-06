@@ -11,6 +11,7 @@ import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -54,7 +55,7 @@ public class SpecialiteElementRef implements Serializable {
     private String description;
     @Column(name = "description_norm")
     private String descriptionNorm;
-    @OneToMany(mappedBy = "idspecialiteelementref",orphanRemoval = true)
+    @OneToMany(mappedBy = "idspecialiteelementref",orphanRemoval = true,fetch = FetchType.LAZY)
     private List<DictionnaireOffresSoins> dictionnaireoffressoinsList;
     @JoinColumn(name = "iddisciplineref", referencedColumnName = "iddisciplineref")
     @ManyToOne

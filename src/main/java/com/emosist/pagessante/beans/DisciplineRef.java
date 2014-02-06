@@ -5,7 +5,6 @@ package com.emosist.pagessante.beans;
 import java.io.Serializable;
 import java.util.List;
 import javax.persistence.Basic;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -47,8 +46,9 @@ public class DisciplineRef implements Serializable {
     private String description;
     @Column(name = "description_norm")
     private String descriptionNorm; 
-    @OneToMany(mappedBy = "iddisciplineref",fetch = FetchType.LAZY,orphanRemoval = true)
-    @JoinColumn(updatable = false)
+    @OneToMany(mappedBy = "iddisciplineref",fetch = FetchType.EAGER,orphanRemoval = true)
+    @JoinColumn(updatable = false )
+    
     private List<SpecialiteElementRef> specialiteelementrefList;
 
     public DisciplineRef() {

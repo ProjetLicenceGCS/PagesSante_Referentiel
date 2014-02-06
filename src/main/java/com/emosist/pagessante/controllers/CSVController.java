@@ -20,13 +20,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.mail.MessagingException;
-import javax.mail.Part;
-import javax.servlet.ServletException;
-import javax.servlet.ServletOutputStream;
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.FileUploadException;
@@ -139,7 +133,7 @@ public class CSVController extends MainController {
         String nomFichier = null;
         String[] lines = null;
         String dataString = null;
-        String erreur =null;
+        Set<String> erreurs = null;
         try {
             items = new ServletFileUpload(new DiskFileItemFactory()).parseRequest(request);
         } catch (FileUploadException ex) {
@@ -163,17 +157,18 @@ public class CSVController extends MainController {
             nomFichier = FilenameUtils.getName(item.getName());
         }
         if (this.getFileExtension(nomFichier).equals("csv")) {
-        List<Class> classToLoadCSV = CSVClassRegistrer.getClassToLoadCSV(lines[0]);
-        CSVService csvService = MetierFactory.getCSVService(classToLoadCSV);
-        try {
-            csvService.loadCSV(dataString);
-        } catch (Exception ex) {
-            Logger.getLogger(CSVController.class.getName()).log(Level.SEVERE, null, ex);
-        }
+            List<Class> classToLoadCSV = CSVClassRegistrer.getClassToLoadCSV(lines[0]);
+            CSVService csvService = MetierFactory.getCSVService(classToLoadCSV);
+            try {
+                //erreurs = csvService.loadCSV(dataString);
+                Thread.sleep(1000);
+            } catch (Exception ex) {
+                Logger.getLogger(CSVController.class.getName()).log(Level.SEVERE, null, ex);
+            }
         } else {
-            erreur = "Le fichier importer n'est pas un fichier CSV";
+            erreurs.add("Le fichier n'est pas un fichier CSV.");
         }
-        return new ModelAndView("Csv", "ret", erreur);
+        return new ModelAndView("Csv", "ret", erreurs);
     }
 
     private List<Class> getClassHasTrue(Map<Class, Boolean> choix) {
@@ -202,6 +197,7 @@ public class CSVController extends MainController {
         }
         return baos.toByteArray();
     }
+
     public String getFileExtension(String NomFichier) {
         File tmpFichier = new File(NomFichier);
         tmpFichier.getName();

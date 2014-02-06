@@ -9,18 +9,17 @@ import com.emosist.pagessante.physique.persistence.DictionnaireOffresSoinsMapper
 import com.emosist.pagessante.physique.persistence.DisciplineRefMapper;
 import com.emosist.pagessante.physique.persistence.PersistanceFactory;
 import com.emosist.pagessante.physique.persistence.SpecialiteElementRefMapper;
-import java.io.File;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.net.URI;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import org.jboss.weld.util.collections.ArraySet;
 
 /**
  *
@@ -33,11 +32,15 @@ public class CSVServiceImpl implements CSVService {
     private DisciplineRefMapper disciplineRefMapperSrv = PersistanceFactory.getDisciplineRefMapper();
     private DictionnaireOffresSoinsMapper dictionnaireOffresSoinsMapperSrv = PersistanceFactory.getDictionnaireOffresSoinsMapper();
     private Map<Class, List> data;
-
+    private Set<String> erreurs = new ArraySet<String>();
     public CSVServiceImpl(Map<Class, List> map) {
         this.data = map;
+        
     }
 
+    private void addErreur(String err) {
+        this.erreurs.add(err);
+    }
     @Override
     public void delete(URL fichierCSV) throws Exception {
         throw new UnsupportedOperationException("Not supported yet. TO DO");
@@ -223,27 +226,29 @@ public class CSVServiceImpl implements CSVService {
     }
 
     @Override
-    public int loadCSV(String url) throws Exception {
+    public Set<String> loadCSV(String fichier) throws Exception {
+
+        List<String> listFichier = new ArrayList<String>();
         
-            List<String> listFichier = new ArrayList<String>();
-            listFichier = this.csvSrv.recuperationFichier(url);
-            Set<Class> keySet = data.keySet();
-            Iterator<Class> iterator = keySet.iterator();
-            Class next = iterator.next();
-            String DisciplineRefName = DisciplineRef.class.getName();
-            String SpecialiteElementRefName = SpecialiteElementRef.class.getName();
-            String DictionnaireOffresSoinsName = DictionnaireOffresSoins.class.getName();
-            if (next.getName().equals(DisciplineRefName)) {
-                this.loadCSVDisciplineRef(listFichier);
-            } else if (next.getName().equals(SpecialiteElementRefName)) {
-                this.loadCSVSpecialiteElementRef(listFichier);
-            } else if (next.getName().equals(DictionnaireOffresSoinsName)) {
-                this.loadCSVDictionnaireOffreDeSoins(listFichier);
-            } else {
-                return -2;
-            }
-        return 0;
+        listFichier = this.recuperationFichier(fichier);
+        Set<Class> keySet = data.keySet();
+        Iterator<Class> iterator = keySet.iterator();
+        Class next = iterator.next();
+        String DisciplineRefName = DisciplineRef.class.getName();
+        String SpecialiteElementRefName = SpecialiteElementRef.class.getName();
+        String DictionnaireOffresSoinsName = DictionnaireOffresSoins.class.getName();
+        if (next.getName().equals(DisciplineRefName)) {
+            this.loadCSVDisciplineRef(listFichier);
+        } else if (next.getName().equals(SpecialiteElementRefName)) {
+            this.loadCSVSpecialiteElementRef(listFichier);
+        } else if (next.getName().equals(DictionnaireOffresSoinsName)) {
+            this.loadCSVDictionnaireOffreDeSoins(listFichier);
+        } else {
+            this.addErreur("Aucune table ne correspond au fichier CSV.");
+        }
+        return erreurs;
     }
+
     public void loadCSVDisciplineRef(List<String> listFichier) throws Exception {
         System.out.println("loadCSVDisciplineRef");
         List<DisciplineRef> listDisciplineBdd = this.data.get(DisciplineRef.class);
@@ -258,13 +263,14 @@ public class CSVServiceImpl implements CSVService {
                 if (splitElementRef[j].trim().equals("VIDE")) {
                     elementRef = null;
                 } else {
-                    elementRef.setIdspecialiteelementref(Integer.parseInt(splitElementRef[j].trim()));
+//                    elementRef.setIdspecialiteelementref(Integer.parseInt(splitElementRef[j].trim()));
+                    elementRef = PersistanceFactory.getSpecialiteElementRefMapper().selectByPrimaryKey(Integer.parseInt(splitElementRef[j].trim()));
                 }
                 elementRefs.add(elementRef);
             }
             disciplineRef.setIddisciplineref(Integer.parseInt(split[0].trim()));
             disciplineRef.setDescription(split[1].trim());
-            disciplineRef.setDescriptionNorm(split[2].trim());
+            disciplineRef.setDescriptionNorm(split[2].trim().toUpperCase());
             disciplineRef.setSpecialiteelementrefList(elementRefs);
             listDisciplineFichier.add(disciplineRef);
         }
@@ -302,7 +308,8 @@ public class CSVServiceImpl implements CSVService {
                     //Faire delete de la ligne dans bdd et insert de cette meme ligne du fichier.
                     break;
                 case 3:
-                    this.disciplineRefMapperSrv.insert(listDisciplineFichier.get(i));
+                    DisciplineRef dr = this.disciplineRefMapperSrv.add(listDisciplineFichier.get(i));
+                    this.addErreur("Nous avons changé l'id : " +  listDisciplineFichier.get(i).getIddisciplineref() + " par l'id suivant : " + dr.getIddisciplineref());
                     //Faire insert du fichier dans la bdd
                     break;
             }
@@ -336,19 +343,25 @@ public class CSVServiceImpl implements CSVService {
             dictionnaireOffresSoins.setDescription(split[2].trim());
             dictionnaireOffresSoins.setMotscles(split[3].trim());
             dictionnaireOffresSoins.setIntituleNorm(split[4].trim());
-            if (this.ifexist(Integer.parseInt(split[5].trim()), 2) == 1) {
-                elementRef.setIdspecialiteelementref(Integer.parseInt(split[5].trim()));
+            if (split[5].trim().equals("VIDE")) {
+                elementRef = null;
             } else {
-                elementRef.setIdspecialiteelementref(null);
+                elementRef = PersistanceFactory.getSpecialiteElementRefMapper().selectByPrimaryKey(Integer.parseInt(split[5].trim()));
             }
             dictionnaireOffresSoins.setIdspecialiteelementref(elementRef);
             listDiscionnaireOffreDeSoinsFichier.add(dictionnaireOffresSoins);
         }
         for (int i = 0; i < listDiscionnaireOffreDeSoinsFichier.size(); i++) {
-            int mod = 0;
-            if (listDiscionnaireOffreDeSoinsBDD.get(i).getMotscles() == null) {
-                listDiscionnaireOffreDeSoinsBDD.get(i).setMotscles("VIDE");
+            int mod = 3;
+            if (listDiscionnaireOffreDeSoinsBDD.size()== 0) {
+                for(int b = 0 ; b < listDiscionnaireOffreDeSoinsFichier.size() ; b++){
+                    DictionnaireOffresSoins dos = this.dictionnaireOffresSoinsMapperSrv.add(listDiscionnaireOffreDeSoinsFichier.get(b));
+                    this.addErreur("Nous avons changé l'id : " +  listDiscionnaireOffreDeSoinsFichier.get(i).getIddictoffressoins()+ " par l'id suivant : " + dos.getIddictoffressoins());
+                }
+                break;
+                
             }
+
             for (int j = 0; j < listDiscionnaireOffreDeSoinsBDD.size(); j++) {
                 if ((listDiscionnaireOffreDeSoinsFichier.get(i).getIddictoffressoins().equals(listDiscionnaireOffreDeSoinsBDD.get(j).getIddictoffressoins()))) {
                     if (listDiscionnaireOffreDeSoinsFichier.get(i).getIntitule().equals(listDiscionnaireOffreDeSoinsBDD.get(j).getIntitule())) {
@@ -395,7 +408,8 @@ public class CSVServiceImpl implements CSVService {
                     break;
                 case 3:
                     System.out.println("N'existe pas du tout dans la Bdd donc faire INSERT");
-                    this.dictionnaireOffresSoinsMapperSrv.insert(listDiscionnaireOffreDeSoinsFichier.get(i));
+                    DictionnaireOffresSoins dos = this.dictionnaireOffresSoinsMapperSrv.add(listDiscionnaireOffreDeSoinsFichier.get(i));
+                    this.addErreur("Nous avons changé l'id : " +  listDiscionnaireOffreDeSoinsFichier.get(i).getIddictoffressoins()+ " par l'id suivant : " + dos.getIddictoffressoins());
                     //Faire insert du fichier dans la bdd
                     break;
             }
@@ -428,33 +442,28 @@ public class CSVServiceImpl implements CSVService {
             List<DictionnaireOffresSoins> dictionnaireOffresSoinses = new ArrayList<DictionnaireOffresSoins>();
             for (int j = 0; j < splitElementRef.length; j++) {
                 DictionnaireOffresSoins dictionnaireOffresSoins = new DictionnaireOffresSoins();
-               
-                    
-                
 //                if (this.ifexist(Integer.parseInt(splitElementRef[j].trim()), 3) == 1) { 
-            if(!splitElementRef[j].trim().equals("VIDE")){
-                    dictionnaireOffresSoins.setIddictoffressoins(Integer.parseInt(splitElementRef[j].trim()));
-            }else{
-                dictionnaireOffresSoins.setIddictoffressoins(null);
-            }
-                    dictionnaireOffresSoinses.add(dictionnaireOffresSoins);
+                if (!splitElementRef[j].trim().equals("VIDE")) {
+                    dictionnaireOffresSoins = PersistanceFactory.getDictionnaireOffresSoinsMapper().selectByPrimaryKey(Integer.parseInt(splitElementRef[j].trim()));
+                } else {
+                    dictionnaireOffresSoins.setIddictoffressoins(null);
+                }
+                dictionnaireOffresSoinses.add(dictionnaireOffresSoins);
 //                }
             }
             elementRef.setIdspecialiteelementref(Integer.parseInt(split[0].trim()));
             elementRef.setDescription(split[1].trim());
             elementRef.setDescriptionNorm(split[2].trim());
             elementRef.setDictionnaireoffressoinsList(dictionnaireOffresSoinses);
-            DisciplineRef disciplineRef = new DisciplineRef();
-//            if (this.ifexist(Integer.parseInt(split[4].trim()), 1) == 1) {
-                disciplineRef.setIddisciplineref(Integer.parseInt(split[4].trim()));
-//            } else {
-//                disciplineRef.setIddisciplineref(null);
-//            }
+            DisciplineRef disciplineRef = null;
+            if (!split[4].trim().equals("VIDE")) {
+                disciplineRef = PersistanceFactory.getDisciplineRefMapper().selectByPrimaryKey(Integer.parseInt(split[4].trim()));
+            }
             elementRef.setIddisciplineref(disciplineRef);
             listSpecialiteElementRefFichier.add(elementRef);
         }
         for (int i = 0; i < listSpecialiteElementRefFichier.size(); i++) {
-            int mod = 0;
+            int mod = 3;
             for (int j = 0; j < listSpecialiteElementRefBdd.size(); j++) {
                 if ((listSpecialiteElementRefFichier.get(i).getIdspecialiteelementref().equals(listSpecialiteElementRefBdd.get(j).getIdspecialiteelementref()))) {
                     if (listSpecialiteElementRefFichier.get(i).getDescription().equals(listSpecialiteElementRefBdd.get(j).getDescription())) {
@@ -495,7 +504,8 @@ public class CSVServiceImpl implements CSVService {
                     break;
                 case 3:
                     System.out.println("N'existe pas du tout dans la Bdd donc faire INSERT");
-                    this.speialiteElementRefSrv.insert(listSpecialiteElementRefFichier.get(i));
+                    SpecialiteElementRef s = this.speialiteElementRefSrv.add(listSpecialiteElementRefFichier.get(i));
+                    this.addErreur("Nous avons changé l'id : " +  listSpecialiteElementRefFichier.get(i).getIdspecialiteelementref()+ " par l'id suivant : " + s.getIdspecialiteelementref());
                     //Faire insert du fichier dans la bdd
                     break;
             }
@@ -511,12 +521,11 @@ public class CSVServiceImpl implements CSVService {
             if (mod != 1) {
                 //delete fichier de la BDD
                 this.speialiteElementRefSrv.delete(listSpecialiteElementRefBdd.get(i));
-                System.out.println("Existe dans la BDD mais pas dans le fichier donc faire DELETE");
             }
         }
     }
 
-    public int ifexist(int id, int table) {
+    public int ifecxist(int id, int table) {
         int ret = 0;
         if (table == 1) {
             List<DisciplineRef> listDisciplineRefBdd = this.data.get(DisciplineRef.class);
@@ -530,6 +539,7 @@ public class CSVServiceImpl implements CSVService {
             List<SpecialiteElementRef> listSpecialiteElementRefBdd = this.data.get(SpecialiteElementRef.class);
             for (int i = 0; i < listSpecialiteElementRefBdd.size(); i++) {
                 if (listSpecialiteElementRefBdd.get(i).getIdspecialiteelementref() == id) {
+
                     ret = 1;
                     break;
                 }
@@ -547,4 +557,12 @@ public class CSVServiceImpl implements CSVService {
 
     }
 
+    public List<String> recuperationFichier(String fichier) throws Exception {
+        String[] lines = fichier.split("\n");
+        List<String> list = new ArrayList<String>();
+        for (int i = 0; i < lines.length; i++) {
+            list.add(lines[i]);
+        }
+        return list;
+    }
 }

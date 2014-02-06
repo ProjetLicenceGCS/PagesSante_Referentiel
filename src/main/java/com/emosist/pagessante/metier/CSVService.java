@@ -2,6 +2,7 @@ package com.emosist.pagessante.metier;
 
 import java.net.URL;
 import java.util.List;
+import java.util.Set;
 
 /**
  *
@@ -34,6 +35,6 @@ public interface CSVService {
      * @return Erreur si il y a
      * @throws Exception 
      */
-    public int loadCSV(String url) throws Exception;
+    public Set<String> loadCSV(String url) throws Exception;
     
 }

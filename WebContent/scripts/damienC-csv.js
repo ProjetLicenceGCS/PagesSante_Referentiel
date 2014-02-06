@@ -8,7 +8,7 @@ function telechargerCSV() {
         type: 'POST',
         dataType: 'text',
         width: 100,
-        timeout: 10000000, //No time out long time processing
+        timeout: 100000000000000, //No time out long time processing
         error: function() {
             $("#alert").show();
         },
@@ -27,3 +27,46 @@ function onClickInCheckBox(element) {
     }
 }
 
+function importCSVFile() {
+    $("#formChargerCSV").submit(importCSVFileOnSubmit());
+}
+function importCSVFileOnSubmit() {
+    doProgress();
+    var fd = new FormData();
+    fd.append('file', $("#fichier").get(0).files[0]);
+    $.ajax({
+        url: 'csv/charger',
+        type: 'POST',
+        dataType: 'text',
+        data: fd,
+        contentType: false,
+        processData: false,
+        width: 100,
+        timeout: 1000000, //No time out long time processing
+        error: function() {
+            doCancel();
+            $("#alert").show();
+        },
+        success: function(text) {
+            doCancel();
+            if (text.indexOf("PB") != -1) {
+                $("#alert").show();
+            } else {
+
+            }
+        }
+    });
+}
+function doProgress() {
+
+
+    $("#calque").css("z-index", "auto");
+    $("#calque").css("opacity", "0.2");
+    $("#chargement").css("z-index", "auto");
+    $("#chargement").css("display", "block");
+}
+
+function doCancel(){
+    $("#calque").css("opacity", "1");
+    $("#chargement").css("display", "none");
+}

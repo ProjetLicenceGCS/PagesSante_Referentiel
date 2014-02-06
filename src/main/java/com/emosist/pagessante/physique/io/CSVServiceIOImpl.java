@@ -37,15 +37,4 @@ public class CSVServiceIOImpl implements CSVServiceIO {
         file.createNewFile();
         return new URI("http://localhost/"+this.fileName);
     }
-
-    @Override
-    public List<String> recuperationFichier(String url) throws Exception {
-        String[] lines = url.split("\n");
-        List<String> list= new ArrayList<String>();
-        for(int i =0; i < lines.length ; i++){
-        list.add(lines[i]);
-    }
-        return list;
-    }
-
 }

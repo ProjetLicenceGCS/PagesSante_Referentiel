@@ -78,28 +78,27 @@ public class CSVClassRegistrer {
         return classes;
     }
 
-    public static List<Class> getClassToLoadCSV(String url) {
+    public static List<Class> getClassToLoadCSV(String entete) {
         String complet = "discipline_id ; discipline_description ; specialite_id ; specialite_description ; offressoins_id ; offressoins_intitule ; offressoins_description ; offressoins_motscles";
         List<Class> classes = new ArrayList<Class>();
-        List<String> listFichier = new ArrayList<String>();
-        CSVServiceIO csvService = PhysiqueIOFactory.getCSVService();
         try {
-            listFichier = csvService.recuperationFichier(url);
-            if (listFichier.get(0).equals(complet)) {
-                // 2 ou 3
+            if (entete.equals(complet)) {
                 classes.add(DisciplineRef.class);
                 classes.add(DictionnaireOffresSoins.class);
                 classes.add(SpecialiteElementRef.class);
             } else {
                 // 1
-                String disciplineRef = "iddisciplineref ; description ; descriptionNorm ; specialiteelementrefList";
-                String dictionnaireOffresSoins = "iddictoffressoins ; intitule ; description ; motscles ; intituleNorm ; idspecialiteelementref";
-                String specialiteElementRef = "idspecialiteelementref ; description ; descriptionNorm ; dictionnaireoffressoinsList ; iddisciplineref";
-                if (listFichier.get(0).equals(disciplineRef)) {
+                String disciplineRef = "iddisciplineref ; description ; descriptionNorm ; specialiteelementrefList\r";
+                String[] disciplineRefSplit = disciplineRef.split("\r");
+                String dictionnaireOffresSoins = "iddictoffressoins ; intitule ; description ; motscles ; intituleNorm ; idspecialiteelementref\r";
+                String[] dictionnaireOffresSoinsSplit = dictionnaireOffresSoins.split("\r");
+                String specialiteElementRef = "idspecialiteelementref ; description ; descriptionNorm ; dictionnaireoffressoinsList ; iddisciplineref\r";
+                String[] specialiteElementRefSplit = specialiteElementRef.split("\r");
+                if (entete.equals(disciplineRef) || entete.equals(disciplineRefSplit[0])) {
                     classes.add(DisciplineRef.class);
-                } else if (listFichier.get(0).equals(dictionnaireOffresSoins)) {
+                } else if (entete.equals(dictionnaireOffresSoins) || entete.equals(dictionnaireOffresSoinsSplit[0])) {
                     classes.add(DictionnaireOffresSoins.class);
-                } else if (listFichier.get(0).equals(specialiteElementRef)) {
+                } else if (entete.equals(specialiteElementRef)|| entete.equals(specialiteElementRefSplit[0])) {
                     classes.add(SpecialiteElementRef.class);
                 }
             }
