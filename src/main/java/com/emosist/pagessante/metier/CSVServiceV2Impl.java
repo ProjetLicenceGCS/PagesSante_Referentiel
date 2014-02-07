@@ -295,7 +295,7 @@ public class CSVServiceV2Impl implements CSVService {
                 dr.setDescription(split[1].trim());
                 dr.setDescriptionNorm(split[1].trim().toUpperCase());
                 List<SpecialiteElementRef> listSpecialiteRef = new ArrayList<SpecialiteElementRef>();
-                listSpecialiteRef.add(new SpecialiteElementRef(Integer.parseInt(split[2].trim())));
+                listSpecialiteRef.add(PersistanceFactory.getSpecialiteElementRefMapper().selectByPrimaryKey(Integer.parseInt(split[2].trim())));
                 dr.setSpecialiteelementrefList(listSpecialiteRef);
                 this.loadCSVDisciplineRef(dr);
                 listDisciplines.add(dr);
@@ -307,18 +307,18 @@ public class CSVServiceV2Impl implements CSVService {
                 sr.setDescriptionNorm(split[3].trim().toUpperCase());
                 sr.setIddisciplineref(dr);
                 List<DictionnaireOffresSoins> list = new ArrayList<DictionnaireOffresSoins>();
-                listOffres.add(new DictionnaireOffresSoins(Integer.parseInt(split[4].trim())));
-                sr.setDictionnaireoffressoinsList(listOffres);
+                listOffres.add(PersistanceFactory.getDictionnaireOffresSoinsMapper().selectByPrimaryKey(Integer.parseInt(split[4].trim())));
+                sr.setDictionnaireoffressoinsList(list);
                 this.loadCSVSpecialiteElementRef(sr);
                 listSpecialites.add(sr);
             }
             DictionnaireOffresSoins dos = new DictionnaireOffresSoins();
             dos.setIddictoffressoins(Integer.parseInt(split[4].trim()));
-            dos.setIntitule(split[4].trim());
-            dos.setIntituleNorm(split[4].trim().toUpperCase());
-            dos.setDescription(split[5].trim());
+            dos.setIntitule(split[5].trim());
+            dos.setIntituleNorm(split[5].trim().toUpperCase());
+            dos.setDescription(split[6].trim());
             if (split[4].trim().equals("")) {
-                dos.setMotscles(split[6].trim());
+                dos.setMotscles(split[7].trim());
             } else {
                 dos.setMotscles("VIDE");
             }
@@ -326,7 +326,7 @@ public class CSVServiceV2Impl implements CSVService {
             this.loadCSVDictionnaireOffreDeSoins(dos);
             listOffres.add(dos);
         }
-        this.deleteLigne(listDisciplines, listSpecialites, listOffres);
+//        this.deleteLigne(listDisciplines, listSpecialites, listOffres);
 
         return erreurs;
     }
@@ -414,8 +414,6 @@ public class CSVServiceV2Impl implements CSVService {
     }
 
     public void loadCSVSpecialiteElementRef(SpecialiteElementRef sr) throws Exception {
-
-        System.out.println("loadCSVSpecialiteElementRef");
         List<SpecialiteElementRef> listSpecialiteElementRefBdd = this.data.get(SpecialiteElementRef.class);
         int mod = 3;
         for (int j = 0; j < listSpecialiteElementRefBdd.size(); j++) {

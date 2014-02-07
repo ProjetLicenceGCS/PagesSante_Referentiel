@@ -80,9 +80,10 @@ public class CSVClassRegistrer {
 
     public static List<Class> getClassToLoadCSV(String entete) {
         String complet = "discipline_id ; discipline_description ; specialite_id ; specialite_description ; offressoins_id ; offressoins_intitule ; offressoins_description ; offressoins_motscles";
+        String completR = "discipline_id ; discipline_description ; specialite_id ; specialite_description ; offressoins_id ; offressoins_intitule ; offressoins_description ; offressoins_motscles\r";
         List<Class> classes = new ArrayList<Class>();
         try {
-            if (entete.equals(complet)) {
+            if (entete.equals(complet) || entete.equals(completR)) {
                 classes.add(DisciplineRef.class);
                 classes.add(DictionnaireOffresSoins.class);
                 classes.add(SpecialiteElementRef.class);
