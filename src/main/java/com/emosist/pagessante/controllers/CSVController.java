@@ -160,8 +160,7 @@ public class CSVController extends MainController {
             List<Class> classToLoadCSV = CSVClassRegistrer.getClassToLoadCSV(lines[0]);
             CSVService csvService = MetierFactory.getCSVService(classToLoadCSV);
             try {
-                //erreurs = csvService.loadCSV(dataString);
-                Thread.sleep(1000);
+                erreurs = csvService.loadCSV(dataString);
             } catch (Exception ex) {
                 Logger.getLogger(CSVController.class.getName()).log(Level.SEVERE, null, ex);
             }
