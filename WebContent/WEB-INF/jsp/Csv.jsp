@@ -75,11 +75,12 @@
                 </div>
                 <div id="chargement" style="
                      display: none;  
-                     width : 0%; 
-                     margin : auto; ">
+                     margin: auto;
+                     width: 0%;
+                     ">
 
                     <img src="<c:url value="/images/chargement.gif"/>"/>
                 </div>
-
+                <div id="inner"></div>
     </body>
 </html>
