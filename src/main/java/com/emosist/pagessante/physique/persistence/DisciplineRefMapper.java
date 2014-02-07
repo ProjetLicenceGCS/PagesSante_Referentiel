@@ -47,6 +47,7 @@ public interface DisciplineRefMapper {
      * Compte le nombre d'enregistrement de la table DisciplineRef.
      * 
      * @return nombre total de disciplines
+     * @throws java.lang.Exception
      */
      public int countAll() throws Exception;
 
