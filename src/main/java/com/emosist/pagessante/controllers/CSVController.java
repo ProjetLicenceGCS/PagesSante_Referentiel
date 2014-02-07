@@ -167,7 +167,10 @@ public class CSVController extends MainController {
         } else {
             erreurs.add("Le fichier n'est pas un fichier CSV.");
         }
-        return new ModelAndView("Csv", "ret", erreurs);
+        if(erreurs.size()==0){
+            erreurs.add("AUCUN");
+        }
+        return new ModelAndView("ajax/AjaxErrors", "ret", erreurs);
     }
 
     private List<Class> getClassHasTrue(Map<Class, Boolean> choix) {

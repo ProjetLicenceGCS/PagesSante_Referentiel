@@ -51,8 +51,21 @@ function importCSVFileOnSubmit() {
             doCancel();
             if (text.indexOf("PB") != -1) {
                 $("#alert").show();
-            } else {
-
+            } else if(text.indexOf("AUCUN") != -1){
+                
+            }else{
+                document.getElementById("inner").innerHTML = text;// 
+                $("#dialog-message").dialog({
+        resizable: false,
+        height: 200,
+        modal: true,
+        buttons: {
+            Annuler: function() {
+                $(this).dialog("close");
+            }
+        }
+    });
+                
             }
         }
     });
