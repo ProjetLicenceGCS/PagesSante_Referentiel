@@ -151,14 +151,14 @@ public class CSVServiceImpl implements CSVService {
             } else {
                 value = "VIDE";
             }
-            int indexOf;
-            while ((indexOf = value.lastIndexOf(",")) != -1) {
-                if (indexOf != -1) {
-                    char oldChar = value.charAt(indexOf);
-                    String newStr = "*<+";
-                    value = value.replace(Character.toString(oldChar), newStr);
-                }
-            }
+//            int indexOf;
+//            while ((indexOf = value.lastIndexOf(",")) != -1) {
+//                if (indexOf != -1) {
+//                    char oldChar = value.charAt(indexOf);
+//                    String newStr = "*<+";
+//                    value = value.replace(Character.toString(oldChar), newStr);
+//                }
+//            }
             values.add(value);
         }
         return this.format(values);
@@ -308,8 +308,9 @@ public class CSVServiceImpl implements CSVService {
                     //Faire delete de la ligne dans bdd et insert de cette meme ligne du fichier.
                     break;
                 case 3:
+                    int id = listDisciplineFichier.get(i).getIddisciplineref();
                     DisciplineRef dr = this.disciplineRefMapperSrv.add(listDisciplineFichier.get(i));
-                    this.addErreur("Nous avons changé l'id : " +  listDisciplineFichier.get(i).getIddisciplineref() + " par l'id suivant : " + dr.getIddisciplineref());
+                    this.addErreur("Nous avons changé l'id : " +  id + " par l'id suivant : " + dr.getIddisciplineref());
                     //Faire insert du fichier dans la bdd
                     break;
             }

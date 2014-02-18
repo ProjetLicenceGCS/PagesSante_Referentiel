@@ -2,6 +2,7 @@ package com.emosist.pagessante.beans;
 
 import java.io.Serializable;
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -51,7 +52,7 @@ public class DictionnaireOffresSoins implements Serializable {
     @Column(name = "intitule_norm")
     private String intituleNorm;
     @JoinColumn(name = "idspecialiteelementref", referencedColumnName = "idspecialiteelementref",updatable = false,insertable = false)
-    @ManyToOne()
+    @ManyToOne(cascade = CascadeType.PERSIST)
     private SpecialiteElementRef idspecialiteelementref;
 
     public DictionnaireOffresSoins() {

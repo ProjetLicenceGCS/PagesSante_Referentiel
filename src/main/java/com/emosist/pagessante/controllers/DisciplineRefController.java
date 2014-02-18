@@ -40,7 +40,7 @@ public class DisciplineRefController extends MainController {
     /**
      * Répond à une requête de type GET sur le lien
      * "http://<i>monsite</i>/discipline". Des traitements peuvent être réalisés
-     * avant le retour de la page (modifications, passage de variables, etc.).
+     * avant le retour de la page (Smodifications, passage de variables, etc.).
      *
      * @param model modèle issu de Spring servant à afficher la page
      * @param request requête http transmise par le client

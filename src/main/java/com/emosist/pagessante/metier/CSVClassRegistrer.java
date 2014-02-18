@@ -88,7 +88,6 @@ public class CSVClassRegistrer {
                 classes.add(DictionnaireOffresSoins.class);
                 classes.add(SpecialiteElementRef.class);
             } else {
-                // 1
                 String disciplineRef = "iddisciplineref ; description ; descriptionNorm ; specialiteelementrefList\r";
                 String[] disciplineRefSplit = disciplineRef.split("\r");
                 String dictionnaireOffresSoins = "iddictoffressoins ; intitule ; description ; motscles ; intituleNorm ; idspecialiteelementref\r";
